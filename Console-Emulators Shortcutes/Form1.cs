@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using Microsoft.CSharp;
+using System.Data.SqlClient;
 
 namespace Console_Emulators_Shortcutes
 {
@@ -21,27 +22,61 @@ namespace Console_Emulators_Shortcutes
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        EmuPath actual = null;
+        List<EmuPath> selectedEmu = new List<EmuPath>();
+        
+        private void emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string emu = "";
-            if(emulatorcb.SelectedItem != null)
+            string emu = null;
+            bool isinlist = false;
+            if (emulatorcb.SelectedItem != null)
             {
                 emu = emulatorcb.SelectedItem.ToString();
+                foreach (var sEmu in selectedEmu)
+                {
+                    if (sEmu.Emu == emu)
+                    {
+                        Edirbox.Text = sEmu.Path;
+                        isinlist = true;
+                        actual = sEmu;
+                    }
+                }
+
+                if (!isinlist)
+                {
+                    var insert = new EmuPath(emu);
+                    selectedEmu.Add(insert);
+                    Edirbox.Text = insert.Path;
+                    actual = insert;
+                }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string emu = null;
+            if(emulatorcb.SelectedItem != null)
+                emu = emulatorcb.SelectedItem.ToString();
             
             string code = Emulator(emu, Gdirbox.Text, Edirbox.Text);
 
-            if(code == "false")
+            if (code == "false")
+                return;
+            else
             {
+                //Compile(code);
+                actual.UpdatePath(Edirbox.Text);
                 return;
             }
+        }
 
+        private void Compile(string code)
+        {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
             ICodeCompiler icc = codeProvider.CreateCompiler();
             string Output = "Out.exe";
-            Button ButtonObject = (Button)sender;
 
-            CompilerParameters parameters = new CompilerParameters(new[] {"mscorlib.dll", "System.Core.dll", "System.dll"} );
+            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" });
             //Make sure we generate an EXE, not a DLL
             parameters.GenerateExecutable = true;
             parameters.OutputAssembly = Output;
@@ -63,7 +98,7 @@ namespace Console_Emulators_Shortcutes
             else
             {
                 //Successful Compile
-                Succes("Success!");
+                Success("Success!");
                 //If we clicked run then launch our EXE
                 //if (ButtonObject.Text == "Run") Process.Start(Output);
             }
@@ -132,9 +167,16 @@ namespace Console_Emulators_Shortcutes
         {
             MessageBox.Show(message, "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void Succes(string message)
+        private void Success(string message)
         {
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // TODO: esta línea de código carga datos en la tabla 'emupathDataSet.emupath' Puede moverla o quitarla según sea necesario.
+            this.emupathTableAdapter.Fill(this.emupathDataSet.emupath);
+
         }
     }
 
