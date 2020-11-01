@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.Gdirbox = new System.Windows.Forms.TextBox();
             this.Edirbox = new System.Windows.Forms.TextBox();
@@ -40,13 +41,15 @@
             this.emuBrow = new System.Windows.Forms.Button();
             this.gameBrow = new System.Windows.Forms.Button();
             this.ICOpic = new System.Windows.Forms.PictureBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.DesktopCheck = new System.Windows.Forms.CheckBox();
+            this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(128, 315);
+            this.button1.Location = new System.Drawing.Point(27, 277);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(187, 91);
             this.button1.TabIndex = 5;
@@ -154,9 +157,11 @@
             // 
             // ICOpic
             // 
+            this.ICOpic.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ICOpic.BackgroundImage")));
+            this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ICOpic.Location = new System.Drawing.Point(431, 66);
+            this.ICOpic.Location = new System.Drawing.Point(431, 79);
             this.ICOpic.Name = "ICOpic";
             this.ICOpic.Size = new System.Drawing.Size(340, 340);
             this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -164,24 +169,46 @@
             this.ICOpic.TabStop = false;
             this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
             // 
-            // checkBox1
+            // DesktopCheck
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(300, 87);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(109, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Desktop Shortcut";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.DesktopCheck.AutoSize = true;
+            this.DesktopCheck.Checked = true;
+            this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DesktopCheck.Location = new System.Drawing.Point(300, 87);
+            this.DesktopCheck.Name = "DesktopCheck";
+            this.DesktopCheck.Size = new System.Drawing.Size(109, 17);
+            this.DesktopCheck.TabIndex = 2;
+            this.DesktopCheck.Text = "Desktop Shortcut";
+            this.DesktopCheck.UseVisualStyleBackColor = true;
+            // 
+            // OpenShortFolderCheck
+            // 
+            this.OpenShortFolderCheck.AutoSize = true;
+            this.OpenShortFolderCheck.Location = new System.Drawing.Point(231, 315);
+            this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
+            this.OpenShortFolderCheck.Size = new System.Drawing.Size(139, 17);
+            this.OpenShortFolderCheck.TabIndex = 6;
+            this.OpenShortFolderCheck.TabStop = false;
+            this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
+            this.OpenShortFolderCheck.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(475, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(254, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Select a PNG or JPG Image to set as ICON Shotcut:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.OpenShortFolderCheck);
+            this.Controls.Add(this.DesktopCheck);
             this.Controls.Add(this.ICOpic);
             this.Controls.Add(this.gameBrow);
             this.Controls.Add(this.emuBrow);
@@ -195,6 +222,7 @@
             this.Controls.Add(this.Gdirbox);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Emulator ShortCutes";
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
             this.ResumeLayout(false);
@@ -216,7 +244,9 @@
         private System.Windows.Forms.Button emuBrow;
         private System.Windows.Forms.Button gameBrow;
         private System.Windows.Forms.PictureBox ICOpic;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox DesktopCheck;
+        private System.Windows.Forms.CheckBox OpenShortFolderCheck;
+        private System.Windows.Forms.Label label5;
     }
 }
 

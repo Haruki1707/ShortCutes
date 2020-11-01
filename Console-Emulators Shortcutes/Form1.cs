@@ -15,7 +15,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Shell;
+using IWshRuntimeLibrary;
 
 namespace Console_Emulators_Shortcutes
 {
@@ -101,6 +101,10 @@ namespace Console_Emulators_Shortcutes
                     return;
                 }
                 Compile(code, emulatorpath, Shortcutbox.Text);
+                if (OpenShortFolderCheck.Checked)
+                {
+                    System.Diagnostics.Process.Start("explorer.exe",emulatorpath + @"\ShortCutes");
+                }
                 ICOpic.Image = null;
                 Image = false;
                 actual.UpdatePath(emulatorpath);
@@ -116,7 +120,7 @@ namespace Console_Emulators_Shortcutes
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
             ICodeCompiler icc = codeProvider.CreateCompiler();
 
-            emupath += @"shortcuts";
+            emupath += @"ShortCutes";
             if (!Directory.Exists(emupath))
                 Directory.CreateDirectory(emupath);
             emupath += @"\";
@@ -145,17 +149,17 @@ namespace Console_Emulators_Shortcutes
             }
             else
             {
-                using (var shellShortcut = new ShellLink(newShortcutPath)
+                if (DesktopCheck.Checked)
                 {
-                    Path = path
-                    WorkingDirectory = workingDir,
-                    Arguments = args,
-                    IconPath = iconPath,
-                    IconIndex = iconIndex,
-                    Description = description,
-                })
-                {
-                    shellShortcut.Save();
+                    object shDesktop = (object)"Desktop";
+                    WshShell shell = new WshShell();
+                    string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
+                    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                    shortcut.Description = "ShortCute for " + Filename;
+                    shortcut.IconLocation = Filename + ", 0";
+                    shortcut.Hotkey = "Ctrl+Shift+N";
+                    shortcut.TargetPath = Output;
+                    shortcut.Save();
                 }
 
                 if (Success("Shortcut created!\nExecute shortcut?") == DialogResult.Yes)
@@ -191,7 +195,7 @@ namespace Console_Emulators_Shortcutes
 
             string code = "using System;\n" +
                           "using System.Diagnostics;\n" +
-                          "namespace Emulator_Shortcuts\n" +
+                          "namespace Emulator_ShortCutes\n" +
                           "{\n" + 
                             "class Program\n" +
                             "{\n" +
@@ -222,13 +226,13 @@ namespace Console_Emulators_Shortcutes
                     "}\n" +
                 "}\n";
 
-                if (!File.Exists(emulatorchecker))
+                if (!System.IO.File.Exists(emulatorchecker))
                 {
                     Error("Emulator don't exist in the specified path\nCheck if path or selected emulator is correct");
                     return "false";
                 }
 
-                if (!File.Exists(gamechecker))
+                if (!System.IO.File.Exists(gamechecker))
                 {
                     Error("Game file don't exist in the specified path");
                     return "false";
