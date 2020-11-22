@@ -26,6 +26,8 @@ namespace Console_Emulators_Shortcutes
             InitializeComponent();
         }
 
+        private string path = Path.GetTempPath();
+
         EmuPath actual = null;
         List<EmuPath> selectedEmu = new List<EmuPath>();
         
@@ -103,7 +105,7 @@ namespace Console_Emulators_Shortcutes
                 Compile(code, emulatorpath, Shortcutbox.Text);
                 if (OpenShortFolderCheck.Checked)
                 {
-                    System.Diagnostics.Process.Start("explorer.exe",emulatorpath + @"\ShortCutes");
+                    System.Diagnostics.Process.Start("explorer.exe",emulatorpath + @"ShortCutes");
                 }
                 ICOpic.Image = null;
                 Image = false;
@@ -128,7 +130,7 @@ namespace Console_Emulators_Shortcutes
             string Output = emupath + Shortcutbox.Text +".exe";
 
             CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" });
-            parameters.CompilerOptions = "-win32icon:temp.ico";
+            parameters.CompilerOptions = "-win32icon:" + path +" temp.ico";
             //Make sure we generate an EXE, not a DLL
             parameters.GenerateExecutable = true;
             parameters.OutputAssembly = Output;
@@ -156,15 +158,17 @@ namespace Console_Emulators_Shortcutes
                     string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
                     IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
                     shortcut.Description = "ShortCute for " + Filename;
-                    shortcut.IconLocation = Filename + ", 0";
-                    shortcut.Hotkey = "Ctrl+Shift+N";
                     shortcut.TargetPath = Output;
+                    shortcut.WorkingDirectory = emupath;
                     shortcut.Save();
                 }
 
                 if (Success("Shortcut created!\nExecute shortcut?") == DialogResult.Yes)
                 {
-                    Process.Start(Output);
+                    var starto = new Process();
+                    starto.StartInfo.FileName =  Output;
+                    starto.StartInfo.WorkingDirectory = emupath;
+                    starto.Start();
                 }
             }
         }
@@ -293,8 +297,7 @@ namespace Console_Emulators_Shortcutes
             dialog.Multiselect = false;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                string path = Directory.GetCurrentDirectory();
-                ImagingHelper.ConvertToIcon(dialog.FileName, path + @"\temp.ico");
+                ImagingHelper.ConvertToIcon(dialog.FileName, path + @"temp.ico");
                 ICOpic.Image = ImagingHelper.ICONbox;
                 Image = true;
             }

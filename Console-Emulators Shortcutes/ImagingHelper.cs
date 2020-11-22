@@ -41,20 +41,23 @@ namespace Console_Emulators_Shortcutes
                     var imageHeight = inputBitmap.Height;
                     var imageWidth = inputBitmap.Width;
 
-                    float middle;
+                    float middlex;
+                    float middley;
 
                     if (imageHeight < imageWidth)
                     {
-                        middle = (imageWidth - imageHeight) / 2;
+                        middlex = (imageWidth - imageHeight) / 2;
+                        middley = 0;
                         imageWidth = imageHeight;
                     }
                     else
                     {
-                        middle = (imageHeight - imageWidth) / 2;
+                        middley = (imageHeight - imageWidth) / 2;
+                        middlex = 0;
                         imageHeight = imageWidth;
                     }
 
-                    RectangleF cloneRect = new RectangleF(middle, 0, imageWidth, imageHeight);
+                    RectangleF cloneRect = new RectangleF(middlex, middley, imageWidth, imageHeight);
                     System.Drawing.Imaging.PixelFormat format = inputBitmap.PixelFormat;
                     inputBitmap = inputBitmap.Clone(cloneRect, format);
                     ICONbox = inputBitmap;
