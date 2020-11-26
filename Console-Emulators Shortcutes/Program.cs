@@ -36,7 +36,7 @@ namespace Console_Emulators_Shortcutes
         {
             try
             {
-                var cnn = ConfigurationManager.ConnectionStrings["cnnEmuPath"].ConnectionString;
+                var cnn = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\emupath.mdf;Integrated Security=True";
                 var connection = new SqlConnection(cnn);
                 return connection;
             }
@@ -49,52 +49,66 @@ namespace Console_Emulators_Shortcutes
 
         public EmuPath(string Emulador)
         {
-            Emu = Emulador;
-            string query = "SELECT path FROM emupath WHERE emulador = '" + Emu + "'";
-            string result = null;
-
-            using (var connection = cnn())
+            try
             {
-                var command = new SqlCommand(query, connection);
-                connection.Open();
-                using(var reader = command.ExecuteReader())
+                Emu = Emulador;
+                string query = "SELECT path FROM emupath WHERE emulador = '" + Emu + "'";
+                string result = null;
+
+                using (var connection = cnn())
                 {
-                    while (reader.Read())
+                    var command = new SqlCommand(query, connection);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
                     {
-                        result = reader[0].ToString();
-                        dbhaspath = true;
+                        while (reader.Read())
+                        {
+                            result = reader[0].ToString();
+                            dbhaspath = true;
+                        }
                     }
                 }
-            }
 
-            Path = result;
+                Path = result;
+            }
+            catch (Exception)
+            {
+                path = "";
+            }
         }
 
         public void UpdatePath(string RPath)
         {
-            Path = RPath;
-            if(!dbhaspath)
+            try
             {
-                string insertdata = "INSERT INTO emupath(emulador, path) ";
-                insertdata += "VALUES('" + Emu + "', '" + Path + "')";
-                using(var connection = cnn())
+                Path = RPath;
+                if (!dbhaspath)
                 {
-                    connection.Open();
-                    var insertcommand = new SqlCommand(insertdata, connection);
-                    insertcommand.ExecuteNonQuery();
+                    string insertdata = "INSERT INTO emupath(emulador, path) ";
+                    insertdata += "VALUES('" + Emu + "', '" + Path + "')";
+                    using (var connection = cnn())
+                    {
+                        connection.Open();
+                        var insertcommand = new SqlCommand(insertdata, connection);
+                        insertcommand.ExecuteNonQuery();
+                    }
+                    dbhaspath = true;
                 }
-                dbhaspath = true;
+                else
+                {
+                    string updatedata = "UPDATE emupath ";
+                    updatedata += "SET path = '" + Path + "' WHERE emulador = '" + Emu + "'";
+                    using (var connection = cnn())
+                    {
+                        connection.Open();
+                        var updatecommand = new SqlCommand(updatedata, connection);
+                        updatecommand.ExecuteNonQuery();
+                    }
+                }
             }
-            else
+            catch (Exception)
             {
-                string updatedata = "UPDATE emupath ";
-                updatedata += "SET path = '" + Path + "' WHERE emulador = '" + Emu + "'";
-                using(var connection = cnn())
-                {
-                    connection.Open();
-                    var updatecommand = new SqlCommand(updatedata, connection);
-                    updatecommand.ExecuteNonQuery();
-                }
+                throw;
             }
         }
     }

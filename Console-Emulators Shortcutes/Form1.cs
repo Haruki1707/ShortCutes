@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using Microsoft.CSharp;
-using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -26,10 +19,10 @@ namespace Console_Emulators_Shortcutes
             InitializeComponent();
         }
 
-        private string path = Path.GetTempPath();
+        readonly private string path = Path.GetTempPath();
 
         EmuPath actual = null;
-        List<EmuPath> selectedEmu = new List<EmuPath>();
+        readonly List<EmuPath> selectedEmu = new List<EmuPath>();
         
         private void emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -120,7 +113,7 @@ namespace Console_Emulators_Shortcutes
         private void Compile(string code, string emupath, string Filename)
         {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-            ICodeCompiler icc = codeProvider.CreateCompiler();
+            //ICodeCompiler icc = codeProvider.CreateCompiler();
 
             emupath += @"ShortCutes";
             if (!Directory.Exists(emupath))
@@ -130,11 +123,11 @@ namespace Console_Emulators_Shortcutes
             string Output = emupath + Shortcutbox.Text +".exe";
 
             CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" });
-            parameters.CompilerOptions = "-win32icon:" + path +" temp.ico";
+            parameters.CompilerOptions = "-win32icon:" + path + "temp.ico";
             //Make sure we generate an EXE, not a DLL
             parameters.GenerateExecutable = true;
             parameters.OutputAssembly = Output;
-            CompilerResults results = icc.CompileAssemblyFromSource(parameters, code);
+            CompilerResults results = codeProvider.CompileAssemblyFromSource(parameters, code);
 
             if (results.Errors.Count > 0)
             {
