@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace Console_Emulators_Shortcutes {
+namespace ShortCutes {
     
     
     /// <summary>
@@ -635,7 +635,7 @@ namespace Console_Emulators_Shortcutes {
         }
     }
 }
-namespace Console_Emulators_Shortcutes.emupathDataSetTableAdapters {
+namespace ShortCutes.emupathDataSetTableAdapters {
     
     
     /// <summary>
@@ -795,7 +795,7 @@ namespace Console_Emulators_Shortcutes.emupathDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::Console_Emulators_Shortcutes.Properties.Settings.Default.cnnEmuPath;
+            this._connection.ConnectionString = global::ShortCutes.Properties.Settings.Default.cnnEmuPath;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

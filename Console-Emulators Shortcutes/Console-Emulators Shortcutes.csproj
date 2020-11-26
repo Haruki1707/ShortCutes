@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{088F2159-EBB0-49AB-9897-A4588B049154}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Console_Emulators_Shortcutes</RootNamespace>
-    <AssemblyName>Console-Emulators Shortcutes</AssemblyName>
+    <RootNamespace>ShortCutes</RootNamespace>
+    <AssemblyName>ShortCutes</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -110,6 +110,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="emupathDataSet.xsc">
       <DependentUpon>emupathDataSet.xsd</DependentUpon>

@@ -4,7 +4,7 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="cnnEmuPath" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="cnnEmuPath (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Console_Emulators_Shortcutes.Properties.Settings.GlobalReference.Default.cnnEmuPath" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="cnnEmuPath" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="cnnEmuPath (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.ShortCutes.Properties.Settings.GlobalReference.Default.cnnEmuPath" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="emupathTableAdapter" GeneratorDataComponentClassName="emupathTableAdapter" Name="emupath" UserDataComponentName="emupathTableAdapter">
@@ -65,7 +65,7 @@ SELECT emulador, path FROM emupath WHERE (emulador = @emulador)</CommandText>
   <xs:element name="emupathDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="emupathDataSet" msprop:Generator_UserDSName="emupathDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="emupath" msprop:Generator_TableClassName="emupathDataTable" msprop:Generator_TableVarName="tableemupath" msprop:Generator_TablePropName="emupath" msprop:Generator_RowDeletingName="emupathRowDeleting" msprop:Generator_RowChangingName="emupathRowChanging" msprop:Generator_RowEvHandlerName="emupathRowChangeEventHandler" msprop:Generator_RowDeletedName="emupathRowDeleted" msprop:Generator_UserTableName="emupath" msprop:Generator_RowChangedName="emupathRowChanged" msprop:Generator_RowEvArgName="emupathRowChangeEvent" msprop:Generator_RowClassName="emupathRow">
+        <xs:element name="emupath" msprop:Generator_TableClassName="emupathDataTable" msprop:Generator_TableVarName="tableemupath" msprop:Generator_RowChangedName="emupathRowChanged" msprop:Generator_TablePropName="emupath" msprop:Generator_RowDeletingName="emupathRowDeleting" msprop:Generator_RowChangingName="emupathRowChanging" msprop:Generator_RowEvHandlerName="emupathRowChangeEventHandler" msprop:Generator_RowDeletedName="emupathRowDeleted" msprop:Generator_RowClassName="emupathRow" msprop:Generator_UserTableName="emupath" msprop:Generator_RowEvArgName="emupathRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="emulador" msprop:Generator_ColumnVarNameInTable="columnemulador" msprop:Generator_ColumnPropNameInRow="emulador" msprop:Generator_ColumnPropNameInTable="emuladorColumn" msprop:Generator_UserColumnName="emulador">
