@@ -198,7 +198,8 @@ namespace Console_Emulators_Shortcutes
                             "{\n" +
                                 "static void Main()\n" +
                                 "{\n" +
-                                    "Console.WriteLine(\"Emulator ShortCutes UwU \\nDesign by Haruki1707.  \\nExecuting ShortCute...\");";
+                                    "Console.WriteLine(\"Emulator ShortCutes UwU \\nDesign by Haruki1707.  \\nExecuting ShortCute...\");" +
+                                    "Process ShortCute = new Process();\n";
             
             switch (option)
             {
@@ -206,10 +207,23 @@ namespace Console_Emulators_Shortcutes
                     emulatordir += "Cemu.exe";
                     emulatorchecker += "Cemu.exe";
 
-                    code += "Process Cemugame = new Process();\n"+
-                            "Cemugame.StartInfo.FileName = \"" + emulatordir + "\";\n" +
-                            "Cemugame.StartInfo.Arguments = \"-g \\\""+gamedir+"\\\" -f\";\n" +
-                            "Cemugame.Start();\n";
+                    code += "ShortCute.StartInfo.FileName = \"" + emulatordir + "\";\n" +
+                            "ShortCute.StartInfo.Arguments = \"-g \\\"" + gamedir + "\\\" -f\";\n";
+                    break;
+                case "PJ64":
+                    emulatordir += "Project64.exe";
+                    emulatorchecker += "Project64.exe";
+
+                    code += "ShortCute.StartInfo.FileName = \"" + emulatordir + "\";\n" +
+                            "ShortCute.StartInfo.Arguments = \"\\\"" + gamedir + "\"\"\n";
+                    break;
+                case "SNES9X":
+                    emulatordir += "snes9x.exe";
+                    emulatorchecker += "snes9x.exe";
+
+                    code += "ShortCute.StartInfo.FileName = \"" + emulatordir + "\";\n" +
+                            "ShortCute.StartInfo.Arguments = \"\"" + gamedir + "\" -fullscreen\"";
+
                     break;
                 default:
                     Error("Please select a emulator!");
@@ -217,8 +231,10 @@ namespace Console_Emulators_Shortcutes
                     break;
             }
 
+
             if(code != "false")
             {
+                code += "ShortCute.Start();\n";
                 code += "}\n" +
                     "}\n" +
                 "}\n";
