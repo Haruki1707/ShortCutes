@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Principal;
+using System.Drawing;
 
 namespace ShortCutes
 {
@@ -45,6 +46,24 @@ namespace ShortCutes
                 isAdmin = false;
             }
             return isAdmin;
+        }
+
+        public static void ToDraw(Control.ControlCollection control, PaintEventArgs g)
+        {
+            var color = Color.White;
+            Pen pen = new Pen(color, 3);
+            foreach (Control current in control)
+            {
+                if (current is TextBox || current is MaskedTextBox)
+                {
+                    var LX = current.Location.X;
+                    var W = current.Width;
+                    var Y = current.Location.Y + current.Height;
+
+                    g.Graphics.DrawLine(pen, new PointF(LX, Y), new PointF(LX + W, Y));
+                }
+            }
+            pen.Dispose();
         }
     }
 }

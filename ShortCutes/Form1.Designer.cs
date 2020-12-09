@@ -56,7 +56,7 @@
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(495, 116);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(296, 16);
+            this.label5.Size = new System.Drawing.Size(263, 16);
             this.label5.TabIndex = 27;
             this.label5.Text = "Select a PNG or JPG Image to set as ICON Shotcut:";
             // 
@@ -67,7 +67,7 @@
             this.OpenShortFolderCheck.ForeColor = System.Drawing.Color.White;
             this.OpenShortFolderCheck.Location = new System.Drawing.Point(37, 345);
             this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
-            this.OpenShortFolderCheck.Size = new System.Drawing.Size(165, 20);
+            this.OpenShortFolderCheck.Size = new System.Drawing.Size(147, 20);
             this.OpenShortFolderCheck.TabIndex = 22;
             this.OpenShortFolderCheck.TabStop = false;
             this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
@@ -82,7 +82,7 @@
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
             this.DesktopCheck.Location = new System.Drawing.Point(333, 170);
             this.DesktopCheck.Name = "DesktopCheck";
-            this.DesktopCheck.Size = new System.Drawing.Size(127, 20);
+            this.DesktopCheck.Size = new System.Drawing.Size(115, 20);
             this.DesktopCheck.TabIndex = 17;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
@@ -132,12 +132,12 @@
             // Shortcutbox
             // 
             this.Shortcutbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(57)))), ((int)(((byte)(77)))));
-            this.Shortcutbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
+            this.Shortcutbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
             this.Shortcutbox.ForeColor = System.Drawing.Color.White;
             this.Shortcutbox.Location = new System.Drawing.Point(37, 170);
             this.Shortcutbox.Name = "Shortcutbox";
-            this.Shortcutbox.Size = new System.Drawing.Size(250, 22);
+            this.Shortcutbox.Size = new System.Drawing.Size(250, 20);
             this.Shortcutbox.TabIndex = 16;
             // 
             // label4
@@ -147,7 +147,7 @@
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(34, 150);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(95, 16);
+            this.label4.Size = new System.Drawing.Size(86, 16);
             this.label4.TabIndex = 25;
             this.label4.Text = "Shortcut name:";
             // 
@@ -158,7 +158,7 @@
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(37, 92);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(119, 16);
+            this.label3.Size = new System.Drawing.Size(106, 16);
             this.label3.TabIndex = 24;
             this.label3.Text = "Select an emulator:";
             // 
@@ -169,7 +169,7 @@
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(37, 275);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 16);
+            this.label2.Size = new System.Drawing.Size(111, 16);
             this.label2.TabIndex = 23;
             this.label2.Text = "Game File Directory:";
             // 
@@ -180,7 +180,7 @@
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(37, 206);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(121, 16);
+            this.label1.Size = new System.Drawing.Size(107, 16);
             this.label1.TabIndex = 20;
             this.label1.Text = "Emulator Directory:";
             // 
@@ -200,7 +200,7 @@
             // Edirbox
             // 
             this.Edirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(57)))), ((int)(((byte)(77)))));
-            this.Edirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Edirbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Edirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
             this.Edirbox.ForeColor = System.Drawing.Color.White;
             this.Edirbox.Location = new System.Drawing.Point(37, 226);
@@ -211,11 +211,12 @@
             this.Edirbox.TabIndex = 14;
             this.Edirbox.TabStop = false;
             this.Edirbox.Click += new System.EventHandler(this.EmuBrow_Click);
+            this.Edirbox.Enter += new System.EventHandler(this.notfocus_Enter);
             // 
             // Gdirbox
             // 
             this.Gdirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(57)))), ((int)(((byte)(77)))));
-            this.Gdirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Gdirbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Gdirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
             this.Gdirbox.ForeColor = System.Drawing.Color.White;
             this.Gdirbox.Location = new System.Drawing.Point(37, 295);
@@ -226,6 +227,7 @@
             this.Gdirbox.TabIndex = 15;
             this.Gdirbox.TabStop = false;
             this.Gdirbox.Click += new System.EventHandler(this.GameBrow_Click);
+            this.Gdirbox.Enter += new System.EventHandler(this.notfocus_Enter);
             // 
             // button1
             // 
@@ -262,6 +264,7 @@
             this.panelBorderStyle.Name = "panelBorderStyle";
             this.panelBorderStyle.Size = new System.Drawing.Size(825, 57);
             this.panelBorderStyle.TabIndex = 29;
+            this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
             // 
             // ShortCutes
             // 
@@ -290,6 +293,7 @@
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
