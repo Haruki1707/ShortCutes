@@ -31,25 +31,25 @@ namespace ShortCutes
         readonly private string path = Path.GetTempPath();
 
         private int emuindex = -1;
-        private void emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
+        private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
             int lastemuindex = emuindex;
 
             if (emulatorcb.SelectedItem != null)
                 emuindex = emulatorcb.SelectedIndex;
-            
-            if(lastemuindex != emuindex)
+
+            if (lastemuindex != emuindex)
             {
                 Edirbox.Text = null;
                 Gdirbox.Text = null;
             }
         }
-       
-        private void createShortCute_Click(object sender, EventArgs e)
+
+        private void CreateShortCute_Click(object sender, EventArgs e)
         {
             string emulatorpath = Edirbox.Text;
             if (!emulatorpath.EndsWith("\\"))
-                emulatorpath = emulatorpath + @"\";
+                emulatorpath += @"\";
 
             string code = Emulator(Gdirbox.Text, emulatorpath);
 
@@ -97,11 +97,13 @@ namespace ShortCutes
 
             string Output = emupath + Shortcutbox.Text + ".exe";
 
-            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" });
-            parameters.CompilerOptions = "-win32icon:" + path + "temp.ico";
-            //Make sure we generate an EXE, not a DLL
-            parameters.GenerateExecutable = true;
-            parameters.OutputAssembly = Output;
+            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" })
+            {
+                CompilerOptions = "-win32icon:" + path + "temp.ico",
+                //Make sure we generate an EXE, not a DLL
+                GenerateExecutable = true,
+                OutputAssembly = Output
+            };
             CompilerResults results = codeProvider.CompileAssemblyFromSource(parameters, code);
 
             if (results.Errors.Count > 0)
@@ -213,7 +215,7 @@ namespace ShortCutes
             return result;
         }
 
-        private void emuBrow_Click(object sender, EventArgs e)
+        private void EmuBrow_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
@@ -230,9 +232,9 @@ namespace ShortCutes
                 {
                     bool exists = false;
                     int currentindex = 0;
-                    foreach(var emu in emus)
+                    foreach (var emu in emus)
                     {
-                        if(emu.Exe.ToLower() == dialog.SafeFileName.ToLower())
+                        if (emu.Exe.ToLower() == dialog.SafeFileName.ToLower())
                         {
                             emulatorcb.SelectedIndex = currentindex;
                             Edirbox.Text = Path.GetDirectoryName(dialog.FileName);
@@ -242,7 +244,7 @@ namespace ShortCutes
                         currentindex++;
                     }
 
-                    if(exists == false)
+                    if (exists == false)
                     {
                         Info("Emulator not supported yet. You can contribute to make it supported on GitHub (Haruki1707/ShortCutes repository)\n\n" +
                             "!!!Also this could appear cause you change the emulator executable name. Make sure you are using the original emulator name!!!");
@@ -251,10 +253,10 @@ namespace ShortCutes
             }
         }
 
-        private void gameBrow_Click(object sender, EventArgs e)
+        private void GameBrow_Click(object sender, EventArgs e)
         {
             string filter;
-            if(emuindex != -1)
+            if (emuindex != -1)
                 filter = emus[emuindex].Gamesfilters;
             else
             {

@@ -22,11 +22,11 @@ namespace ShortCutes
 
     class Emulator
     {
-        string name;
-        string exe;
-        string argumentsP1;
-        string argumentsP2;
-        string gamesfilters;
+        readonly string name;
+        readonly string exe;
+        readonly string argumentsP1;
+        readonly string argumentsP2;
+        readonly string gamesfilters;
 
         public string Name { get => name;}
         public string Exe { get => exe;}

@@ -102,7 +102,7 @@
             this.gameBrow.TabIndex = 19;
             this.gameBrow.Text = "Browse Game";
             this.gameBrow.UseVisualStyleBackColor = true;
-            this.gameBrow.Click += new System.EventHandler(this.gameBrow_Click);
+            this.gameBrow.Click += new System.EventHandler(this.GameBrow_Click);
             // 
             // emuBrow
             // 
@@ -112,7 +112,7 @@
             this.emuBrow.TabIndex = 18;
             this.emuBrow.Text = "Browse Dir";
             this.emuBrow.UseVisualStyleBackColor = true;
-            this.emuBrow.Click += new System.EventHandler(this.emuBrow_Click);
+            this.emuBrow.Click += new System.EventHandler(this.EmuBrow_Click);
             // 
             // Shortcutbox
             // 
@@ -165,7 +165,7 @@
             this.emulatorcb.Name = "emulatorcb";
             this.emulatorcb.Size = new System.Drawing.Size(187, 21);
             this.emulatorcb.TabIndex = 13;
-            this.emulatorcb.SelectedIndexChanged += new System.EventHandler(this.emulatorcb_SelectedIndexChanged);
+            this.emulatorcb.SelectedIndexChanged += new System.EventHandler(this.Emulatorcb_SelectedIndexChanged);
             // 
             // Edirbox
             // 
@@ -176,7 +176,7 @@
             this.Edirbox.Size = new System.Drawing.Size(253, 35);
             this.Edirbox.TabIndex = 14;
             this.Edirbox.TabStop = false;
-            this.Edirbox.Click += new System.EventHandler(this.emuBrow_Click);
+            this.Edirbox.Click += new System.EventHandler(this.EmuBrow_Click);
             // 
             // Gdirbox
             // 
@@ -187,7 +187,7 @@
             this.Gdirbox.Size = new System.Drawing.Size(254, 35);
             this.Gdirbox.TabIndex = 15;
             this.Gdirbox.TabStop = false;
-            this.Gdirbox.Click += new System.EventHandler(this.gameBrow_Click);
+            this.Gdirbox.Click += new System.EventHandler(this.GameBrow_Click);
             // 
             // button1
             // 
@@ -198,7 +198,7 @@
             this.button1.TabStop = false;
             this.button1.Text = "Create ShortCute";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.createShortCute_Click);
+            this.button1.Click += new System.EventHandler(this.CreateShortCute_Click);
             // 
             // label6
             // 
