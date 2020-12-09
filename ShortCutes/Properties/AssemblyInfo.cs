@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("ShortCutes")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Make ShortCutes [shortcuts] for your emulator games")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Haruki1707")]
 [assembly: AssemblyProduct("ShortCutes")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]

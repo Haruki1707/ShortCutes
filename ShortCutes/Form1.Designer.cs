@@ -32,7 +32,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
             this.DesktopCheck = new System.Windows.Forms.CheckBox();
-            this.ICOpic = new System.Windows.Forms.PictureBox();
             this.gameBrow = new System.Windows.Forms.Button();
             this.emuBrow = new System.Windows.Forms.Button();
             this.Shortcutbox = new System.Windows.Forms.TextBox();
@@ -43,9 +42,14 @@
             this.emulatorcb = new System.Windows.Forms.ComboBox();
             this.Edirbox = new System.Windows.Forms.TextBox();
             this.Gdirbox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.createshortbtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.miniBtn = new System.Windows.Forms.Button();
+            this.closeBtn = new System.Windows.Forms.Button();
+            this.ICOpic = new System.Windows.Forms.PictureBox();
+            this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,20 +90,6 @@
             this.DesktopCheck.TabIndex = 17;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
-            // 
-            // ICOpic
-            // 
-            this.ICOpic.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ICOpic.BackgroundImage")));
-            this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ICOpic.Location = new System.Drawing.Point(495, 146);
-            this.ICOpic.Name = "ICOpic";
-            this.ICOpic.Size = new System.Drawing.Size(300, 300);
-            this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.ICOpic.TabIndex = 26;
-            this.ICOpic.TabStop = false;
-            this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
             // 
             // gameBrow
             // 
@@ -188,12 +178,13 @@
             // 
             this.emulatorcb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(57)))), ((int)(((byte)(77)))));
             this.emulatorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.emulatorcb.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emulatorcb.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emulatorcb.ForeColor = System.Drawing.Color.White;
             this.emulatorcb.FormattingEnabled = true;
             this.emulatorcb.Location = new System.Drawing.Point(37, 113);
+            this.emulatorcb.MaxDropDownItems = 10;
             this.emulatorcb.Name = "emulatorcb";
-            this.emulatorcb.Size = new System.Drawing.Size(176, 22);
+            this.emulatorcb.Size = new System.Drawing.Size(176, 26);
             this.emulatorcb.TabIndex = 13;
             this.emulatorcb.SelectedIndexChanged += new System.EventHandler(this.Emulatorcb_SelectedIndexChanged);
             // 
@@ -229,20 +220,20 @@
             this.Gdirbox.Click += new System.EventHandler(this.GameBrow_Click);
             this.Gdirbox.Enter += new System.EventHandler(this.notfocus_Enter);
             // 
-            // button1
+            // createshortbtn
             // 
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(37, 382);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(404, 65);
-            this.button1.TabIndex = 21;
-            this.button1.TabStop = false;
-            this.button1.Text = "Create ShortCute";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.CreateShortCute_Click);
+            this.createshortbtn.FlatAppearance.BorderSize = 0;
+            this.createshortbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.createshortbtn.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.createshortbtn.ForeColor = System.Drawing.Color.White;
+            this.createshortbtn.Location = new System.Drawing.Point(37, 382);
+            this.createshortbtn.Name = "createshortbtn";
+            this.createshortbtn.Size = new System.Drawing.Size(404, 65);
+            this.createshortbtn.TabIndex = 21;
+            this.createshortbtn.TabStop = false;
+            this.createshortbtn.Text = "Create ShortCute";
+            this.createshortbtn.UseVisualStyleBackColor = true;
+            this.createshortbtn.Click += new System.EventHandler(this.CreateShortCute_Click);
             // 
             // label6
             // 
@@ -259,12 +250,72 @@
             // panelBorderStyle
             // 
             this.panelBorderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(17)))), ((int)(((byte)(23)))));
+            this.panelBorderStyle.Controls.Add(this.label7);
+            this.panelBorderStyle.Controls.Add(this.miniBtn);
+            this.panelBorderStyle.Controls.Add(this.closeBtn);
             this.panelBorderStyle.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelBorderStyle.Location = new System.Drawing.Point(0, 0);
             this.panelBorderStyle.Name = "panelBorderStyle";
-            this.panelBorderStyle.Size = new System.Drawing.Size(825, 57);
+            this.panelBorderStyle.Size = new System.Drawing.Size(825, 42);
             this.panelBorderStyle.TabIndex = 29;
             this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.SystemColors.Control;
+            this.label7.Location = new System.Drawing.Point(12, 4);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(151, 31);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "ShortCutes";
+            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
+            // 
+            // miniBtn
+            // 
+            this.miniBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.miniBtn.BackgroundImage = global::ShortCutes.Properties.Resources.minimizebtn;
+            this.miniBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.miniBtn.FlatAppearance.BorderSize = 0;
+            this.miniBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(41)))), ((int)(((byte)(51)))));
+            this.miniBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.miniBtn.ForeColor = System.Drawing.SystemColors.Control;
+            this.miniBtn.Location = new System.Drawing.Point(749, 0);
+            this.miniBtn.Name = "miniBtn";
+            this.miniBtn.Size = new System.Drawing.Size(35, 35);
+            this.miniBtn.TabIndex = 1;
+            this.miniBtn.UseVisualStyleBackColor = false;
+            this.miniBtn.Click += new System.EventHandler(this.miniBtn_Click);
+            // 
+            // closeBtn
+            // 
+            this.closeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.closeBtn.BackgroundImage = global::ShortCutes.Properties.Resources.closebtn;
+            this.closeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.closeBtn.FlatAppearance.BorderSize = 0;
+            this.closeBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeBtn.Location = new System.Drawing.Point(787, 0);
+            this.closeBtn.Name = "closeBtn";
+            this.closeBtn.Size = new System.Drawing.Size(35, 35);
+            this.closeBtn.TabIndex = 0;
+            this.closeBtn.UseVisualStyleBackColor = false;
+            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
+            // 
+            // ICOpic
+            // 
+            this.ICOpic.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ICOpic.BackgroundImage")));
+            this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ICOpic.Location = new System.Drawing.Point(484, 150);
+            this.ICOpic.Name = "ICOpic";
+            this.ICOpic.Size = new System.Drawing.Size(300, 300);
+            this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ICOpic.TabIndex = 26;
+            this.ICOpic.TabStop = false;
+            this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
             // 
             // ShortCutes
             // 
@@ -288,12 +339,14 @@
             this.Controls.Add(this.emulatorcb);
             this.Controls.Add(this.Edirbox);
             this.Controls.Add(this.Gdirbox);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.createshortbtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
+            this.panelBorderStyle.ResumeLayout(false);
+            this.panelBorderStyle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -316,9 +369,12 @@
         private System.Windows.Forms.ComboBox emulatorcb;
         private System.Windows.Forms.TextBox Edirbox;
         private System.Windows.Forms.TextBox Gdirbox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button createshortbtn;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panelBorderStyle;
+        private System.Windows.Forms.Button closeBtn;
+        private System.Windows.Forms.Button miniBtn;
+        private System.Windows.Forms.Label label7;
     }
 }
 
