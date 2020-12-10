@@ -46,10 +46,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.miniBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.panelBorderStyle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
             // 
@@ -252,6 +254,7 @@
             // panelBorderStyle
             // 
             this.panelBorderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(17)))), ((int)(((byte)(23)))));
+            this.panelBorderStyle.Controls.Add(this.pictureBox1);
             this.panelBorderStyle.Controls.Add(this.label7);
             this.panelBorderStyle.Controls.Add(this.miniBtn);
             this.panelBorderStyle.Controls.Add(this.closeBtn);
@@ -267,12 +270,23 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.Control;
-            this.label7.Location = new System.Drawing.Point(12, 4);
+            this.label7.Location = new System.Drawing.Point(39, 4);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(151, 31);
             this.label7.TabIndex = 2;
             this.label7.Text = "ShortCutes";
             this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::ShortCutes.Properties.Resources.ShortCute;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(41, 35);
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
             // 
             // miniBtn
             // 
@@ -346,12 +360,14 @@
             this.Controls.Add(this.Gdirbox);
             this.Controls.Add(this.createshortbtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
             this.panelBorderStyle.ResumeLayout(false);
             this.panelBorderStyle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -380,6 +396,7 @@
         private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.Button miniBtn;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
