@@ -95,10 +95,11 @@
             // 
             // gameBrow
             // 
-            this.gameBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
+            this.gameBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.gameBrow.FlatAppearance.BorderSize = 0;
+            this.gameBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.gameBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameBrow.ForeColor = System.Drawing.Color.White;
             this.gameBrow.Location = new System.Drawing.Point(302, 261);
             this.gameBrow.Name = "gameBrow";
@@ -110,10 +111,11 @@
             // 
             // emuBrow
             // 
-            this.emuBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
+            this.emuBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.emuBrow.FlatAppearance.BorderSize = 0;
+            this.emuBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.emuBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.emuBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emuBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emuBrow.ForeColor = System.Drawing.Color.White;
             this.emuBrow.Location = new System.Drawing.Point(302, 192);
             this.emuBrow.Name = "emuBrow";
@@ -230,10 +232,11 @@
             // 
             // createshortbtn
             // 
-            this.createshortbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
+            this.createshortbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.createshortbtn.FlatAppearance.BorderSize = 0;
+            this.createshortbtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.createshortbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.createshortbtn.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.createshortbtn.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.createshortbtn.ForeColor = System.Drawing.Color.White;
             this.createshortbtn.Location = new System.Drawing.Point(12, 337);
             this.createshortbtn.Name = "createshortbtn";
