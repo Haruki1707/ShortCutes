@@ -54,6 +54,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>shortcute_OzB_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CustomMarshalers" />
     <Reference Include="PresentationCore" />
@@ -142,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ShortCute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="shortcute_OzB_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
