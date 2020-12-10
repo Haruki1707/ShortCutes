@@ -329,12 +329,8 @@ namespace ShortCutes
             this.Close();
         }
 
-        [DllImport("user32.dll")]
-        static extern bool AnimateWindow(IntPtr hWnd, int time, int flags);
-
         private void miniBtn_Click(object sender, EventArgs e)
         {
-            AnimateWindow(this.Handle, 200, 0x00080000 | 0x00010000);
             this.WindowState = FormWindowState.Minimized;
         }
     }
