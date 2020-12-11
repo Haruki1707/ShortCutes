@@ -12,5 +12,5 @@ Emulator | Version From | Version To
 
 
 ### Build (Portable Program)
-* Download latest release [ShortCutes.exe](https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.exe)
+* Download latest release [ShortCutes.zip](https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.zip)
 * Requires [.NET Framework 4.7.1](https://dotnet.microsoft.com/download/dotnet-framework/net471)
