@@ -5,7 +5,7 @@
 
 Emulator | Version From | Version To
 ---------|:------------:|:---------:
-[CEMU](https://cemu.info/) | 1.3.1 | Latest
+[CEMU](https://cemu.info/) | 1.11.4 | Latest
 [Dolphin](https://dolphin-emu.org) | 3.5 | Latest
 [PJ64](https://www.pj64-emu.com) | 1.7 | Latest
 [SNES9X](https://www.snes9x.com) | 1.5 | Latest
