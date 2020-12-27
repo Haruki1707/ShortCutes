@@ -329,6 +329,8 @@
             this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
             this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
+            this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
+            this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
             this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
             // 
             // ICOpic

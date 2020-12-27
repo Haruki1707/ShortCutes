@@ -357,6 +357,17 @@ namespace ShortCutes
             ICOurl.Text = text;
         }
 
+        bool InputIsCommand = false;
+        private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !InputIsCommand;
+        }
+
+        private void ICOurl_KeyDown(object sender, KeyEventArgs e)
+        {
+            InputIsCommand = e.Control == true && (e.KeyCode == Keys.V);
+        }
+
         private void ICOurl_TextChanged(object sender, EventArgs e)
         {
             if(urltext != null && !String.IsNullOrWhiteSpace(ICOurl.Text))
@@ -384,14 +395,14 @@ namespace ShortCutes
 
         private void Info(string message)
         {
-            var success = new MessageForm(message, 0);
-            success.ShowDialog();
+            var info = new MessageForm(message, 0);
+            info.ShowDialog();
         }
 
         private void Error(string message)
         {
-            var success = new MessageForm(message, 1);
-            success.ShowDialog();
+            var error = new MessageForm(message, 1);
+            error.ShowDialog();
         }
         private DialogResult Success(string message)
         {
