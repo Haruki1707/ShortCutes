@@ -15,6 +15,7 @@ using System.Diagnostics;
 using Microsoft.CSharp;
 using System.Text.RegularExpressions;
 using IWshRuntimeLibrary;
+using System.Net;
 
 namespace ShortCutes
 {
@@ -36,7 +37,7 @@ namespace ShortCutes
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
-        private void panelBorderStyle_MouseDown(object sender, MouseEventArgs e)
+        private void FormDisp_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
@@ -56,7 +57,10 @@ namespace ShortCutes
             {
                 Edirbox.Text = null;
                 Gdirbox.Text = null;
+                label6.Text = emus[emuindex].Description;
+                label6.ForeColor = emus[emuindex].Cdesc;
             }
+            Shortcutbox.Focus();
         }
 
         private void CreateShortCute_Click(object sender, EventArgs e)
@@ -68,12 +72,15 @@ namespace ShortCutes
             string code = Emulator(Gdirbox.Text, emulatorpath);
 
             if (code == "false")
+            {
+                Shortcutbox.Focus();
                 return;
+            }
             else
             {
                 if (!Image)
                 {
-                    Error("Select a picture to continue.");
+                    Error("Select a picture to continue");
                     return;
                 }
                 Regex containsABadCharacter = new Regex("["
@@ -95,6 +102,7 @@ namespace ShortCutes
                 Edirbox.Text = emulatorpath;
                 Gdirbox.Text = null;
                 Shortcutbox.Text = null;
+                Shortcutbox.Focus();
                 return;
             }
         }
@@ -169,16 +177,28 @@ namespace ShortCutes
             }
             else
             {
-                if (Success("Emulator and games folder must be in the same path for better working.\n\nWanna continue without the same path? (still working)", "Warning") == DialogResult.Yes)
+
+                if (emuindex == -1)
+                {
+                    Error("Please select a emulator!");
+                    return "false";
+                }
+                else if (!System.IO.File.Exists(emulatordir + emus[emuindex].Exe))
+                {
+                    Error("Emulator doesn't exist in the specified path\nCheck if path or selected emulator is correct");
+                    return "false";
+                }
+
+                else if (!System.IO.File.Exists(gamechecker))
+                {
+                    Error("Game file doesn't exist in the specified path");
+                    return "false";
+                }
+                else if (Success("Emulator and games folder must be on the same path for better working.\n\n" +
+                        "Wanna continue without the same path? (still works)") == DialogResult.Yes)
                     gamedir = gamedir.Replace(@"\", @"\\");
                 else
                     return "false";
-            }
-
-            if(emuindex == -1)
-            {
-                Error("Please select a emulator!");
-                return "false";
             }
 
             string code = "using System;\n" +
@@ -193,40 +213,13 @@ namespace ShortCutes
                                     "Process ShortCute = new Process();\n" +
                                     "ShortCute.StartInfo.WorkingDirectory = \"..\\\\\";\n" +
                                     "ShortCute.StartInfo.FileName = \"..\\\\" + emus[emuindex].Exe + "\";\n" +
-                                    "ShortCute.StartInfo.Arguments =" + emus[emuindex].Arguments(gamedir) + ";\n" +
+                                    "ShortCute.StartInfo.Arguments =\"" + emus[emuindex].Arguments(gamedir) + "\";\n" +
                                     "ShortCute.Start();\n" + 
                                 "}\n" +
                             "}\n" +
                           "}\n";
 
-            if (!System.IO.File.Exists(emulatordir + emus[emuindex].Exe))
-            {
-                Error("Emulator don't exist in the specified path\nCheck if path or selected emulator is correct");
-                return "false";
-            }
-
-            if (!System.IO.File.Exists(gamechecker))
-            {
-                Error("Game file don't exist in the specified path");
-                return "false";
-            }
-
             return code;
-        }
-
-        private void Info(string message)
-        {
-            MessageBox.Show(message, "Fix", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-
-        private void Error(string message)
-        {
-            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        private DialogResult Success(string message, string header = "Success")
-        {
-            DialogResult result = MessageBox.Show(message, header, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            return result;
         }
 
         private void EmuBrow_Click(object sender, EventArgs e)
@@ -253,6 +246,8 @@ namespace ShortCutes
                             emulatorcb.SelectedIndex = currentindex;
                             Edirbox.Text = Path.GetDirectoryName(dialog.FileName);
                             exists = true;
+                            label6.Text = emu.Description;
+                            label6.ForeColor = emu.Cdesc;
                             break;
                         }
                         currentindex++;
@@ -260,11 +255,13 @@ namespace ShortCutes
 
                     if (exists == false)
                     {
-                        Info("Emulator not supported yet. You can contribute to make it supported on GitHub (Haruki1707/ShortCutes repository)\n\n" +
-                            "!!!Also this could appear cause you change the emulator executable name. Make sure you are using the original emulator name!!!");
+                        Info("The emulator is not yet supported. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
+                            "\n\n!!!Also, this could appear because you changed the emulator executable name." +
+                            "Make sure you are using the original emulator name!!!");
                     }
                 }
             }
+            Shortcutbox.Focus();
         }
 
         private void GameBrow_Click(object sender, EventArgs e)
@@ -274,7 +271,7 @@ namespace ShortCutes
                 filter = emus[emuindex].Gamesfilters;
             else
             {
-                Info("First select or browse and emulator!!!");
+                Info("First, select or browse an emulator!!!");
                 return;
             }
 
@@ -294,6 +291,7 @@ namespace ShortCutes
                     Gdirbox.Text = dialog.FileName;
                 }
             }
+            Shortcutbox.Focus();
         }
 
         private static bool Image = false;
@@ -313,25 +311,94 @@ namespace ShortCutes
                     Image = true;
                 }
             }
+            Shortcutbox.Focus();
         }
         private void ShortCutes_Paint(object sender, PaintEventArgs e)
         {
             Program.ToDraw(this.Controls, e);
         }
 
-        private void notfocus_Enter(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-
-        private void closeBtn_Click(object sender, EventArgs e)
+        private void CloseBtn_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void miniBtn_Click(object sender, EventArgs e)
+        private void MiniBtn_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void DesktopCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+
+        private void OpenShortFolderCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+
+        private void ShortCutes_Click(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+
+        string urltext;
+        private void ICOurl_Click(object sender, EventArgs e)
+        {
+            urltext = ICOurl.Text;
+            ICOurl.Text = null;
+        }
+
+        private void ICOurl_Leave(object sender, EventArgs e)
+        {
+            var text = urltext;
+            urltext = null;
+            ICOurl.Text = text;
+        }
+
+        private void ICOurl_TextChanged(object sender, EventArgs e)
+        {
+            if(urltext != null && !String.IsNullOrWhiteSpace(ICOurl.Text))
+            {
+                try
+                {
+                    WebClient client = new WebClient();
+                    Stream stream = client.OpenRead(ICOurl.Text);
+                    Bitmap bitmap = new Bitmap(stream);
+                    if (bitmap != null)
+                    {
+                        bitmap.Save(path + @"temp.png");
+                        ImagingHelper.ConvertToIcon(path + @"temp.png", path + @"temp.ico");
+                        ICOpic.Image = ImagingHelper.ICONbox;
+                        Image = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    Error("URL is not an image...");
+                }
+                Shortcutbox.Focus();
+            }
+        }
+
+        private void Info(string message)
+        {
+            var success = new MessageForm(message, 0);
+            success.ShowDialog();
+        }
+
+        private void Error(string message)
+        {
+            var success = new MessageForm(message, 1);
+            success.ShowDialog();
+        }
+        private DialogResult Success(string message)
+        {
+            var success = new MessageForm(message, 2);
+            success.ShowDialog();
+
+            return success.dialogResult;
         }
     }
 

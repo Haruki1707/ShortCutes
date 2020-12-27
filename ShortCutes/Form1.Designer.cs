@@ -48,6 +48,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.miniBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
+            this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
@@ -55,19 +56,19 @@
             // 
             // label5
             // 
-            this.label5.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(437, 78);
+            this.label5.Location = new System.Drawing.Point(443, 50);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(298, 21);
+            this.label5.Size = new System.Drawing.Size(303, 21);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Select a PNG or JPG Image to set as ICON Shotcut:";
+            this.label5.Text = "Select a PNG or JPG image to set as the shortcut ICON:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // OpenShortFolderCheck
             // 
             this.OpenShortFolderCheck.AutoSize = true;
-            this.OpenShortFolderCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenShortFolderCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.OpenShortFolderCheck.ForeColor = System.Drawing.Color.White;
             this.OpenShortFolderCheck.Location = new System.Drawing.Point(14, 311);
             this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
@@ -76,13 +77,14 @@
             this.OpenShortFolderCheck.TabStop = false;
             this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
             this.OpenShortFolderCheck.UseVisualStyleBackColor = true;
+            this.OpenShortFolderCheck.CheckedChanged += new System.EventHandler(this.OpenShortFolderCheck_CheckedChanged);
             // 
             // DesktopCheck
             // 
             this.DesktopCheck.AutoSize = true;
             this.DesktopCheck.Checked = true;
             this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
             this.DesktopCheck.Location = new System.Drawing.Point(302, 130);
             this.DesktopCheck.Name = "DesktopCheck";
@@ -90,6 +92,7 @@
             this.DesktopCheck.TabIndex = 5;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
+            this.DesktopCheck.CheckedChanged += new System.EventHandler(this.DesktopCheck_CheckedChanged);
             // 
             // gameBrow
             // 
@@ -97,7 +100,7 @@
             this.gameBrow.FlatAppearance.BorderSize = 0;
             this.gameBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.gameBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
             this.gameBrow.ForeColor = System.Drawing.Color.White;
             this.gameBrow.Location = new System.Drawing.Point(302, 261);
             this.gameBrow.Name = "gameBrow";
@@ -113,7 +116,7 @@
             this.emuBrow.FlatAppearance.BorderSize = 0;
             this.emuBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.emuBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.emuBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emuBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
             this.emuBrow.ForeColor = System.Drawing.Color.White;
             this.emuBrow.Location = new System.Drawing.Point(302, 192);
             this.emuBrow.Name = "emuBrow";
@@ -150,7 +153,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold);
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(14, 52);
             this.label3.Name = "label3";
@@ -184,13 +187,13 @@
             // 
             this.emulatorcb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(57)))), ((int)(((byte)(77)))));
             this.emulatorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.emulatorcb.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emulatorcb.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
             this.emulatorcb.ForeColor = System.Drawing.Color.White;
             this.emulatorcb.FormattingEnabled = true;
             this.emulatorcb.Location = new System.Drawing.Point(14, 73);
             this.emulatorcb.MaxDropDownItems = 10;
             this.emulatorcb.Name = "emulatorcb";
-            this.emulatorcb.Size = new System.Drawing.Size(176, 22);
+            this.emulatorcb.Size = new System.Drawing.Size(176, 26);
             this.emulatorcb.TabIndex = 6;
             this.emulatorcb.SelectedIndexChanged += new System.EventHandler(this.Emulatorcb_SelectedIndexChanged);
             // 
@@ -209,7 +212,6 @@
             this.Edirbox.TabIndex = 14;
             this.Edirbox.TabStop = false;
             this.Edirbox.Click += new System.EventHandler(this.EmuBrow_Click);
-            this.Edirbox.Enter += new System.EventHandler(this.notfocus_Enter);
             // 
             // Gdirbox
             // 
@@ -226,7 +228,6 @@
             this.Gdirbox.TabIndex = 15;
             this.Gdirbox.TabStop = false;
             this.Gdirbox.Click += new System.EventHandler(this.GameBrow_Click);
-            this.Gdirbox.Enter += new System.EventHandler(this.notfocus_Enter);
             // 
             // createshortbtn
             // 
@@ -234,11 +235,11 @@
             this.createshortbtn.FlatAppearance.BorderSize = 0;
             this.createshortbtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.createshortbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.createshortbtn.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.createshortbtn.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 14.25F, System.Drawing.FontStyle.Bold);
             this.createshortbtn.ForeColor = System.Drawing.Color.White;
             this.createshortbtn.Location = new System.Drawing.Point(12, 337);
             this.createshortbtn.Name = "createshortbtn";
-            this.createshortbtn.Size = new System.Drawing.Size(404, 65);
+            this.createshortbtn.Size = new System.Drawing.Size(409, 65);
             this.createshortbtn.TabIndex = 4;
             this.createshortbtn.Text = "Create ShortCute";
             this.createshortbtn.UseVisualStyleBackColor = false;
@@ -246,13 +247,13 @@
             // 
             // label6
             // 
-            this.label6.Font = new System.Drawing.Font("Bahnschrift SemiLight SemiConde", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Bahnschrift SemiLight SemiConde", 9.75F);
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(199, 70);
+            this.label6.Location = new System.Drawing.Point(199, 61);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(222, 26);
+            this.label6.Size = new System.Drawing.Size(222, 44);
             this.label6.TabIndex = 28;
-            this.label6.Text = "(Opening .exe emulator will auto-select it)";
+            this.label6.Text = "Opening \'.exe\' emulator will auto-select it";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelBorderStyle
@@ -264,21 +265,21 @@
             this.panelBorderStyle.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelBorderStyle.Location = new System.Drawing.Point(0, 0);
             this.panelBorderStyle.Name = "panelBorderStyle";
-            this.panelBorderStyle.Size = new System.Drawing.Size(751, 42);
+            this.panelBorderStyle.Size = new System.Drawing.Size(760, 42);
             this.panelBorderStyle.TabIndex = 29;
-            this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
+            this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 20.25F);
             this.label7.ForeColor = System.Drawing.SystemColors.Control;
             this.label7.Location = new System.Drawing.Point(4, 4);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(132, 33);
             this.label7.TabIndex = 2;
             this.label7.Text = "ShortCutes";
-            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelBorderStyle_MouseDown);
+            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
             // miniBtn
             // 
@@ -289,13 +290,13 @@
             this.miniBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
             this.miniBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.miniBtn.ForeColor = System.Drawing.SystemColors.Control;
-            this.miniBtn.Location = new System.Drawing.Point(676, 4);
+            this.miniBtn.Location = new System.Drawing.Point(682, 4);
             this.miniBtn.Name = "miniBtn";
             this.miniBtn.Size = new System.Drawing.Size(35, 35);
             this.miniBtn.TabIndex = 0;
             this.miniBtn.TabStop = false;
             this.miniBtn.UseVisualStyleBackColor = false;
-            this.miniBtn.Click += new System.EventHandler(this.miniBtn_Click);
+            this.miniBtn.Click += new System.EventHandler(this.MiniBtn_Click);
             // 
             // closeBtn
             // 
@@ -305,13 +306,30 @@
             this.closeBtn.FlatAppearance.BorderSize = 0;
             this.closeBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeBtn.Location = new System.Drawing.Point(713, 4);
+            this.closeBtn.Location = new System.Drawing.Point(719, 4);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(35, 35);
             this.closeBtn.TabIndex = 0;
             this.closeBtn.TabStop = false;
             this.closeBtn.UseVisualStyleBackColor = false;
-            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
+            this.closeBtn.Click += new System.EventHandler(this.CloseBtn_Click);
+            // 
+            // ICOurl
+            // 
+            this.ICOurl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
+            this.ICOurl.ForeColor = System.Drawing.Color.White;
+            this.ICOurl.Location = new System.Drawing.Point(446, 379);
+            this.ICOurl.Multiline = true;
+            this.ICOurl.Name = "ICOurl";
+            this.ICOurl.Size = new System.Drawing.Size(300, 28);
+            this.ICOurl.TabIndex = 30;
+            this.ICOurl.Text = "or paste an Image URL here...";
+            this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
+            this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
+            this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
             // 
             // ICOpic
             // 
@@ -319,7 +337,7 @@
             this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ICOpic.Location = new System.Drawing.Point(435, 102);
+            this.ICOpic.Location = new System.Drawing.Point(446, 73);
             this.ICOpic.Name = "ICOpic";
             this.ICOpic.Size = new System.Drawing.Size(300, 300);
             this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -332,8 +350,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.ClientSize = new System.Drawing.Size(751, 415);
+            this.ClientSize = new System.Drawing.Size(760, 415);
             this.ControlBox = false;
+            this.Controls.Add(this.ICOurl);
             this.Controls.Add(this.panelBorderStyle);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -356,6 +375,7 @@
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
+            this.Click += new System.EventHandler(this.ShortCutes_Click);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
             this.panelBorderStyle.ResumeLayout(false);
             this.panelBorderStyle.PerformLayout();
@@ -387,6 +407,7 @@
         private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.Button miniBtn;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox ICOurl;
     }
 }
 
