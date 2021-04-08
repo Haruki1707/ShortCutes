@@ -21,6 +21,7 @@ namespace ShortCutes
 {
     public partial class ShortCutes : Form
     {
+        readonly private string temppath = Path.GetTempPath();
         readonly List<Emulator> emus = Emulators.emus;
         public ShortCutes()
         {
@@ -30,20 +31,6 @@ namespace ShortCutes
                 emulatorcb.Items.Add(emu.Name);
         }
 
-        //Permite arrastrar el formulario
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-
-        private void FormDisp_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        readonly private string path = Path.GetTempPath();
 
         private int emuindex = -1;
         private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
@@ -121,7 +108,7 @@ namespace ShortCutes
 
             CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" })
             {
-                CompilerOptions = "-win32icon:" + path + "temp.ico",
+                CompilerOptions = "-win32icon:" + temppath + "temp.ico",
                 //Make sure we generate an EXE, not a DLL
                 GenerateExecutable = true,
                 OutputAssembly = Output
@@ -306,66 +293,12 @@ namespace ShortCutes
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    ImagingHelper.ConvertToIcon(dialog.FileName, path + @"temp.ico");
+                    ImagingHelper.ConvertToIcon(dialog.FileName, temppath + @"temp.ico");
                     ICOpic.Image = ImagingHelper.ICONbox;
                     Image = true;
                 }
             }
             Shortcutbox.Focus();
-        }
-        private void ShortCutes_Paint(object sender, PaintEventArgs e)
-        {
-            Program.ToDraw(this.Controls, e);
-        }
-
-        private void CloseBtn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MiniBtn_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void DesktopCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-
-        private void OpenShortFolderCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-
-        private void ShortCutes_Click(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-
-        string urltext;
-        private void ICOurl_Click(object sender, EventArgs e)
-        {
-            urltext = ICOurl.Text;
-            ICOurl.Text = null;
-        }
-
-        private void ICOurl_Leave(object sender, EventArgs e)
-        {
-            var text = urltext;
-            urltext = null;
-            ICOurl.Text = text;
-        }
-
-        bool InputIsCommand = false;
-        private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = !InputIsCommand;
-        }
-
-        private void ICOurl_KeyDown(object sender, KeyEventArgs e)
-        {
-            InputIsCommand = e.Control == true && (e.KeyCode == Keys.V);
         }
 
         private void ICOurl_TextChanged(object sender, EventArgs e)
@@ -379,8 +312,8 @@ namespace ShortCutes
                     Bitmap bitmap = new Bitmap(stream);
                     if (bitmap != null)
                     {
-                        bitmap.Save(path + @"temp.png");
-                        ImagingHelper.ConvertToIcon(path + @"temp.png", path + @"temp.ico");
+                        bitmap.Save(temppath + @"temp.png");
+                        ImagingHelper.ConvertToIcon(temppath + @"temp.png", temppath + @"temp.ico");
                         ICOpic.Image = ImagingHelper.ICONbox;
                         Image = true;
                     }
@@ -393,12 +326,73 @@ namespace ShortCutes
             }
         }
 
+        bool InputIsCommand = false;
+        private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !InputIsCommand;
+        }
+
+        private void ICOurl_KeyDown(object sender, KeyEventArgs e)
+        {
+            InputIsCommand = e.Control == true && (e.KeyCode == Keys.V);
+        }
+
+        string urltext;
+        private void ICOurl_Click(object sender, EventArgs e)
+        {
+            urltext = ICOurl.Text;
+            ICOurl.Text = null;
+        }
+        private void ICOurl_Leave(object sender, EventArgs e)
+        {
+            var text = urltext;
+            urltext = null;
+            ICOurl.Text = text;
+        }
+
+        private void ShortCutes_Paint(object sender, PaintEventArgs e)
+        {
+            Program.ToDraw(this.Controls, e);
+        }
+        private void CloseBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        private void MiniBtn_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+        private void DesktopCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+        private void OpenShortFolderCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+        private void ShortCutes_Click(object sender, EventArgs e)
+        {
+            Shortcutbox.Focus();
+        }
+
+        //Permite arrastrar el formulario
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        private void FormDisp_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
         private void Info(string message)
         {
             var info = new MessageForm(message, 0);
             info.ShowDialog();
         }
-
         private void Error(string message)
         {
             var error = new MessageForm(message, 1);

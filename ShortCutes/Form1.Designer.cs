@@ -86,7 +86,7 @@
             this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
-            this.DesktopCheck.Location = new System.Drawing.Point(302, 130);
+            this.DesktopCheck.Location = new System.Drawing.Point(302, 139);
             this.DesktopCheck.Name = "DesktopCheck";
             this.DesktopCheck.Size = new System.Drawing.Size(115, 20);
             this.DesktopCheck.TabIndex = 5;
@@ -132,11 +132,11 @@
             this.Shortcutbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
             this.Shortcutbox.ForeColor = System.Drawing.Color.White;
-            this.Shortcutbox.Location = new System.Drawing.Point(14, 130);
+            this.Shortcutbox.Location = new System.Drawing.Point(14, 137);
             this.Shortcutbox.MaxLength = 35;
             this.Shortcutbox.Multiline = true;
             this.Shortcutbox.Name = "Shortcutbox";
-            this.Shortcutbox.Size = new System.Drawing.Size(254, 28);
+            this.Shortcutbox.Size = new System.Drawing.Size(254, 22);
             this.Shortcutbox.TabIndex = 1;
             // 
             // label4
