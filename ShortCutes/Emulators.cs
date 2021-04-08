@@ -28,6 +28,8 @@ namespace ShortCutes
             emus.Last().DescriptionChange("Activate fullscreen through PJ64 GUI");
             //Need to activate fullscreen through Emulator GUI
             emus.Add(new Emulator("YUZU", "yuzu.exe","Switch Games (*.xci; *.nsp)| *.xci;*.nsp", "-f -g", "", ""));
+            var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            emus.Last().Path(Appdata + @"\Local\Yuzu\yuzu-windows-msvc\");
             //Only works on NightBuild
             emus.Add(new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip)|*.gba;*.gbc;*.gb;*.zip", "/f", "", ""));
             emus.Last().DescriptionChange("Only works on nightbuild. Don't exit fullscreen, do ALT+F4", true);
@@ -48,6 +50,7 @@ namespace ShortCutes
         readonly string argumentsP2;
         readonly string gamesfilters;
         string description = "Works as expected";
+        string InstallPath = null;
         Color cdesc = Color.LightGreen;
 
         public string Name { get => name;}
@@ -82,6 +85,18 @@ namespace ShortCutes
                 cdesc = Color.OrangeRed;
             else
                 cdesc = Color.Yellow;
+        }
+
+        public string Path(string path = null)
+        {
+            if (InstallPath == null)
+            {
+                if (System.IO.File.Exists(path + exe))
+                {
+                    InstallPath = path;
+                }
+            }
+            return InstallPath;
         }
 
         public string Arguments(string gamedir)

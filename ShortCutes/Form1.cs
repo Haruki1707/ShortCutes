@@ -46,6 +46,7 @@ namespace ShortCutes
                 Gdirbox.Text = null;
                 label6.Text = emus[emuindex].Description;
                 label6.ForeColor = emus[emuindex].Cdesc;
+                Edirbox.Text = emus[emuindex].Path();
             }
             Shortcutbox.Focus();
         }
