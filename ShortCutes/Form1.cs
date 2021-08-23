@@ -22,12 +22,14 @@ namespace ShortCutes
     public partial class ShortCutes : Form
     {
         readonly private string temppath = Path.GetTempPath();
-        readonly List<Emulator> emus = Emulators.emus;
+        readonly List<Emulator> EmulatorsList = Emulators.EmulatorsList;
+        Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
+
         public ShortCutes()
         {
             InitializeComponent();
 
-            foreach(var emu in emus)
+            foreach(var emu in EmulatorsList)
                 emulatorcb.Items.Add(emu.Name);
         }
 
@@ -42,12 +44,12 @@ namespace ShortCutes
 
             if (lastemuindex != emuindex)
             {
-                Edirbox.Text = null;
-                Gdirbox.Text = null;
-                label6.Text = emus[emuindex].Description;
-                label6.ForeColor = emus[emuindex].Cdesc;
-                Edirbox.Text = emus[emuindex].Path();
+                Edirbox.Text = Gdirbox.Text = null;
+                label6.Text = EmulatorsList[emuindex].Description;
+                label6.ForeColor = EmulatorsList[emuindex].Cdesc;
+                Edirbox.Text = EmulatorsList[emuindex].Path();
             }
+
             Shortcutbox.Focus();
         }
 
@@ -64,41 +66,32 @@ namespace ShortCutes
                 Shortcutbox.Focus();
                 return;
             }
-            else
+            if (!Image)
             {
-                if (!Image)
-                {
-                    Error("Select a picture to continue");
-                    return;
-                }
-                Regex containsABadCharacter = new Regex("["
-                + Regex.Escape(new string(Path.GetInvalidPathChars()))
-                + "]");
-                if (containsABadCharacter.IsMatch(Shortcutbox.Text))
-                {
-                    char[] invalidFileChars = Path.GetInvalidFileNameChars();
-
-                    Error("Invalid filename!\n Cannot contain: " + string.Join(", ", invalidFileChars));
-                    return;
-                }
-                Compile(code, emulatorpath, Shortcutbox.Text);
-                if (OpenShortFolderCheck.Checked)
-                    System.Diagnostics.Process.Start("explorer.exe", emulatorpath + @"ShortCutes");
-
-                ICOpic.Image = null;
-                Image = false;
-                Edirbox.Text = emulatorpath;
-                Gdirbox.Text = null;
-                Shortcutbox.Text = null;
-                Shortcutbox.Focus();
+                Error("Select a picture to continue");
                 return;
             }
+            if (containsABadCharacter.IsMatch(Shortcutbox.Text))
+            {
+                Error("Invalid filename!\n Cannot contain: " + string.Join(", ", Path.GetInvalidFileNameChars()));
+                return;
+            }
+
+            Compile(code, emulatorpath, Shortcutbox.Text);
+            if (OpenShortFolderCheck.Checked)
+                Process.Start("explorer.exe", emulatorpath + @"ShortCutes");
+
+            Image = false;
+            ICOpic.Image = null;
+            Gdirbox.Text = Shortcutbox.Text = null;
+            Edirbox.Text = emulatorpath;
+            Shortcutbox.Focus();
+            return;
         }
 
         private void Compile(string code, string emupath, string Filename)
         {
             CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-            //ICodeCompiler icc = codeProvider.CreateCompiler();
 
             emupath += @"ShortCutes";
             if (!Directory.Exists(emupath))
@@ -110,7 +103,6 @@ namespace ShortCutes
             CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" })
             {
                 CompilerOptions = "-win32icon:" + temppath + "temp.ico",
-                //Make sure we generate an EXE, not a DLL
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
@@ -128,28 +120,27 @@ namespace ShortCutes
                                 Environment.NewLine + Environment.NewLine;
                 }
                 Error(errors);
+                return;
             }
-            else
-            {
-                if (DesktopCheck.Checked)
-                {
-                    object shDesktop = (object)"Desktop";
-                    WshShell shell = new WshShell();
-                    string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
-                    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-                    shortcut.Description = "ShortCute for " + Filename;
-                    shortcut.TargetPath = Output;
-                    shortcut.WorkingDirectory = emupath;
-                    shortcut.Save();
-                }
 
-                if (Success("Shortcut created!\nExecute shortcut?") == DialogResult.Yes)
-                {
-                    var starto = new Process();
-                    starto.StartInfo.FileName = Output;
-                    starto.StartInfo.WorkingDirectory = emupath;
-                    starto.Start();
-                }
+            if (DesktopCheck.Checked)
+            {
+                object shDesktop = (object)"Desktop";
+                WshShell shell = new WshShell();
+                string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                shortcut.Description = "ShortCute for " + Filename;
+                shortcut.TargetPath = Output;
+                shortcut.WorkingDirectory = emupath;
+                shortcut.Save();
+            }
+
+            if (Success("Shortcut created!\nExecute shortcut?") == DialogResult.Yes)
+            {
+                var starto = new Process();
+                starto.StartInfo.FileName = Output;
+                starto.StartInfo.WorkingDirectory = emupath;
+                starto.Start();
             }
         }
 
@@ -157,8 +148,7 @@ namespace ShortCutes
         {
             string gamechecker = gamedir;
 
-            StringComparison comp = StringComparison.OrdinalIgnoreCase;
-            if (gamedir.Contains(emulatordir, comp))
+            if (gamedir.Contains(emulatordir, StringComparison.OrdinalIgnoreCase))
             {
                 gamedir = gamedir.Replace(emulatordir, @"");
                 gamedir = gamedir.Replace(@"\", @"\\");
@@ -171,7 +161,7 @@ namespace ShortCutes
                     Error("Please select a emulator!");
                     return "false";
                 }
-                else if (!System.IO.File.Exists(emulatordir + emus[emuindex].Exe))
+                else if (!System.IO.File.Exists(emulatordir + EmulatorsList[emuindex].Exe))
                 {
                     Error("Emulator doesn't exist in the specified path\nCheck if path or selected emulator is correct");
                     return "false";
@@ -200,8 +190,8 @@ namespace ShortCutes
                                     "Console.WriteLine(\"Emulator ShortCutes UwU \\nDesign by Haruki1707.  \\nExecuting ShortCute...\");\n" +
                                     "Process ShortCute = new Process();\n" +
                                     "ShortCute.StartInfo.WorkingDirectory = \"..\\\\\";\n" +
-                                    "ShortCute.StartInfo.FileName = \"..\\\\" + emus[emuindex].Exe + "\";\n" +
-                                    "ShortCute.StartInfo.Arguments =\"" + emus[emuindex].Arguments(gamedir) + "\";\n" +
+                                    "ShortCute.StartInfo.FileName = \"..\\\\" + EmulatorsList[emuindex].Exe + "\";\n" +
+                                    "ShortCute.StartInfo.Arguments =\"" + EmulatorsList[emuindex].Arguments(gamedir) + "\";\n" +
                                     "ShortCute.Start();\n" + 
                                 "}\n" +
                             "}\n" +
@@ -212,94 +202,88 @@ namespace ShortCutes
 
         private void EmuBrow_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            string EmuDir = "C:\\";
+            if (Edirbox.Text != "")
+                EmuDir = Edirbox.Text;
+
+            var File = FileDialog(EmuDir, "Executable File (*.exe)|*.exe");
+
+            if(File != null)
             {
-                if (Edirbox.Text != @"")
-                    dialog.InitialDirectory = Edirbox.Text;
-                else
-                    dialog.InitialDirectory = "C:\\";
-
-                dialog.Filter = "Executable File (*.exe)|*.exe";
-                dialog.FilterIndex = 1;
-                dialog.RestoreDirectory = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
+                bool exists = false;
+                int currentindex = 0;
+                foreach (var emu in EmulatorsList)
                 {
-                    bool exists = false;
-                    int currentindex = 0;
-                    foreach (var emu in emus)
+                    if (emu.Exe.ToLower() == Path.GetFileName(File).ToLower())
                     {
-                        if (emu.Exe.ToLower() == dialog.SafeFileName.ToLower())
-                        {
-                            emulatorcb.SelectedIndex = currentindex;
-                            Edirbox.Text = Path.GetDirectoryName(dialog.FileName);
-                            exists = true;
-                            label6.Text = emu.Description;
-                            label6.ForeColor = emu.Cdesc;
-                            break;
-                        }
-                        currentindex++;
+                        emu.Path(Path.GetDirectoryName(File));
+                        emulatorcb.SelectedIndex = currentindex;
+                        exists = true;
+                        break;
                     }
+                    currentindex++;
+                }
 
-                    if (exists == false)
-                    {
-                        Info("The emulator is not yet supported. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
-                            "\n\n!!!Also, this could appear because you changed the emulator executable name." +
-                            "Make sure you are using the original emulator name!!!");
-                    }
+                if (exists == false)
+                {
+                    Info("The emulator is not yet supported. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
+                        "\n\n!!!Also, this could appear because you changed the emulator executable name." +
+                        "Make sure you are using the original emulator name!!!");
                 }
             }
+
             Shortcutbox.Focus();
         }
 
         private void GameBrow_Click(object sender, EventArgs e)
         {
-            string filter;
-            if (emuindex != -1)
-                filter = emus[emuindex].Gamesfilters;
+            string GamesPath = "C:\\";
+            if(emuindex != -1)
+            {
+                if (EmulatorsList[emuindex].Games() != "" && EmulatorsList[emuindex].Games() != null)
+                    GamesPath = EmulatorsList[emuindex].Games();
+                else if (Edirbox.Text != "")
+                    GamesPath = Edirbox.Text;
+
+                var File = FileDialog(GamesPath, EmulatorsList[emuindex].Gamesfilters);
+
+                if (File != null)
+                    Gdirbox.Text = File;
+            }
             else
-            {
                 Info("First, select or browse an emulator!!!");
-                return;
-            }
 
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                if (Edirbox.Text != @"")
-                    dialog.InitialDirectory = Edirbox.Text;
-                else
-                    dialog.InitialDirectory = "C:\\";
-
-                dialog.Filter = filter;
-                dialog.FilterIndex = 1;
-                dialog.RestoreDirectory = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    Gdirbox.Text = dialog.FileName;
-                }
-            }
             Shortcutbox.Focus();
         }
 
         private static bool Image = false;
         private void ICOpic_Click(object sender, EventArgs e)
         {
+            var File = FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+            
+            if (File != null)
+            {
+                ImagingHelper.ConvertToIcon(File, temppath + @"temp.ico");
+                ICOpic.Image = ImagingHelper.ICONbox;
+                Image = true;
+            }
+
+            Shortcutbox.Focus();
+        }
+
+        private string FileDialog(string InitialDir, string Filter)
+        {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                dialog.InitialDirectory = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads");
-                dialog.Filter = "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg";
+                dialog.InitialDirectory = InitialDir;
+                dialog.Filter = Filter;
                 dialog.FilterIndex = 1;
-                dialog.RestoreDirectory = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    ImagingHelper.ConvertToIcon(dialog.FileName, temppath + @"temp.ico");
-                    ICOpic.Image = ImagingHelper.ICONbox;
-                    Image = true;
-                }
+                    return dialog.FileName;
+                else
+                    return null;
             }
-            Shortcutbox.Focus();
         }
 
         private void ICOurl_TextChanged(object sender, EventArgs e)
@@ -308,8 +292,7 @@ namespace ShortCutes
             {
                 try
                 {
-                    WebClient client = new WebClient();
-                    Stream stream = client.OpenRead(ICOurl.Text);
+                    Stream stream = new WebClient().OpenRead(ICOurl.Text);
                     Bitmap bitmap = new Bitmap(stream);
                     if (bitmap != null)
                     {
@@ -327,6 +310,7 @@ namespace ShortCutes
             }
         }
 
+        //UI things not that important
         bool InputIsCommand = false;
         private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -348,7 +332,7 @@ namespace ShortCutes
         {
             var text = urltext;
             urltext = null;
-            ICOurl.Text = text;
+            ICOurl.Text = urltext;
         }
 
         private void ShortCutes_Paint(object sender, PaintEventArgs e)
@@ -363,15 +347,8 @@ namespace ShortCutes
         {
             this.WindowState = FormWindowState.Minimized;
         }
-        private void DesktopCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-        private void OpenShortFolderCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Shortcutbox.Focus();
-        }
-        private void ShortCutes_Click(object sender, EventArgs e)
+
+        private void Shortcutbox_Focus(object sender, EventArgs e)
         {
             Shortcutbox.Focus();
         }
@@ -405,6 +382,14 @@ namespace ShortCutes
             success.ShowDialog();
 
             return success.dialogResult;
+        }
+
+        private void Shortcutbox_TextChanged(object sender, EventArgs e)
+        {
+            if (TextRenderer.MeasureText(Shortcutbox.Text, Shortcutbox.Font).Width > Shortcutbox.Width)
+                Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size - 1);
+            else if(Shortcutbox.Font.Size < 12 && TextRenderer.MeasureText(Shortcutbox.Text, new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1)).Width < Shortcutbox.Width)
+                Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1);
         }
     }
 

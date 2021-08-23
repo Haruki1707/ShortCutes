@@ -17,15 +17,15 @@ namespace ShortCutes
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ShortCutes());
-
             if(IsUserAdministrator() == false)
             {
                 MessageBox.Show("Requires administrator rights to work as expected\nClosing");
                 Environment.Exit(0);
             }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new ShortCutes());
         }
 
         static bool IsUserAdministrator()

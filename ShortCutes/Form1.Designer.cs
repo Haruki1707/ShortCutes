@@ -77,7 +77,7 @@
             this.OpenShortFolderCheck.TabStop = false;
             this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
             this.OpenShortFolderCheck.UseVisualStyleBackColor = true;
-            this.OpenShortFolderCheck.CheckedChanged += new System.EventHandler(this.OpenShortFolderCheck_CheckedChanged);
+            this.OpenShortFolderCheck.CheckedChanged += new System.EventHandler(this.Shortcutbox_Focus);
             // 
             // DesktopCheck
             // 
@@ -92,7 +92,7 @@
             this.DesktopCheck.TabIndex = 5;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
-            this.DesktopCheck.CheckedChanged += new System.EventHandler(this.DesktopCheck_CheckedChanged);
+            this.DesktopCheck.CheckedChanged += new System.EventHandler(this.Shortcutbox_Focus);
             // 
             // gameBrow
             // 
@@ -133,11 +133,12 @@
             this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
             this.Shortcutbox.ForeColor = System.Drawing.Color.White;
             this.Shortcutbox.Location = new System.Drawing.Point(14, 137);
-            this.Shortcutbox.MaxLength = 35;
+            this.Shortcutbox.MaxLength = 50;
             this.Shortcutbox.Multiline = true;
             this.Shortcutbox.Name = "Shortcutbox";
             this.Shortcutbox.Size = new System.Drawing.Size(254, 22);
             this.Shortcutbox.TabIndex = 1;
+            this.Shortcutbox.TextChanged += new System.EventHandler(this.Shortcutbox_TextChanged);
             // 
             // label4
             // 
@@ -377,7 +378,7 @@
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
-            this.Click += new System.EventHandler(this.ShortCutes_Click);
+            this.Click += new System.EventHandler(this.Shortcutbox_Focus);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
             this.panelBorderStyle.ResumeLayout(false);
             this.panelBorderStyle.PerformLayout();
