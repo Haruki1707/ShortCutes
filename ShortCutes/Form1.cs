@@ -33,7 +33,6 @@ namespace ShortCutes
                 emulatorcb.Items.Add(emu.Name);
         }
 
-
         private int emuindex = -1;
         private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
