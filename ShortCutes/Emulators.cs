@@ -77,15 +77,12 @@ namespace ShortCutes
             ShortcutsFinder();
         }
 
-        private static void ShortcutsFinder()
+        public static void ShortcutsFinder()
         {
-            string DesktopPath = Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory);
-            string AllUserStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs";
-            string UserStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs";
-
-            GetLnkFiles(DesktopPath);
-            GetLnkFiles(AllUserStartMenuPath);
-            GetLnkFiles(UserStartMenuPath);
+            GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+            GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs");
+            GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs");
+            GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar");
 
             foreach (var shortcut in Shortcuts)
             {
@@ -170,6 +167,7 @@ namespace ShortCutes
 
         public string Games(string path = null)
         {
+            
             if (path != null)
                 GamesPath = path;
 

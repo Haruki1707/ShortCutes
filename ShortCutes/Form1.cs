@@ -49,6 +49,12 @@ namespace ShortCutes
                 Edirbox.Text = EmulatorsList[emuindex].Path();
             }
 
+            if (Edirbox.Text == null || Edirbox.Text == "" || !System.IO.File.Exists(EmulatorsList[emuindex].Path() + EmulatorsList[emuindex].Exe))
+            {
+                Emulators.ShortcutsFinder();
+                Edirbox.Text = EmulatorsList[emuindex].Path();
+            }
+
             Shortcutbox.Focus();
         }
 
