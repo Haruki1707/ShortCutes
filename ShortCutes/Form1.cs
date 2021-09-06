@@ -23,6 +23,7 @@ namespace ShortCutes
     {
         readonly private string temppath = Path.GetTempPath();
         readonly List<Emulator> EmulatorsList = Emulators.EmulatorsList;
+        readonly System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
         Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
 
         public ShortCutes()
@@ -31,6 +32,10 @@ namespace ShortCutes
 
             foreach(var emu in EmulatorsList)
                 emulatorcb.Items.Add(emu.Name);
+
+            using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Resources.loading.gif"))
+            using (Bitmap bitmap = new Bitmap(stream))
+                bitmap.Save(temppath + @"loading.gif");
         }
 
         private int emuindex = -1;
@@ -103,11 +108,13 @@ namespace ShortCutes
                 Directory.CreateDirectory(emupath);
             emupath += @"\";
 
-            string Output = emupath + Shortcutbox.Text + ".exe";
+            string Output = emupath + Filename + ".exe";
 
-            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll" })
+            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll" })
             {
-                CompilerOptions = "-win32icon:" + temppath + "temp.ico",
+                CompilerOptions = "-win32icon:" + temppath + "temp.ico \n -target:winexe " +
+                    "\n -resource:" + temppath + @"temp.png" +
+                    "\n -resource:" + temppath + @"loading.gif",
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
@@ -184,23 +191,15 @@ namespace ShortCutes
                     return "false";
             }
 
-            string code = "using System;\n" +
-                          "using System.Diagnostics;\n" +
-                          "namespace Emulator_ShortCutes\n" +
-                          "{\n" +
-                            "class Program\n" +
-                            "{\n" +
-                                "static void Main()\n" +
-                                "{\n" +
-                                    "Console.WriteLine(\"Emulator ShortCutes UwU \\nDesign by Haruki1707.  \\nExecuting ShortCute...\");\n" +
-                                    "Process ShortCute = new Process();\n" +
-                                    "ShortCute.StartInfo.WorkingDirectory = \"..\\\\\";\n" +
-                                    "ShortCute.StartInfo.FileName = \"..\\\\" + EmulatorsList[emuindex].Exe + "\";\n" +
-                                    "ShortCute.StartInfo.Arguments =\"" + EmulatorsList[emuindex].Arguments(gamedir) + "\";\n" +
-                                    "ShortCute.Start();\n" + 
-                                "}\n" +
-                            "}\n" +
-                          "}\n";
+            string code = null;
+            using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Roslyn Form Code.cs"))
+            using (StreamReader reader = new StreamReader(stream))
+                code = reader.ReadToEnd();
+
+            code = code.Replace("%EMUNAME%", EmulatorsList[emuindex].Name);
+            code = code.Replace("%GAME%", Shortcutbox.Text);
+            code = code.Replace("%EMULATOR%", EmulatorsList[emuindex].Exe);
+            code = code.Replace("%ARGUMENTS%", EmulatorsList[emuindex].Arguments(gamedir));
 
             return code;
         }
@@ -270,6 +269,7 @@ namespace ShortCutes
             {
                 ImagingHelper.ConvertToIcon(File, temppath + @"temp.ico");
                 ICOpic.Image = ImagingHelper.ICONbox;
+                ICOpic.Image.Save(temppath + @"temp.png");
                 Image = true;
             }
 
@@ -304,6 +304,7 @@ namespace ShortCutes
                         bitmap.Save(temppath + @"temp.png");
                         ImagingHelper.ConvertToIcon(temppath + @"temp.png", temppath + @"temp.ico");
                         ICOpic.Image = ImagingHelper.ICONbox;
+                        ICOpic.Image.Save(temppath + @"temp.png");
                         Image = true;
                     }
                 }

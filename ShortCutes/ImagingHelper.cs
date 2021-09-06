@@ -60,9 +60,10 @@ namespace ShortCutes
                     RectangleF cloneRect = new RectangleF(middlex, middley, imageWidth, imageHeight);
                     System.Drawing.Imaging.PixelFormat format = inputBitmap.PixelFormat;
                     inputBitmap = inputBitmap.Clone(cloneRect, format);
-                    ICONbox = inputBitmap;
 
                     width = height = size;
+
+                    ICONbox = new Bitmap(inputBitmap, new Size(width, height));
                 }
                 Bitmap newBitmap = new Bitmap(inputBitmap, new Size(width, height));
                 if (newBitmap != null)
