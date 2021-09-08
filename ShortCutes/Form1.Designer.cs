@@ -46,9 +46,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.ICOurl = new System.Windows.Forms.TextBox();
+            this.ConfigBtn = new System.Windows.Forms.Button();
             this.miniBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
-            this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
@@ -260,6 +261,7 @@
             // panelBorderStyle
             // 
             this.panelBorderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(17)))), ((int)(((byte)(23)))));
+            this.panelBorderStyle.Controls.Add(this.ConfigBtn);
             this.panelBorderStyle.Controls.Add(this.label7);
             this.panelBorderStyle.Controls.Add(this.miniBtn);
             this.panelBorderStyle.Controls.Add(this.closeBtn);
@@ -281,6 +283,42 @@
             this.label7.TabIndex = 2;
             this.label7.Text = "ShortCutes";
             this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
+            // 
+            // ICOurl
+            // 
+            this.ICOurl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
+            this.ICOurl.ForeColor = System.Drawing.Color.White;
+            this.ICOurl.Location = new System.Drawing.Point(446, 379);
+            this.ICOurl.Multiline = true;
+            this.ICOurl.Name = "ICOurl";
+            this.ICOurl.Size = new System.Drawing.Size(300, 28);
+            this.ICOurl.TabIndex = 30;
+            this.ICOurl.Text = "or paste an Image URL here...";
+            this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
+            this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
+            this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
+            this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
+            this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
+            // 
+            // ConfigBtn
+            // 
+            this.ConfigBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.ConfigBtn.BackgroundImage = global::ShortCutes.Properties.Resources.config;
+            this.ConfigBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ConfigBtn.FlatAppearance.BorderSize = 0;
+            this.ConfigBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.ConfigBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ConfigBtn.ForeColor = System.Drawing.SystemColors.Control;
+            this.ConfigBtn.Location = new System.Drawing.Point(642, 4);
+            this.ConfigBtn.Name = "ConfigBtn";
+            this.ConfigBtn.Size = new System.Drawing.Size(35, 35);
+            this.ConfigBtn.TabIndex = 3;
+            this.ConfigBtn.TabStop = false;
+            this.ConfigBtn.UseVisualStyleBackColor = false;
+            this.ConfigBtn.Click += new System.EventHandler(this.ConfigBtn_Click);
             // 
             // miniBtn
             // 
@@ -314,25 +352,6 @@
             this.closeBtn.TabStop = false;
             this.closeBtn.UseVisualStyleBackColor = false;
             this.closeBtn.Click += new System.EventHandler(this.CloseBtn_Click);
-            // 
-            // ICOurl
-            // 
-            this.ICOurl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
-            this.ICOurl.ForeColor = System.Drawing.Color.White;
-            this.ICOurl.Location = new System.Drawing.Point(446, 379);
-            this.ICOurl.Multiline = true;
-            this.ICOurl.Name = "ICOurl";
-            this.ICOurl.Size = new System.Drawing.Size(300, 28);
-            this.ICOurl.TabIndex = 30;
-            this.ICOurl.Text = "or paste an Image URL here...";
-            this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
-            this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
-            this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
-            this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
-            this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
             // 
             // ICOpic
             // 
@@ -411,6 +430,7 @@
         private System.Windows.Forms.Button miniBtn;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox ICOurl;
+        private System.Windows.Forms.Button ConfigBtn;
     }
 }
 

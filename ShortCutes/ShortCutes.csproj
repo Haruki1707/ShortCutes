@@ -85,6 +85,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Roslyn Form Code.cs" />
     <Compile Include="Emulators.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -130,7 +131,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <AdditionalFiles Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
@@ -165,10 +166,10 @@
     <None Include="ShortCute.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Roslyn Form Code.cs">
-      <SubType>Form</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\loading.gif" />
+    <None Include="Resources\config.png" />
+    <EmbeddedResource Include="Resources\rectangular.png" />
+    <EmbeddedResource Include="Resources\square.png" />
     <Content Include="shortcute_OzB_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

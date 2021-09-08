@@ -22,6 +22,7 @@ namespace ShortCutes
     public partial class ShortCutes : Form
     {
         readonly private string temppath = Path.GetTempPath();
+        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         readonly List<Emulator> EmulatorsList = Emulators.EmulatorsList;
         readonly System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
         Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
@@ -36,6 +37,9 @@ namespace ShortCutes
             using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Resources.loading.gif"))
             using (Bitmap bitmap = new Bitmap(stream))
                 bitmap.Save(temppath + @"loading.gif");
+
+            if (System.IO.File.Exists(appdata + @"\secondesign"))
+                RectangularDesign = true;
         }
 
         private int emuindex = -1;
@@ -114,7 +118,8 @@ namespace ShortCutes
             {
                 CompilerOptions = "-win32icon:" + temppath + "temp.ico \n -target:winexe " +
                     "\n -resource:" + temppath + @"temp.png" +
-                    "\n -resource:" + temppath + @"loading.gif",
+                    "\n -resource:" + temppath + @"loadingframe.png",
+                    //"\n -resource:" + temppath + @"loading.gif",
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
@@ -196,6 +201,11 @@ namespace ShortCutes
             using (StreamReader reader = new StreamReader(stream))
                 code = reader.ReadToEnd();
 
+            string size = "256";
+            if (RectangularDesign == true)
+                size = "322";
+
+            code = code.Replace("%HEIGHT%", size);
             code = code.Replace("%EMUNAME%", EmulatorsList[emuindex].Name);
             code = code.Replace("%GAME%", Shortcutbox.Text);
             code = code.Replace("%EMULATOR%", EmulatorsList[emuindex].Exe);
@@ -220,7 +230,7 @@ namespace ShortCutes
                 {
                     if (emu.Exe.ToLower() == Path.GetFileName(File).ToLower())
                     {
-                        emu.Path(Path.GetDirectoryName(File));
+                        emu.Path(Path.GetDirectoryName(File) + @"\");
                         emulatorcb.SelectedIndex = currentindex;
                         exists = true;
                         break;
@@ -352,6 +362,25 @@ namespace ShortCutes
         private void MiniBtn_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        bool RectangularDesign = false;
+        private void ConfigBtn_Click(object sender, EventArgs e)
+        {
+            var design = new MessageForm(RectangularDesign.ToString(), 3);
+            design.ShowDialog();
+
+            if(design.dialogResult == DialogResult.Yes)
+            {
+                if (System.IO.File.Exists(appdata + @"\secondesign"))
+                    System.IO.File.Delete(appdata + @"\secondesign");
+                RectangularDesign = false;
+            }
+            else if(design.dialogResult == DialogResult.No)
+            {
+                System.IO.File.Create(appdata + @"\secondesign").Close();
+                RectangularDesign = true;
+            }
         }
 
         private void Shortcutbox_Focus(object sender, EventArgs e)

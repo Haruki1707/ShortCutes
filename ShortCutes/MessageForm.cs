@@ -16,6 +16,8 @@ namespace ShortCutes
         {
             InitializeComponent();
 
+            Messagelbl.Text = Message;
+
             switch (Type)
             {
                 //Info message
@@ -35,11 +37,65 @@ namespace ShortCutes
                     OKbtn.Hide();
                     iconPB.Image = System.Drawing.SystemIcons.Information.ToBitmap();
                     break;
+                case 3:
+                    this.Size = new Size(440, 336);
+                    OKbtn.Hide();
+                    iconPB.Hide();
+                    Messagelbl.Size = new Size(382, 20);
+                    Messagelbl.Location = new Point(18, 10);
+                    Messagelbl.TextAlign = ContentAlignment.TopCenter;
+                    Messagelbl.Text = "ShortCute Design";
+                    YESbtn.Text = "Square";
+                    NObtn.Text = "Rectangular";
+                    YESbtn.Location = new Point(YESbtn.Location.X - 35, YESbtn.Location.Y);
+                    NObtn.Location = new Point(NObtn.Location.X + 65, NObtn.Location.Y);
+
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+                    PictureBox image;
+                    image = new PictureBox()
+                    {
+                        Size = new Size(200, 200),
+                        Location = new Point(15, 60),
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        BorderStyle = BorderStyle.None,
+                        Image = new Bitmap(assembly.GetManifestResourceStream("ShortCutes.Resources.square.png")),
+                    };
+                    this.Controls.Add(image);
+
+                    PictureBox image2;
+                    image2 = new PictureBox()
+                    {
+                        Size = new Size(200, 252),
+                        Location = new Point(225, 35),
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        BorderStyle = BorderStyle.None,
+                        Image = new Bitmap(assembly.GetManifestResourceStream("ShortCutes.Resources.rectangular.png")),
+                    };
+                    this.Controls.Add(image2);
+
+                    Size tempsize = image.Size;
+                    Point temppoint = image.Location;
+
+                    if (Message == "True")
+                    {
+                        tempsize = image2.Size;
+                        temppoint = image2.Location;
+                    }
+
+                    Label borderPB;
+                    borderPB = new Label()
+                    {
+                        Size = new Size(tempsize.Width + 6, tempsize.Height + 6),
+                        Location = new Point(temppoint.X - 3, temppoint.Y - 3),
+                        BorderStyle = BorderStyle.None,
+                        BackColor = Color.Red
+                    };
+                    this.Controls.Add(borderPB);
+                    break;
                 default:
                     break;
             }
-
-            Messagelbl.Text = Message;
         }
 
         public DialogResult dialogResult = DialogResult.No;
