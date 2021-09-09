@@ -118,8 +118,7 @@ namespace ShortCutes
             {
                 CompilerOptions = "-win32icon:" + temppath + "temp.ico \n -target:winexe " +
                     "\n -resource:" + temppath + @"temp.png" +
-                    "\n -resource:" + temppath + @"loadingframe.png",
-                    //"\n -resource:" + temppath + @"loading.gif",
+                    "\n -resource:" + temppath + @"loading.gif",
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
@@ -348,7 +347,7 @@ namespace ShortCutes
         {
             var text = urltext;
             urltext = null;
-            ICOurl.Text = urltext;
+            ICOurl.Text = text;
         }
 
         private void ShortCutes_Paint(object sender, PaintEventArgs e)
