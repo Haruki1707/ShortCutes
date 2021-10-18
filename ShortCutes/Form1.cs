@@ -22,10 +22,11 @@ namespace ShortCutes
     public partial class ShortCutes : Form
     {
         readonly private string temppath = Path.GetTempPath();
-        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
         readonly List<Emulator> EmulatorsList = Emulators.EmulatorsList;
         readonly System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
+        readonly Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+        readonly string InvalidFileNameChars = "";
 
         public ShortCutes()
         {
@@ -38,8 +39,41 @@ namespace ShortCutes
             using (Bitmap bitmap = new Bitmap(stream))
                 bitmap.Save(temppath + @"loading.gif");
 
-            if (System.IO.File.Exists(appdata + @"\secondesign"))
-                RectangularDesign = true;
+            if (System.IO.File.Exists(appdata + @"squaredesign"))
+                RectangularDesign = false;
+
+            foreach (char ch in Path.GetInvalidFileNameChars())
+            {
+                if (!Char.IsWhiteSpace(ch) && !Char.IsControl(ch))
+                    InvalidFileNameChars += ch + " ";
+            }
+
+
+            //Extracting XCI-Explorer, which I don't own and only has a little modification || Original Reporsitory: https://github.com/StudentBlake/XCI-Explorer
+            if(!System.IO.File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
+            {
+                using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Resources.XCI-Explorer.zip"))
+                using (FileStream bw = new FileStream(appdata + @"XCI-Explorer.zip", FileMode.Create))
+                {
+                    while (stream.Position < stream.Length)
+                    {
+                        byte[] bits = new byte[stream.Length];
+                        stream.Read(bits, 0, (int)stream.Length);
+                        bw.Write(bits, 0, (int)stream.Length);
+                    }
+                }
+
+                System.IO.Compression.ZipFile.ExtractToDirectory(appdata + @"XCI-Explorer.zip", appdata + @"XCI-Explorer");
+                System.IO.File.Delete(appdata + @"XCI-Explorer.zip");
+            }            
+        }
+
+        private void ShortCutes_Shown(object sender, EventArgs e)
+        {
+            if (EZ_Updater.CheckUpdate("Haruki1707/ShortCutes") == true && Success("There is a new version, wanna update?") == DialogResult.Yes)
+            {
+                Download();
+            }
         }
 
         private int emuindex = -1;
@@ -85,9 +119,9 @@ namespace ShortCutes
                 Error("Select a picture to continue");
                 return;
             }
-            if (containsABadCharacter.IsMatch(Shortcutbox.Text))
+            if (!String.IsNullOrWhiteSpace(Shortcutbox.Text))
             {
-                Error("Invalid filename!\n Cannot contain: " + string.Join(", ", Path.GetInvalidFileNameChars()));
+                Error("Shortcut name cannot be empty");
                 return;
             }
 
@@ -363,22 +397,23 @@ namespace ShortCutes
             this.WindowState = FormWindowState.Minimized;
         }
 
-        bool RectangularDesign = false;
+        bool RectangularDesign = true;
         private void ConfigBtn_Click(object sender, EventArgs e)
         {
             var design = new MessageForm(RectangularDesign.ToString(), 3);
             design.ShowDialog();
 
-            if(design.dialogResult == DialogResult.Yes)
+            if(design.dialogResult == DialogResult.No)
             {
-                if (System.IO.File.Exists(appdata + @"\secondesign"))
-                    System.IO.File.Delete(appdata + @"\secondesign");
-                RectangularDesign = false;
-            }
-            else if(design.dialogResult == DialogResult.No)
-            {
-                System.IO.File.Create(appdata + @"\secondesign").Close();
+                if (System.IO.File.Exists(appdata + @"squaredesign"))
+                    System.IO.File.Delete(appdata + @"squaredesign");
                 RectangularDesign = true;
+            }
+            else if(design.dialogResult == DialogResult.Yes)
+            {
+                Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
+                System.IO.File.Create(appdata + @"squaredesign").Close();
+                RectangularDesign = false;
             }
         }
 
@@ -417,6 +452,11 @@ namespace ShortCutes
 
             return success.dialogResult;
         }
+        private void Download()
+        {
+            var FD = new MessageForm("", 4);
+            FD.ShowDialog();
+        }
 
         private void Shortcutbox_TextChanged(object sender, EventArgs e)
         {
@@ -424,6 +464,15 @@ namespace ShortCutes
                 Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size - 1);
             else if(Shortcutbox.Font.Size < 12 && TextRenderer.MeasureText(Shortcutbox.Text, new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1)).Width < Shortcutbox.Width)
                 Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1);
+        }
+
+        private void Shortcutbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (containsABadCharacter.IsMatch(e.KeyChar.ToString()) && !Char.IsControl(e.KeyChar))
+            {
+                Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
+                e.Handled = true;
+            }
         }
     }
 

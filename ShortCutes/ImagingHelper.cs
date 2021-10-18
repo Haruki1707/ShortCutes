@@ -14,6 +14,8 @@ namespace ShortCutes
     /// </summary>
     public static class ImagingHelper
     {
+        public static Bitmap ICONbox;
+
         /// <summary>
         /// Converts a PNG image to a icon (ico)
         /// </summary>
@@ -22,9 +24,6 @@ namespace ShortCutes
         /// <param name="size">The size (16x16 px by default)</param>
         /// <param name="preserveAspectRatio">Preserve the aspect ratio</param>
         /// <returns>Wether or not the icon was succesfully generated</returns>
-
-        public static Bitmap ICONbox;
-
         public static bool ConvertToIcon(Stream input, Stream output, int size = 256, bool preserveAspectRatio = false)
         {
             Bitmap inputBitmap = (Bitmap)Bitmap.FromStream(input);

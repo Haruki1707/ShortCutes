@@ -35,6 +35,7 @@ namespace ShortCutes
             this.YESbtn = new System.Windows.Forms.Button();
             this.Messagelbl = new System.Windows.Forms.Label();
             this.iconPB = new System.Windows.Forms.PictureBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPB)).BeginInit();
             this.SuspendLayout();
@@ -120,6 +121,14 @@ namespace ShortCutes
             this.iconPB.TabIndex = 29;
             this.iconPB.TabStop = false;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 100);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(394, 24);
+            this.progressBar1.TabIndex = 30;
+            this.progressBar1.Visible = false;
+            // 
             // MessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -129,6 +138,7 @@ namespace ShortCutes
             this.Controls.Add(this.iconPB);
             this.Controls.Add(this.Messagelbl);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MessageForm";
             this.ShowIcon = false;
@@ -149,5 +159,6 @@ namespace ShortCutes
         private System.Windows.Forms.Button NObtn;
         private System.Windows.Forms.Button YESbtn;
         private System.Windows.Forms.PictureBox iconPB;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

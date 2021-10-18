@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -93,9 +94,47 @@ namespace ShortCutes
                     };
                     this.Controls.Add(borderPB);
                     break;
+                case 4:
+                    progressBar1.Visible = true;
+                    OKbtn.Hide();
+                    YESbtn.Hide();
+                    NObtn.Hide();
+                    iconPB.Hide();
+
+                    Messagelbl.Size = new Size(382, 75);
+                    Messagelbl.Location = new Point(18, 10);
+                    Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
+                    Messagelbl.Text = "ShortCutes Update Download Progress";
+                    EZ_Updater.Update(DownloadProgress, RestartProgram);
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            double bytesIn = double.Parse(e.BytesReceived.ToString());
+            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+            double percentage = bytesIn / totalBytes * 100;
+
+            progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
+        }
+
+        private void RestartProgram(object sender, AsyncCompletedEventArgs e)
+        {
+            Timer TimerSC = new Timer
+            {
+                Interval = 700,
+                Enabled = true,
+            };
+            TimerSC.Tick += Execute_Tick;
+            TimerSC.Start();
+        }
+
+        private void Execute_Tick(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
 
         public DialogResult dialogResult = DialogResult.No;

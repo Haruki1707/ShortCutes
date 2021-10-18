@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortCutes));
             this.label5 = new System.Windows.Forms.Label();
             this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
@@ -45,14 +46,16 @@
             this.createshortbtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.ICOurl = new System.Windows.Forms.TextBox();
             this.ConfigBtn = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             this.miniBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
+            this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label5
@@ -140,6 +143,7 @@
             this.Shortcutbox.Size = new System.Drawing.Size(254, 22);
             this.Shortcutbox.TabIndex = 1;
             this.Shortcutbox.TextChanged += new System.EventHandler(this.Shortcutbox_TextChanged);
+            this.Shortcutbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Shortcutbox_KeyPress);
             // 
             // label4
             // 
@@ -272,37 +276,6 @@
             this.panelBorderStyle.TabIndex = 29;
             this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 20.25F);
-            this.label7.ForeColor = System.Drawing.SystemColors.Control;
-            this.label7.Location = new System.Drawing.Point(4, 4);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(132, 33);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "ShortCutes";
-            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
-            // 
-            // ICOurl
-            // 
-            this.ICOurl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
-            this.ICOurl.ForeColor = System.Drawing.Color.White;
-            this.ICOurl.Location = new System.Drawing.Point(446, 379);
-            this.ICOurl.Multiline = true;
-            this.ICOurl.Name = "ICOurl";
-            this.ICOurl.Size = new System.Drawing.Size(300, 28);
-            this.ICOurl.TabIndex = 30;
-            this.ICOurl.Text = "or paste an Image URL here...";
-            this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
-            this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
-            this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
-            this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
-            this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
-            // 
             // ConfigBtn
             // 
             this.ConfigBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
@@ -319,6 +292,18 @@
             this.ConfigBtn.TabStop = false;
             this.ConfigBtn.UseVisualStyleBackColor = false;
             this.ConfigBtn.Click += new System.EventHandler(this.ConfigBtn_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 20.25F);
+            this.label7.ForeColor = System.Drawing.SystemColors.Control;
+            this.label7.Location = new System.Drawing.Point(4, 4);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(132, 33);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "ShortCutes";
+            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
             // miniBtn
             // 
@@ -353,6 +338,25 @@
             this.closeBtn.UseVisualStyleBackColor = false;
             this.closeBtn.Click += new System.EventHandler(this.CloseBtn_Click);
             // 
+            // ICOurl
+            // 
+            this.ICOurl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
+            this.ICOurl.ForeColor = System.Drawing.Color.White;
+            this.ICOurl.Location = new System.Drawing.Point(446, 379);
+            this.ICOurl.Multiline = true;
+            this.ICOurl.Name = "ICOurl";
+            this.ICOurl.Size = new System.Drawing.Size(300, 28);
+            this.ICOurl.TabIndex = 30;
+            this.ICOurl.Text = "or paste an Image URL here...";
+            this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
+            this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
+            this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
+            this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
+            this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
+            // 
             // ICOpic
             // 
             this.ICOpic.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ICOpic.BackgroundImage")));
@@ -366,6 +370,10 @@
             this.ICOpic.TabIndex = 26;
             this.ICOpic.TabStop = false;
             this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // ShortCutes
             // 
@@ -397,11 +405,13 @@
             this.Name = "ShortCutes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ShortCutes";
+            this.Shown += new System.EventHandler(this.ShortCutes_Shown);
             this.Click += new System.EventHandler(this.Shortcutbox_Focus);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShortCutes_Paint);
             this.panelBorderStyle.ResumeLayout(false);
             this.panelBorderStyle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -431,6 +441,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox ICOurl;
         private System.Windows.Forms.Button ConfigBtn;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 

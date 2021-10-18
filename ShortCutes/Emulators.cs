@@ -86,12 +86,12 @@ namespace ShortCutes
 
             foreach (var shortcut in Shortcuts)
             {
-                var lnk = new WshShell().CreateShortcut(shortcut) as IWshShortcut;
+                IWshShortcut lnk = new WshShell().CreateShortcut(shortcut);
                 if (lnk != null)
                 {
                     foreach (var emulator in EmulatorsList)
                     {
-                        if(emulator.Exe.ToLower() == Path.GetFileName(lnk.TargetPath).ToLower() && emulator.Path() == null)
+                        if (emulator.Exe.ToLower() == Path.GetFileName(lnk.TargetPath).ToLower() && emulator.Path() == null)
                             emulator.Path(Path.GetDirectoryName(lnk.TargetPath) + @"\");
                     }
                 }

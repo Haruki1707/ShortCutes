@@ -70,6 +70,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -87,6 +88,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Roslyn Form Code.cs" />
     <Compile Include="Emulators.cs" />
+    <Compile Include="EZ_Updater.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +165,7 @@
     <None Include="Resources\minimizebtn.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\XCI-Explorer.zip" />
     <None Include="ShortCute.png" />
   </ItemGroup>
   <ItemGroup>
