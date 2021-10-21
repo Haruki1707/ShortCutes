@@ -27,6 +27,7 @@ namespace Shortcutes
 			this.DoubleBuffered = true;
 			this.ShowInTaskbar = false;
 			this.Paint += this.OnPaint;
+			this.TopMost = true;
 
 			BG = new PictureBox()
 			{
@@ -66,9 +67,22 @@ namespace Shortcutes
 			TimerSC.Start();
 		}
 
+		string EMainWindowTitle = null;
 		private void timer1_Tick(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
+            {
+				EMainWindowTitle = ShortCute.MainWindowTitle;
+				TimerSC.Interval = 250;
+				TimerSC.Tick -= timer1_Tick;
+				TimerSC.Tick += timer2_Tick;
+            }
+			ShortCute.Refresh();
+		}
+
+		private void timer2_Tick(object sender, EventArgs e)
+        {
+			if(ShortCute.MainWindowTitle != EMainWindowTitle)
 				Environment.Exit(0);
 			ShortCute.Refresh();
 		}

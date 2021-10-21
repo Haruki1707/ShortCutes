@@ -1,16 +1,15 @@
 # **ShortCutes [Console-Emulators Shortcuts]**
  Creates executable shortcutes for your emulator games
 
-## **Download (Portable Program)**
-* Latest release **[ShortCutes.exe](https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.exe)**
+## **[Download ShortCutes.exe](https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.exe)** (Portable Program)
 * Requires [.NET Framework 4.7.1](https://dotnet.microsoft.com/download/dotnet-framework/net471)
 
 ### **Two ShortCute launcher design**
-Can be selected on ShortCutes config (default: squared)
+Can be selected on ShortCutes config (default: Rectangular)
 
 Squared | Rectangular
 :--------:|:----------:
-![](https://i.ibb.co/pW3zD1c/square.png) | ![](https://i.ibb.co/TvBL6Bh/rectangular.png)
+![](https://raw.githubusercontent.com/Haruki1707/ShortCutes/main/ShortCutes/Resources/square.png) | ![](https://github.com/Haruki1707/ShortCutes/blob/main/ShortCutes/Resources/rectangular.png?raw=true)
 
 ### **Actual supported emulators**
 

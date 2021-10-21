@@ -17,6 +17,7 @@ namespace ShortCutes
         {
             InitializeComponent();
 
+            DialogResult = DialogResult.No;
             Messagelbl.Text = Message;
 
             switch (Type)
@@ -60,7 +61,7 @@ namespace ShortCutes
                         Location = new Point(15, 60),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
-                        Image = new Bitmap(assembly.GetManifestResourceStream("ShortCutes.Resources.square.png")),
+                        Image = global::ShortCutes.Properties.Resources.square,
                     };
                     this.Controls.Add(image);
 
@@ -71,7 +72,7 @@ namespace ShortCutes
                         Location = new Point(225, 35),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
-                        Image = new Bitmap(assembly.GetManifestResourceStream("ShortCutes.Resources.rectangular.png")),
+                        Image = global::ShortCutes.Properties.Resources.rectangular,
                     };
                     this.Controls.Add(image2);
 
@@ -137,8 +138,6 @@ namespace ShortCutes
             Application.Restart();
         }
 
-        public DialogResult dialogResult = DialogResult.No;
-
         private void OKbtn_Click(object sender, EventArgs e)
         {
             Close();
@@ -146,13 +145,13 @@ namespace ShortCutes
 
         private void NObtn_Click(object sender, EventArgs e)
         {
-            dialogResult = DialogResult.No;
+            DialogResult = DialogResult.No;
             OKbtn_Click(sender, e);
         }
 
         private void YESbtn_Click(object sender, EventArgs e)
         {
-            dialogResult = DialogResult.Yes;
+            DialogResult = DialogResult.Yes;
             OKbtn_Click(sender, e);
         }
 

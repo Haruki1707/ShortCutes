@@ -77,8 +77,17 @@ namespace ShortCutes
             ShortcutsFinder();
         }
 
-        public static void ShortcutsFinder()
+        public static void ShortcutsFinder(Emulator emu = null)
         {
+            List<Emulator> emulist = EmulatorsList;
+            if(emu != null)
+            {
+                emulist = new List<Emulator>
+                {
+                    emu
+                };
+            }
+            
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs");
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs");
@@ -91,18 +100,21 @@ namespace ShortCutes
                 {
                     foreach (var emulator in EmulatorsList)
                     {
-                        if (emulator.Exe.ToLower() == Path.GetFileName(lnk.TargetPath).ToLower() && emulator.Path() == null)
+                        if (emulator.Exe.ToLower() == Path.GetFileName(lnk.TargetPath).ToLower())
                             emulator.Path(Path.GetDirectoryName(lnk.TargetPath) + @"\");
                     }
                 }
             }
+            emulist = null;
         }
 
         private static void GetLnkFiles(string Path)
         {
             var shortcuts = Directory.GetFiles(Path, "*.*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".lnk"));
             foreach (var shortcut in shortcuts)
-                Shortcuts.Add(shortcut);
+                if(!Shortcuts.Contains(shortcut))
+                    Shortcuts.Add(shortcut);
+            shortcuts = null;
         }
     }
 
@@ -162,6 +174,8 @@ namespace ShortCutes
         {
             if (path != null & System.IO.File.Exists(path + exe))
                 InstallPath = path;
+            else if(string.IsNullOrWhiteSpace(path) && !System.IO.File.Exists(InstallPath + exe))
+                Emulators.ShortcutsFinder(this);
             return InstallPath;
         }
 

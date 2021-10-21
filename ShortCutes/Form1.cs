@@ -14,7 +14,7 @@ using System.CodeDom.Compiler;
 using System.Diagnostics;
 using Microsoft.CSharp;
 using System.Text.RegularExpressions;
-using IWshRuntimeLibrary;
+
 using System.Net;
 
 namespace ShortCutes
@@ -23,10 +23,12 @@ namespace ShortCutes
     {
         readonly private string temppath = Path.GetTempPath();
         readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
-        readonly List<Emulator> EmulatorsList = Emulators.EmulatorsList;
-        readonly System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        readonly Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
-        readonly string InvalidFileNameChars = "";
+        private Stream AssemblyResource(string resource) => System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutes.Resources." + resource);
+        readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+        readonly private string InvalidFileNameChars = "";
+        //Emuthings
+        private List<Emulator> EmulatorsList => Emulators.EmulatorsList;
+        private Emulator SelectedEmu => EmulatorsList[emuindex];
 
         public ShortCutes()
         {
@@ -34,25 +36,27 @@ namespace ShortCutes
 
             foreach(var emu in EmulatorsList)
                 emulatorcb.Items.Add(emu.Name);
+            emulatorcb.SelectedIndex = 0;
 
-            using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Resources.loading.gif"))
+            using (Stream stream = AssemblyResource("loading.gif"))
             using (Bitmap bitmap = new Bitmap(stream))
                 bitmap.Save(temppath + @"loading.gif");
 
-            if (System.IO.File.Exists(appdata + @"squaredesign"))
-                RectangularDesign = false;
-
             foreach (char ch in Path.GetInvalidFileNameChars())
-            {
                 if (!Char.IsWhiteSpace(ch) && !Char.IsControl(ch))
                     InvalidFileNameChars += ch + " ";
-            }
+
+            if (File.Exists(appdata + @"squaredesign"))
+                RectangularDesign = false;
+
+            if(!Directory.Exists(appdata.Remove(appdata.Length - 1)))
+                Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
 
 
             //Extracting XCI-Explorer, which I don't own and only has a little modification || Original Reporsitory: https://github.com/StudentBlake/XCI-Explorer
-            if(!System.IO.File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
+            if (!File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
             {
-                using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Resources.XCI-Explorer.zip"))
+                using (Stream stream = AssemblyResource("XCI-Explorer.zip"))
                 using (FileStream bw = new FileStream(appdata + @"XCI-Explorer.zip", FileMode.Create))
                 {
                     while (stream.Position < stream.Length)
@@ -64,15 +68,16 @@ namespace ShortCutes
                 }
 
                 System.IO.Compression.ZipFile.ExtractToDirectory(appdata + @"XCI-Explorer.zip", appdata + @"XCI-Explorer");
-                System.IO.File.Delete(appdata + @"XCI-Explorer.zip");
+                File.Delete(appdata + @"XCI-Explorer.zip");
             }            
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
         {
-            if (EZ_Updater.CheckUpdate("Haruki1707/ShortCutes") == true && Success("There is a new version, wanna update?") == DialogResult.Yes)
+            if (EZ_Updater.CheckUpdate("Haruki1707/ShortCutes") && Success("There is a new version, wanna update?"))
             {
-                Download();
+                var FD = new MessageForm("", 4);
+                FD.ShowDialog();
             }
         }
 
@@ -87,14 +92,8 @@ namespace ShortCutes
             if (lastemuindex != emuindex)
             {
                 Edirbox.Text = Gdirbox.Text = null;
-                label6.Text = EmulatorsList[emuindex].Description;
+                label6.Text = SelectedEmu.Description;
                 label6.ForeColor = EmulatorsList[emuindex].Cdesc;
-                Edirbox.Text = EmulatorsList[emuindex].Path();
-            }
-
-            if (Edirbox.Text == null || Edirbox.Text == "" || !System.IO.File.Exists(EmulatorsList[emuindex].Path() + EmulatorsList[emuindex].Exe))
-            {
-                Emulators.ShortcutsFinder();
                 Edirbox.Text = EmulatorsList[emuindex].Path();
             }
 
@@ -119,7 +118,7 @@ namespace ShortCutes
                 Error("Select a picture to continue");
                 return;
             }
-            if (!String.IsNullOrWhiteSpace(Shortcutbox.Text))
+            if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
             {
                 Error("Shortcut name cannot be empty");
                 return;
@@ -176,16 +175,16 @@ namespace ShortCutes
             if (DesktopCheck.Checked)
             {
                 object shDesktop = (object)"Desktop";
-                WshShell shell = new WshShell();
+                IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
                 string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
-                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutAddress);
                 shortcut.Description = "ShortCute for " + Filename;
                 shortcut.TargetPath = Output;
                 shortcut.WorkingDirectory = emupath;
                 shortcut.Save();
             }
 
-            if (Success("Shortcut created!\nExecute shortcut?") == DialogResult.Yes)
+            if (Success("Shortcut created!\nExecute shortcut?"))
             {
                 var starto = new Process();
                 starto.StartInfo.FileName = Output;
@@ -223,14 +222,14 @@ namespace ShortCutes
                     return "false";
                 }
                 else if (Success("Emulator and games folder must be on the same path for better working.\n\n" +
-                        "Wanna continue without the same path? (still works)") == DialogResult.Yes)
+                        "Wanna continue without the same path? (still works)"))
                     gamedir = gamedir.Replace(@"\", @"\\");
                 else
                     return "false";
             }
 
             string code = null;
-            using (Stream stream = assembly.GetManifestResourceStream("ShortCutes.Roslyn Form Code.cs"))
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutes.Roslyn Form Code.cs"))
             using (StreamReader reader = new StreamReader(stream))
                 code = reader.ReadToEnd();
 
@@ -403,15 +402,14 @@ namespace ShortCutes
             var design = new MessageForm(RectangularDesign.ToString(), 3);
             design.ShowDialog();
 
-            if(design.dialogResult == DialogResult.No)
+            if(design.DialogResult == DialogResult.No)
             {
                 if (System.IO.File.Exists(appdata + @"squaredesign"))
                     System.IO.File.Delete(appdata + @"squaredesign");
                 RectangularDesign = true;
             }
-            else if(design.dialogResult == DialogResult.Yes)
+            else if(design.DialogResult == DialogResult.Yes)
             {
-                Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
                 System.IO.File.Create(appdata + @"squaredesign").Close();
                 RectangularDesign = false;
             }
@@ -445,17 +443,12 @@ namespace ShortCutes
             var error = new MessageForm(message, 1);
             error.ShowDialog();
         }
-        private DialogResult Success(string message)
+        private bool Success(string message)
         {
             var success = new MessageForm(message, 2);
             success.ShowDialog();
 
-            return success.dialogResult;
-        }
-        private void Download()
-        {
-            var FD = new MessageForm("", 4);
-            FD.ShowDialog();
+            return success.DialogResult == DialogResult.Yes;
         }
 
         private void Shortcutbox_TextChanged(object sender, EventArgs e)
@@ -478,17 +471,12 @@ namespace ShortCutes
 
     public static class StringExtensions
     {
-        public static bool Contains(this String str,
-                                    String substr,
-                                    StringComparison cmp)
+        public static bool Contains(this String str, String substr, StringComparison cmp)
         {
             if (substr == null)
-                throw new ArgumentNullException("substring substring",
-                                                " cannot be null.");
-
+                throw new ArgumentNullException("substring substring", " cannot be null.");
             else if (!Enum.IsDefined(typeof(StringComparison), cmp))
-                throw new ArgumentException("comp is not a member of",
-                                            "StringComparison, comp");
+                throw new ArgumentException("comp is not a member of", "StringComparison, comp");
 
             return str.IndexOf(substr, cmp) >= 0;
         }
