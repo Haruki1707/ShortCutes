@@ -106,7 +106,7 @@ namespace ShortCutes
                     Messagelbl.Location = new Point(18, 10);
                     Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
                     Messagelbl.Text = "ShortCutes Update Download Progress";
-                    EZ_Updater.Update(DownloadProgress, RestartProgram);
+                    EZ_Updater.Update(CanceledDownload, RetryDownload, DownloadProgress, RestartProgram);
                     break;
                 default:
                     break;
@@ -115,25 +115,30 @@ namespace ShortCutes
 
         private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
         {
+            Messagelbl.Text = "ShortCutes Update Download Progress";
+
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             double percentage = bytesIn / totalBytes * 100;
 
             progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
+            test = 1;
         }
-
-        private void RestartProgram(object sender, AsyncCompletedEventArgs e)
+        int test = 1;
+        private void RetryDownload()
         {
-            Timer TimerSC = new Timer
-            {
-                Interval = 700,
-                Enabled = true,
-            };
-            TimerSC.Tick += Execute_Tick;
-            TimerSC.Start();
+            Messagelbl.Text = "Retrying Download... " + test++ + "/4";
+            return;
         }
 
-        private void Execute_Tick(object sender, EventArgs e)
+        private void CanceledDownload()
+        {
+            Messagelbl.Text = "Download canceled";
+            progressBar1.Value = 0;
+            OKbtn.Visible = true;
+        }
+
+        private void RestartProgram()
         {
             Application.Restart();
         }

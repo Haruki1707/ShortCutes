@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
@@ -57,7 +52,7 @@ namespace ShortCutes
                     }
 
                     RectangleF cloneRect = new RectangleF(middlex, middley, imageWidth, imageHeight);
-                    System.Drawing.Imaging.PixelFormat format = inputBitmap.PixelFormat;
+                    PixelFormat format = inputBitmap.PixelFormat;
                     inputBitmap = inputBitmap.Clone(cloneRect, format);
 
                     width = height = size;

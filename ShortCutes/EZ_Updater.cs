@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,16 +18,11 @@ namespace ShortCutes
     /// </summary>
     static class EZ_Updater
     {
-        static EZ_Updater()
-        {
-            if (File.Exists(ProgramFileBak))
-                File.Delete(ProgramFileBak);
-        }
-
         readonly private static string ProgramFilePath = Process.GetCurrentProcess().MainModule.FileName;
         readonly private static string ProgramFileName = Path.GetFileName(ProgramFilePath);
         readonly private static string ProgramFileBak = Path.GetFileNameWithoutExtension(ProgramFilePath) + ".bak";
         readonly private static string ProgramVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private static bool AlreadyBak = false;
         /// <summary>
         /// Gets your user and repo from GitHub for program update (must be "USER/REPOSITORY")
         /// </summary>
@@ -47,7 +43,41 @@ namespace ShortCutes
         private static string GitHubrepo = null;
         private static string GitHubrepoAPI = null;
         private static string GitHubrepoDOWNLOAD = null;
+        private static WebClient client = new WebClient();
         readonly private static Regex rg = new Regex(@"(?<digit>\d+)");
+        private static Action CanceledDownload = null;
+        private static Action RetryDownloadAction = null;
+        private static Action<object, DownloadProgressChangedEventArgs> DownloadProgressEvent = null;
+        private static Action RestartEvent = null;
+        private static Timer TimerDP = new Timer();
+        private static int RetryCount = 0; 
+
+        static EZ_Updater()
+        {
+            if (File.Exists(ProgramFileBak))
+                File.Delete(ProgramFileBak);
+
+            TimerDP.Interval = 3000;
+            TimerDP.Tick += RetryDownload;
+        }
+
+        /// <summary>
+        /// Check for the program updates at GitHub Latest Release (Doesn't count pre-releases and drafts) using Semantic versioning, also calling a method after checking async for update
+        /// || Lack of Alpha and Beta Support (later implementation) ||
+        /// </summary>
+        /// <param name="owner">Must be UI Form from where is being called (this)</param>
+        /// <param name="AskForUpdate">Method going to be executed if Check Async Update returns there is a update</param>
+        /// <param name="GitHubrepository">Gets your user and repo from GitHub for program update (must be "USER/REPOSITORY")</param>
+        /// <returns>True in case there is a new update, False if not</returns>
+        public static void CheckUpdate(Form owner, Action AskForUpdate, string GitHubrepository = null)
+        {
+            System.Threading.Thread CU = new System.Threading.Thread(() =>
+            {
+                if (EZ_Updater.CheckUpdate("Haruki1707/ShortCutes"))
+                    owner.BeginInvoke(AskForUpdate);
+            });
+            CU.Start();
+        }
 
         /// <summary>
         /// Check for the program updates at GitHub Latest Release (Doesn't count pre-releases and drafts) using Semantic versioning
@@ -61,13 +91,19 @@ namespace ShortCutes
                 GitHubRep = GitHubrepository;
 
             string json;
-            using (WebClient wc = new WebClient())
+            try
             {
-                wc.Headers.Add("User-Agent", GitHubrepo);
-                wc.Headers.Add("Accept", "application/vnd.github.v3+json");
-                json = wc.DownloadString(GitHubrepoAPI);
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers.Add("User-Agent", GitHubrepo);
+                    wc.Headers.Add("Accept", "application/vnd.github.v3+json");
+                    json = wc.DownloadString(GitHubrepoAPI);
+                }
             }
-
+            catch
+            {
+                return false;
+            }
             List<string> File = json.Split(',').ToList();
 
 
@@ -113,32 +149,100 @@ namespace ShortCutes
             }
             ActualVersion = ActualVersion.Substring(0, ActualVersion.Length - 1);
 
-            if (TAG.CompareTo(ActualVersion) > 0)
-                return true;
-            else
-                return false;
+            return TAG.CompareTo(ActualVersion) > 0;
         }
 
         /// <summary>
         /// Updates the application wheter or not there is a new update
         /// </summary>
-        /// <param name="DownloadProgressEvent">Event method to get DownloadProgressChangedEventArgs</param>
-        /// <param name="RestartEvent">Event method to execute code after download had finished (like a application restart to apply update)</param>
-        public static void Update(Action<object, DownloadProgressChangedEventArgs> DownloadProgressEvent = null, Action<object, AsyncCompletedEventArgs> RestartEvent = null)
+        /// <param name="CanceledDownloadR">Method u want to execute when download is canceled (Obligatory)</param>
+        /// <param name="RetryDownloadR">Method u want to execute when retrying download(Obligatory)</param>
+        /// <param name="DownloadProgressEventR">Event method to get DownloadProgressChangedEventArgs</param>
+        /// <param name="RestartEventR">Event method to execute code after download had finished (like a application restart to apply update)</param>
+        public static void Update(Action CanceledDownloadR = null, Action RetryDownloadR = null, Action<object, DownloadProgressChangedEventArgs> DownloadProgressEventR = null, Action RestartEventR = null)
         {
-            if (File.Exists(ProgramFileBak))
+            if (File.Exists(ProgramFileBak) && !AlreadyBak)
                 File.Delete(ProgramFileBak);
 
-            File.Move(ProgramFileName, ProgramFileBak);
+            if (!AlreadyBak)
+            {
+                AlreadyBak = true;
+                File.Move(ProgramFileName, ProgramFileBak);
+            }
 
-            WebClient client = new WebClient();
+            CanceledDownload = CanceledDownloadR;
+            RetryDownloadAction = RetryDownloadR;
+            DownloadProgressEvent = DownloadProgressEventR;
+            RestartEvent = RestartEventR;
+
+            client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(RestartTimer);
+            client.DownloadFileCompleted += new AsyncCompletedEventHandler(CompletedFile);
 
             if (DownloadProgressEvent != null)
                 client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressEvent);
-            if (RestartEvent != null)
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(RestartEvent);
 
             client.DownloadFileAsync(new Uri(GitHubrepoDOWNLOAD), ProgramFilePath);
+        }
+
+        private static void RestartTimer(object sender, DownloadProgressChangedEventArgs e)
+        {
+            RetryCount = 0;
+            TimerDP.Stop();
+            TimerDP.Interval = 3000;
+            TimerDP.Start();
+        }
+
+        private static void RetryDownload(object sender, EventArgs e)
+        {
+            TimerDP.Interval = 5000;
+            client.CancelAsync();
+            client = new WebClient();
+            if(RetryCount >= 4)
+            {
+                TimerDP.Tick -= RetryDownload;
+                TimerDP.Tick += Canceled;
+                TimerDP.Interval = 1500;
+                return;
+            }
+            RetryCount++;
+            Update(CanceledDownload, RetryDownloadAction, DownloadProgressEvent, RestartEvent);
+            if(RetryDownloadAction != null)
+                RetryDownloadAction();
+        }
+
+        private static void Canceled(object sender, EventArgs e)
+        {
+            TimerDP.Stop();
+            client.Dispose();
+            if (AlreadyBak)
+            {
+                AlreadyBak = false;
+                if (File.Exists(ProgramFileName))
+                    File.Delete(ProgramFileName);
+                File.Move(ProgramFileBak, ProgramFileName);
+            }
+            if (CanceledDownload != null)
+                CanceledDownload();
+        }
+
+        private static void CompletedFile(object sender, AsyncCompletedEventArgs e)
+        {
+            if (!e.Cancelled && e.Error == null)
+            {
+                Timer TimerSC = new Timer
+                {
+                    Interval = 700,
+                    Enabled = true,
+                };
+                TimerSC.Tick += Execute_Tick;
+                TimerSC.Start();
+            }
+        }
+
+        private static void Execute_Tick(object sender, EventArgs e)
+        {
+            if(RestartEvent != null)
+                RestartEvent();
         }
     }
 }
