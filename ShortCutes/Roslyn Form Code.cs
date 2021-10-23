@@ -13,6 +13,7 @@ namespace Shortcutes
 	{
 		private PictureBox BG;
 		private Timer TimerSC = new Timer();
+		private Button CLOSEbutton;
 		int standarHeight = %HEIGHT%;
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		public CuteLauncher()
@@ -39,6 +40,22 @@ namespace Shortcutes
 				Padding = new Padding(192, standarHeight - 66, 0, 0),
 				BackColor = Color.Transparent
 			};
+			CLOSEbutton = new Button()
+			{
+				Size = new Size(20, 20),
+				Location = new Point(236, 0),
+				FlatStyle = System.Windows.Forms.FlatStyle.Flat,
+				BackColor = Color.FromArgb(199, 80, 80),
+				Text = "X",
+				ForeColor = Color.White,
+                FlatAppearance =
+				{
+					BorderSize = 0,
+					MouseOverBackColor = Color.Red
+                },
+				Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold)
+			};
+			CLOSEbutton.Click += (object sender, EventArgs e) => { this.Close(); };
 			this.Controls.Add(BG);
 
 			Screen s = Screen.FromPoint(Cursor.Position);
@@ -80,10 +97,14 @@ namespace Shortcutes
 			ShortCute.Refresh();
 		}
 
+		int timer2_times = 0;
 		private void timer2_Tick(object sender, EventArgs e)
         {
 			if(ShortCute.MainWindowTitle != EMainWindowTitle)
 				Environment.Exit(0);
+			if(timer2_times == 12)
+				BG.Controls.Add(CLOSEbutton);
+			timer2_times++;
 			ShortCute.Refresh();
 		}
 
@@ -106,6 +127,17 @@ namespace Shortcutes
 			e.Graphics.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
 			e.Graphics.DrawString("   %EMUNAME%", new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
 			e.Graphics.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.LightGray, 0, standarHeight - 10);
+		}
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams cp = base.CreateParams;
+				// turn on WS_EX_TOOLWINDOW style bit
+				cp.ExStyle |= 0x80;
+				return cp;
+			}
 		}
 
 		[STAThread]
