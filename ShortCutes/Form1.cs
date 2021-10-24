@@ -86,7 +86,7 @@ namespace ShortCutes
             }
         }
 
-        private void emulatorcb_TextChanged(object sender, EventArgs e)
+        private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
             Edirbox.Text = Gdirbox.Text = null;
             label6.Text = SelectedEmu.Description;
@@ -227,6 +227,7 @@ namespace ShortCutes
                 size = "322";
 
             code = code.Replace("%HEIGHT%", size);
+            code = code.Replace("%WAITCHANGE%", SelectedEmu.WaitWindowChange.ToString().ToLower());
             code = code.Replace("%EMUNAME%", SelectedEmu.Name);
             code = code.Replace("%GAME%", Shortcutbox.Text);
             code = code.Replace("%EMULATOR%", SelectedEmu.Exe);
@@ -246,17 +247,16 @@ namespace ShortCutes
             if(File != null)
             {
                 bool exists = false;
-                int currentindex = 0;
                 foreach (var emu in EmulatorsList)
                 {
                     if (emu.Exe.ToLower() == Path.GetFileName(File).ToLower())
                     {
                         emu.Path(Path.GetDirectoryName(File) + @"\");
-                        emulatorcb.SelectedIndex = currentindex;
+                        emulatorcb.SelectedIndex = EmulatorsList.IndexOf(emu);
+                        Emulatorcb_SelectedIndexChanged(null, null);
                         exists = true;
                         break;
                     }
-                    currentindex++;
                 }
 
                 if (exists == false)
@@ -274,8 +274,8 @@ namespace ShortCutes
         {
             string GamesPath = "C:\\";
 
-            if (SelectedEmu.Games() != "" && SelectedEmu.Games() != null)
-                GamesPath = SelectedEmu.Games();
+            if (SelectedEmu.Games() != "" && SelectedEmu.Games(true) != null)
+                GamesPath = SelectedEmu.Games(true);
             else if (Edirbox.Text != "")
                 GamesPath = Edirbox.Text;
 
@@ -326,8 +326,8 @@ namespace ShortCutes
                 {
                     Error("URL is not an image...");
                 }
+                Shortcutbox.Focus();
             }
-            Shortcutbox.Focus();
         }
 
         private string FileDialog(string InitialDir, string Filter)
@@ -338,10 +338,7 @@ namespace ShortCutes
                 dialog.Filter = Filter;
                 dialog.FilterIndex = 1;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
-                    return dialog.FileName;
-                else
-                    return null;
+                return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
             }
         }
 

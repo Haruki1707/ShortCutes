@@ -24,13 +24,13 @@ namespace ShortCutes
 
             //CEMU
             //Works as expected
-            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux)|*.rpx;*.wud;*.wux", "-g", "", "-f");
+            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux)|*.rpx;*.wud;*.wux", "-g", "", "-f", true);
                 CEMU.Games(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 
             //Dolphin
             //Works as expected
-            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.gcm)|*.iso;*.wbfs;*.ciso;*.gcz;*.gcm", "-b -e", "", "");
+            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.gcm)|*.iso;*.wbfs;*.ciso;*.gcz;*.gcm", "-e", "", "");
                 Dolphin.Games(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
             EmulatorsList.Add(Dolphin);
 
@@ -48,7 +48,7 @@ namespace ShortCutes
 
             //YUZU
             //Need to activate fullscreen through Emulator GUI
-            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp)| *.xci;*.nsp", "-f -g", "", "");
+            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp)| *.xci;*.nsp", "-f -g", "", "", true);
                 YUZU.Games(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
@@ -135,14 +135,16 @@ namespace ShortCutes
         string ConfigPath = null;
         string ConfigSection = null;
         string ConfigElement = null;
+        readonly bool WaitWindowChangeP = false;
 
         public string Name { get => name;}
         public string Exe { get => exe;}
         public string Gamesfilters { get => gamesfilters; }
         public string Description { get => description; }
         public Color Cdesc { get => cdesc; }
+        public bool WaitWindowChange { get => WaitWindowChangeP;  }
 
-        public Emulator(string Name, string Exe, string Filters, string ArgumentsP1, string ArgumentsPmid, string ArgumentsP2)
+        public Emulator(string Name, string Exe, string Filters, string ArgumentsP1, string ArgumentsPmid, string ArgumentsP2, bool waitWindowChange = false)
         {
             name = Name;
             exe = Exe;
@@ -150,6 +152,7 @@ namespace ShortCutes
             argumentsPmid = ArgumentsPmid;
             argumentsP2 = "\\\" " + ArgumentsP2;
             gamesfilters = Filters;
+            WaitWindowChangeP = waitWindowChange;
         }
 
         public Emulator(string Name, string Exe, string Filters)
@@ -170,7 +173,7 @@ namespace ShortCutes
                 cdesc = Color.Yellow;
         }
 
-        public string Path(string path = null)
+        public virtual string Path(string path = null)
         {
             if (path != null & System.IO.File.Exists(path + exe))
                 InstallPath = path;
@@ -224,6 +227,11 @@ namespace ShortCutes
                 }
             }
             return GamesPath;
+        }
+
+        public string Games(bool justdir)
+        {
+            return justdir ? GamesPath : null;
         }
 
         public void Games(string File, string Section, string Element)

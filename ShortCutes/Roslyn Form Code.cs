@@ -14,7 +14,8 @@ namespace Shortcutes
 		private PictureBox BG;
 		private Timer TimerSC = new Timer();
 		private Button CLOSEbutton;
-		int standarHeight = %HEIGHT%;
+		private int standarHeight = %HEIGHT%;
+		private bool WaitForWindowChange = %WAITCHANGE%;
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		public CuteLauncher()
 		{
@@ -90,9 +91,14 @@ namespace Shortcutes
 			if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
             {
 				EMainWindowTitle = ShortCute.MainWindowTitle;
-				TimerSC.Interval = 250;
-				TimerSC.Tick -= timer1_Tick;
-				TimerSC.Tick += timer2_Tick;
+				if (WaitForWindowChange)
+				{
+					TimerSC.Interval = 250;
+					TimerSC.Tick -= timer1_Tick;
+					TimerSC.Tick += timer2_Tick;
+				}
+				else
+					Environment.Exit(0);
             }
 			ShortCute.Refresh();
 		}
