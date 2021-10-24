@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace ShortCutes
@@ -15,8 +11,8 @@ namespace ShortCutes
     static class Emulators
     {
         public static readonly List<Emulator> EmulatorsList = new List<Emulator>();
-        public static readonly List<string> Shortcuts = new List<string>();
-        
+        private static readonly List<string> Shortcuts = new List<string>();
+
         static Emulators()
         {
             //To add a emulator call 'new Emulator();'
@@ -24,14 +20,14 @@ namespace ShortCutes
 
             //CEMU
             //Works as expected
-            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux)|*.rpx;*.wud;*.wux", "-g", "", "-f", true);
-                CEMU.Games(@"settings.xml", "GamePaths", "Entry");
+            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)|*.rpx;*.wud;*.wux;*.elf;*.iso", "-g", "", "-f", true);
+            CEMU.SetGamesPath(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 
             //Dolphin
             //Works as expected
-            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.gcm)|*.iso;*.wbfs;*.ciso;*.gcz;*.gcm", "-e", "", "");
-                Dolphin.Games(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
+            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.gcm; *.tgc; *.wia; *.wad)|*.iso;*.wbfs;*.ciso;*.gcz;*.gcm;*.tgc;*.wia;*.wad", "-e", "", "");
+            Dolphin.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
             EmulatorsList.Add(Dolphin);
 
             //SNES9X
@@ -41,15 +37,15 @@ namespace ShortCutes
             //PJ64
             //Need to activate fullscreen through Emulator GUI
             var PJ64 = new Emulator("PJ64", "Project64.exe",
-                "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.rar; *.rom; *.jap; *.pal; *.usa)|*.n64;*.z64;*.v64;*.u64;*.zip;*.rar;*.rom;*.jap;*.pal;*.usa");
-                PJ64.DescriptionChange("Activate fullscreen through PJ64 GUI");
-                PJ64.Games(@"\Config\Project64.cfg", "Game Directory", "Directory");
+                "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)|*.n64;*.z64;*.v64;*.u64;*.zip;*.7z;*.rar;*.rom;*.jap;*.pal;*.usa *.bin;*.ndd;*.d64");
+            PJ64.DescriptionChange("Activate fullscreen through PJ64 GUI");
+            PJ64.SetGamesPath(@"\Config\Project64.cfg", "Game Directory", "Directory");
             EmulatorsList.Add(PJ64);
 
             //YUZU
             //Need to activate fullscreen through Emulator GUI
-            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp)| *.xci;*.nsp", "-f -g", "", "", true);
-                YUZU.Games(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
+            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca)| *.xci;*.nsp;*.nso;*.nro;*.nca", "-f -g", "", "", true);
+            YUZU.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
                 YUZU.Path(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\");
@@ -59,19 +55,19 @@ namespace ShortCutes
 
             //VBA-M
             //Only works on NightBuild
-            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip)|*.gba;*.gbc;*.gb;*.zip", "/f", "", "");
-                VBA_M.DescriptionChange("Only works on nightbuild. Don't exit fullscreen, do ALT+F4", true);
+            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin)|*.gba;*.gbc;*.gb;*.zip;*.agb;*.7z;*.rar;*.mb;*.bin", "/f", "", "");
+            VBA_M.DescriptionChange("Only works on nightbuild. Don't exit fullscreen, do ALT+F4", true);
             EmulatorsList.Add(VBA_M);
 
             //RPCS3
             //Need to activate close when process finishes and fullscreen
             var RPCS3 = new Emulator("RPCS3", "rpcs3.exe", "PS3 Games (*.bin)|*.bin");
-                RPCS3.DescriptionChange("Activate RPCS3 close when process finish and fullscreen");
+            RPCS3.DescriptionChange("Activate RPCS3 close when process finish and fullscreen");
             EmulatorsList.Add(RPCS3);
 
             //PCSX2
             //Works as expected
-            EmulatorsList.Add(new Emulator("PCSX2", "pcsx2.exe", "PS2 Games (*.iso)|*.iso", "","", "--fullscreen --nogui"));
+            EmulatorsList.Add(new Emulator("PCSX2", "pcsx2.exe", "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)|*.iso;*.mdf;*.nrg;*.bin;*.img;*.dump;*.gz;*.csp", "", "", "--fullscreen --nogui"));
 
             //To find if emulator shortcut exist for easy use of Shortcutes
             ShortcutsFinder();
@@ -80,14 +76,9 @@ namespace ShortCutes
         public static void ShortcutsFinder(Emulator emu = null)
         {
             List<Emulator> emulist = EmulatorsList;
-            if(emu != null)
-            {
-                emulist = new List<Emulator>
-                {
-                    emu
-                };
-            }
-            
+            if (emu != null)
+                emulist = new List<Emulator>{ emu };
+
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs");
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs");
@@ -112,7 +103,7 @@ namespace ShortCutes
         {
             var shortcuts = Directory.GetFiles(Path, "*.*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".lnk"));
             foreach (var shortcut in shortcuts)
-                if(!Shortcuts.Contains(shortcut))
+                if (!Shortcuts.Contains(shortcut))
                     Shortcuts.Add(shortcut);
             shortcuts = null;
         }
@@ -128,7 +119,7 @@ namespace ShortCutes
         readonly string gamesfilters;
         string description = "Works as expected";
         string InstallPath = null;
-        string GamesPath = null;
+        string gamesPath = null;
         Color cdesc = Color.LightGreen;
 
         bool SelfConfig = false;
@@ -137,12 +128,13 @@ namespace ShortCutes
         string ConfigElement = null;
         readonly bool WaitWindowChangeP = false;
 
-        public string Name { get => name;}
-        public string Exe { get => exe;}
+        public string Name { get => name; }
+        public string Exe { get => exe; }
         public string Gamesfilters { get => gamesfilters; }
         public string Description { get => description; }
+        public string GamesPath { get => gamesPath; }
         public Color Cdesc { get => cdesc; }
-        public bool WaitWindowChange { get => WaitWindowChangeP;  }
+        public bool WaitWindowChange { get => WaitWindowChangeP; }
 
         public Emulator(string Name, string Exe, string Filters, string ArgumentsP1, string ArgumentsPmid, string ArgumentsP2, bool waitWindowChange = false)
         {
@@ -177,20 +169,16 @@ namespace ShortCutes
         {
             if (path != null & System.IO.File.Exists(path + exe))
                 InstallPath = path;
-            else if(string.IsNullOrWhiteSpace(path) && !System.IO.File.Exists(InstallPath + exe))
+            else if (string.IsNullOrWhiteSpace(path) && !System.IO.File.Exists(InstallPath + exe))
                 Emulators.ShortcutsFinder(this);
             return InstallPath;
         }
 
-        public string Games(string path = null)
+        public string TryGetGamesPath()
         {
-            
-            if (path != null)
-                GamesPath = path;
-
-            else if(ConfigPath != null)
+            if (ConfigPath != null)
             {
-                if (SelfConfig == true)
+                if (SelfConfig)
                 {
                     ConfigPath = InstallPath + ConfigPath;
                     SelfConfig = false;
@@ -207,7 +195,7 @@ namespace ShortCutes
                             foreach (var itemElement in doc.Element("content").Elements(ConfigSection))
                             {
                                 var properties = itemElement.Elements(ConfigElement).ToList();
-                                Games((string)properties[0]);
+                                gamesPath = (string)properties[0];
                             }
                         }
                         catch { }
@@ -218,7 +206,7 @@ namespace ShortCutes
                         {
                             string Directory = new IniFile(ConfigPath).Read(ConfigElement, ConfigSection).Replace('/', '\\'); ;
                             if (Directory != null)
-                                Games(Directory);
+                                gamesPath = Directory;
                         }
                         catch { }
                         break;
@@ -226,15 +214,10 @@ namespace ShortCutes
                         break;
                 }
             }
-            return GamesPath;
+            return gamesPath;
         }
 
-        public string Games(bool justdir)
-        {
-            return justdir ? GamesPath : null;
-        }
-
-        public void Games(string File, string Section, string Element)
+        public void SetGamesPath(string File, string Section, string Element)
         {
             ConfigPath = File;
             ConfigSection = Section;
@@ -245,7 +228,7 @@ namespace ShortCutes
 
         public string Arguments(string gamedir)
         {
-            return argumentsP1 + argumentsPmid + gamedir + argumentsP2;
+            return argumentsP1 + argumentsPmid + gamedir.Replace(@"\", @"\\") + argumentsP2;
         }
     }
 }

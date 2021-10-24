@@ -5,10 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShortCutes
@@ -29,10 +26,7 @@ namespace ShortCutes
         /// <returns>User/Repository</returns>
         public static string GitHubRep
         {
-            get
-            {
-                return GitHubrepo;
-            }
+            get => GitHubrepo;
             set
             {
                 GitHubrepo = value;
@@ -50,7 +44,7 @@ namespace ShortCutes
         private static Action<object, DownloadProgressChangedEventArgs> DownloadProgressEvent = null;
         private static Action RestartEvent = null;
         private static Timer TimerDP = new Timer();
-        private static int RetryCount = 0; 
+        private static int RetryCount = 0;
 
         static EZ_Updater()
         {
@@ -111,6 +105,8 @@ namespace ShortCutes
             stringline = stringline.Replace("\"tag_name\":", "");
             stringline = stringline.Replace("\"", "");
             stringline = stringline.Replace(",", "");
+
+            File = null;
 
             string TAG = "";
             MatchCollection MC = rg.Matches(stringline);
@@ -197,7 +193,7 @@ namespace ShortCutes
             TimerDP.Interval = 5000;
             client.CancelAsync();
             client = new WebClient();
-            if(RetryCount >= 4)
+            if (RetryCount >= 4)
             {
                 TimerDP.Tick -= RetryDownload;
                 TimerDP.Tick += Canceled;
@@ -206,7 +202,7 @@ namespace ShortCutes
             }
             RetryCount++;
             Update(CanceledDownload, RetryDownloadAction, DownloadProgressEvent, RestartEvent);
-            if(RetryDownloadAction != null)
+            if (RetryDownloadAction != null)
                 RetryDownloadAction();
         }
 
@@ -241,7 +237,7 @@ namespace ShortCutes
 
         private static void Execute_Tick(object sender, EventArgs e)
         {
-            if(RestartEvent != null)
+            if (RestartEvent != null)
                 RestartEvent();
         }
     }

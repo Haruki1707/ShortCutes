@@ -165,7 +165,7 @@
     <None Include="Resources\minimizebtn.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\XCI-Explorer.zip" />
+    <None Include="Resources\XCI-Explorer.zip" />
     <None Include="ShortCute.png" />
   </ItemGroup>
   <ItemGroup>

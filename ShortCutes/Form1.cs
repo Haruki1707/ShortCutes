@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-using System.Runtime.InteropServices;
-
+﻿using Microsoft.CSharp;
+using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.CSharp;
-using System.Text.RegularExpressions;
-
+using System.Drawing;
+using System.IO;
 using System.Net;
-using System.Threading;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace ShortCutes
 {
@@ -35,15 +27,14 @@ namespace ShortCutes
         {
             InitializeComponent();
 
-            foreach(var emu in EmulatorsList)
+            foreach (var emu in EmulatorsList)
                 emulatorcb.Items.Add(emu.Name);
-            emulatorcb.SelectedIndex = 0;
 
             foreach (char ch in Path.GetInvalidFileNameChars())
                 if (!char.IsWhiteSpace(ch) && !char.IsControl(ch))
                     InvalidFileNameChars += ch + " ";
 
-            if(!Directory.Exists(appdata.Remove(appdata.Length - 1)))
+            if (!Directory.Exists(appdata.Remove(appdata.Length - 1)))
                 Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
 
             if (File.Exists(appdata + @"squaredesign"))
@@ -54,7 +45,8 @@ namespace ShortCutes
                 bitmap.Save(temppath + @"loading.gif");
 
             //Extracting XCI-Explorer, which I don't own and only has a little modification || Original Reporsitory: https://github.com/StudentBlake/XCI-Explorer
-            if (!File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
+            //Still thinking if necessary to implement
+            /*if (!File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
             {
                 using (Stream stream = AssemblyResource("XCI-Explorer.zip"))
                 using (FileStream bw = new FileStream(appdata + @"XCI-Explorer.zip", FileMode.Create))
@@ -69,7 +61,7 @@ namespace ShortCutes
 
                 System.IO.Compression.ZipFile.ExtractToDirectory(appdata + @"XCI-Explorer.zip", appdata + @"XCI-Explorer");
                 File.Delete(appdata + @"XCI-Explorer.zip");
-            }            
+            }*/
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
@@ -79,7 +71,7 @@ namespace ShortCutes
 
         private void AskForUpdate()
         {
-            if(Success("There is a new version, wanna update?"))
+            if (Success("There is a new version, wanna update?"))
             {
                 var FD = new MessageForm("", 4);
                 FD.ShowDialog();
@@ -96,46 +88,50 @@ namespace ShortCutes
             Shortcutbox.Focus();
         }
 
+        private bool Emulatorcb_HasSelectedItem()
+        {
+            return emulatorcb.SelectedItem != null;
+        }
+
         private void CreateShortCute_Click(object sender, EventArgs e)
         {
-            string emulatorpath = Edirbox.Text;
-            if (!emulatorpath.EndsWith("\\"))
-                emulatorpath += @"\";
+            string code;
 
-            string code = Emulator(Gdirbox.Text, emulatorpath);
+            if (!Edirbox.Text.EndsWith(@"\") && !string.IsNullOrWhiteSpace(Edirbox.Text))
+                Edirbox.Text += @"\";
 
-            if (code == "false")
-            {
-                Shortcutbox.Focus();
-                return;
-            }
-            if (!Image)
-            {
-                Error("Select a picture to continue");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
-            {
+            if (!Emulatorcb_HasSelectedItem())
+                Error("Emulator must be selected!");
+            else if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
                 Error("Shortcut name cannot be empty");
-                return;
+            else if (!File.Exists(Edirbox.Text + SelectedEmu.Exe))
+                Error("Emulator doesn't exist in the specified path\nCheck if path or selected emulator is correct");
+            else if (!File.Exists(Gdirbox.Text))
+                Error("Game file doesn't exist in the specified path");
+            else if (!Image)
+                Error("Select a picture to continue");
+            else
+            {
+                if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
+                    code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""), Edirbox.Text);
+                else if (Success("Emulator and games folder must be on the same path for better working.\n\nWanna continue without the same path? (still works)"))
+                    code = Roslyn_FormCode(Gdirbox.Text, Edirbox.Text);
+                else
+                    return;
+
+                Compile(code, Edirbox.Text, Shortcutbox.Text);
+                if (OpenShortFolderCheck.Checked)
+                    Process.Start("explorer.exe", Edirbox.Text + @"ShortCutes");
+
+                Image = false;
+                ICOpic.Image = null;
+                Gdirbox.Text = Shortcutbox.Text = null;
             }
-
-            Compile(code, emulatorpath, Shortcutbox.Text);
-            if (OpenShortFolderCheck.Checked)
-                Process.Start("explorer.exe", emulatorpath + @"ShortCutes");
-
-            Image = false;
-            ICOpic.Image = null;
-            Gdirbox.Text = Shortcutbox.Text = null;
-            Edirbox.Text = emulatorpath;
             Shortcutbox.Focus();
-            return;
         }
 
         private void Compile(string code, string emupath, string Filename)
         {
-            CSharpCodeProvider codeProvider = new CSharpCodeProvider();
-
             emupath += @"ShortCutes";
             if (!Directory.Exists(emupath))
                 Directory.CreateDirectory(emupath);
@@ -151,7 +147,7 @@ namespace ShortCutes
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
-            CompilerResults results = codeProvider.CompileAssemblyFromSource(parameters, code);
+            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, code);
 
             if (results.Errors.Count > 0)
             {
@@ -189,41 +185,15 @@ namespace ShortCutes
             }
         }
 
-        private string Emulator(string gamedir, string emulatordir)
+        private string Roslyn_FormCode(string gamedir, string emulatordir)
         {
-            string gamechecker = gamedir;
-
-            if (gamedir.Contains(emulatordir, StringComparison.OrdinalIgnoreCase))
-            {
-                gamedir = gamedir.Replace(emulatordir, @"");
-                gamedir = gamedir.Replace(@"\", @"\\");
-            }
-            else
-            {
-                if (!System.IO.File.Exists(emulatordir + SelectedEmu.Exe))
-                {
-                    Error("Emulator doesn't exist in the specified path\nCheck if path or selected emulator is correct");
-                    return "false";
-                }
-                else if (!System.IO.File.Exists(gamechecker))
-                {
-                    Error("Game file doesn't exist in the specified path");
-                    return "false";
-                }
-                else if (Success("Emulator and games folder must be on the same path for better working.\n\n" +
-                        "Wanna continue without the same path? (still works)"))
-                    gamedir = gamedir.Replace(@"\", @"\\");
-                else
-                    return "false";
-            }
-
             string code = null;
             using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutes.Roslyn Form Code.cs"))
             using (StreamReader reader = new StreamReader(stream))
                 code = reader.ReadToEnd();
 
             string size = "256";
-            if (RectangularDesign == true)
+            if (RectangularDesign)
                 size = "322";
 
             code = code.Replace("%HEIGHT%", size);
@@ -244,7 +214,7 @@ namespace ShortCutes
 
             var File = FileDialog(EmuDir, "Executable File (*.exe)|*.exe");
 
-            if(File != null)
+            if (File != null)
             {
                 bool exists = false;
                 foreach (var emu in EmulatorsList)
@@ -274,15 +244,22 @@ namespace ShortCutes
         {
             string GamesPath = "C:\\";
 
-            if (SelectedEmu.Games() != "" && SelectedEmu.Games(true) != null)
-                GamesPath = SelectedEmu.Games(true);
-            else if (Edirbox.Text != "")
-                GamesPath = Edirbox.Text;
+            if (Emulatorcb_HasSelectedItem())
+            {
+                if (SelectedEmu.TryGetGamesPath() != "" && SelectedEmu.GamesPath != null)
+                    GamesPath = SelectedEmu.GamesPath;
+                else if (Directory.Exists(Path.GetDirectoryName(Gdirbox.Text)))
+                    GamesPath = Path.GetDirectoryName(Gdirbox.Text);
+                else if (Edirbox.Text != "")
+                    GamesPath = Edirbox.Text;
 
-            var File = FileDialog(GamesPath, SelectedEmu.Gamesfilters);
+                var File = FileDialog(GamesPath, SelectedEmu.Gamesfilters);
 
-            if (File != null)
-                Gdirbox.Text = File;
+                if (File != null)
+                    Gdirbox.Text = File;
+            }
+            else
+                Info("Emulator must be selected!");
 
             Shortcutbox.Focus();
         }
@@ -291,7 +268,7 @@ namespace ShortCutes
         private void ICOpic_Click(object sender, EventArgs e)
         {
             var File = FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
-            
+
             if (File != null)
             {
                 ImagingHelper.ConvertToIcon(File, temppath + @"temp.ico");
@@ -305,7 +282,7 @@ namespace ShortCutes
 
         private void ICOurl_TextChanged(object sender, EventArgs e)
         {
-            if(urltext != null && !string.IsNullOrWhiteSpace(ICOurl.Text))
+            if (urltext != null && !string.IsNullOrWhiteSpace(ICOurl.Text))
             {
                 try
                 {
@@ -387,13 +364,13 @@ namespace ShortCutes
             {
                 design.ShowDialog();
 
-                if(design.DialogResult == DialogResult.No)
+                if (design.DialogResult == DialogResult.No)
                 {
                     if (File.Exists(appdata + @"squaredesign"))
                         File.Delete(appdata + @"squaredesign");
                     RectangularDesign = true;
                 }
-                else if(design.DialogResult == DialogResult.Yes)
+                else if (design.DialogResult == DialogResult.Yes)
                 {
                     File.Create(appdata + @"squaredesign").Close();
                     RectangularDesign = false;
@@ -436,7 +413,7 @@ namespace ShortCutes
 
         private void Info(string message)
         {
-            using(var info = new MessageForm(message, 0))
+            using (var info = new MessageForm(message, 0))
                 info.ShowDialog();
         }
         private void Error(string message)

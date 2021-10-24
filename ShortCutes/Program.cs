@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Data.SqlClient;
-using System.Security.Principal;
 using System.Drawing;
+using System.Security.Principal;
+using System.Windows.Forms;
 
 namespace ShortCutes
 {
@@ -17,7 +13,7 @@ namespace ShortCutes
         [STAThread]
         static void Main()
         {
-            if(IsUserAdministrator() == false)
+            if (IsUserAdministrator() == false)
             {
                 MessageBox.Show("Requires administrator rights to work as expected\nClosing");
                 Environment.Exit(0);
