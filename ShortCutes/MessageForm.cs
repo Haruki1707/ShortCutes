@@ -99,7 +99,7 @@ namespace ShortCutes
                     Messagelbl.Size = new Size(382, 75);
                     Messagelbl.Location = new Point(18, 10);
                     Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
-                    Messagelbl.Text = "ShortCutes Update Download Progress";
+                    Messagelbl.Text = "ShortCutes update download progress";
                     EZ_Updater.Update(CanceledDownload, RetryDownload, DownloadProgress, RestartProgram);
                     break;
                 default:
@@ -109,7 +109,7 @@ namespace ShortCutes
 
         private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
         {
-            Messagelbl.Text = "ShortCutes Update Download Progress";
+            Messagelbl.Text = "ShortCutes update download progress";
 
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
@@ -121,7 +121,7 @@ namespace ShortCutes
         int test = 1;
         private void RetryDownload()
         {
-            Messagelbl.Text = "Retrying Download... " + test++ + "/4";
+            Messagelbl.Text = "Retrying download... " + test++ + "/4";
             return;
         }
 

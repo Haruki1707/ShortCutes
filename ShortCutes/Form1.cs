@@ -71,7 +71,7 @@ namespace ShortCutes
 
         private void AskForUpdate()
         {
-            if (Success("There is a new version, wanna update?"))
+            if (Success("New version available\nDo you want to update?"))
             {
                 var FD = new MessageForm("", 4);
                 FD.ShowDialog();
@@ -105,7 +105,7 @@ namespace ShortCutes
             else if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
                 Error("Shortcut name cannot be empty");
             else if (!File.Exists(Edirbox.Text + SelectedEmu.Exe))
-                Error("Emulator doesn't exist in the specified path\nCheck if path or selected emulator is correct");
+                Error("Emulator doesn't exist in the specified path\nCheck if the path or the selected emulator is correct");
             else if (!File.Exists(Gdirbox.Text))
                 Error("Game file doesn't exist in the specified path");
             else if (!Image)
@@ -114,7 +114,7 @@ namespace ShortCutes
             {
                 if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
                     code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""), Edirbox.Text);
-                else if (Success("Emulator and games folder must be on the same path for better working.\n\nWanna continue without the same path? (still works)"))
+                else if (Success("Emulator and games' folder must be on the same path to avoid issues.\n\nWant to continue without the same path? (still works)"))
                     code = Roslyn_FormCode(Gdirbox.Text, Edirbox.Text);
                 else
                     return;
@@ -231,8 +231,8 @@ namespace ShortCutes
 
                 if (exists == false)
                 {
-                    Info("The emulator is not yet supported. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
-                        "\n\n!!!Also, this could appear because you changed the emulator executable name." +
+                    Info("The emulator isn't supported yet. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
+                        "\n\n!!!This also may occur because you changed the emulator executable name." +
                         "Make sure you are using the original emulator name!!!");
                 }
             }
@@ -301,7 +301,7 @@ namespace ShortCutes
                 }
                 catch
                 {
-                    Error("URL is not an image...");
+                    Error("URL provided isn´t an image...");
                 }
                 Shortcutbox.Focus();
             }

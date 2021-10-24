@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortCutes));
             this.label5 = new System.Windows.Forms.Label();
             this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
@@ -52,10 +51,8 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label5
@@ -371,10 +368,6 @@
             this.ICOpic.TabStop = false;
             this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
             // 
-            // errorProvider1
-            // 
-            this.errorProvider1.ContainerControl = this;
-            // 
             // ShortCutes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -411,7 +404,6 @@
             this.panelBorderStyle.ResumeLayout(false);
             this.panelBorderStyle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -441,7 +433,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox ICOurl;
         private System.Windows.Forms.Button ConfigBtn;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 
