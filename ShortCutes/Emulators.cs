@@ -26,7 +26,7 @@ namespace ShortCutes
 
             //Dolphin
             //Works as expected
-            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.gcm; *.tgc; *.wia; *.wad)|*.iso;*.wbfs;*.ciso;*.gcz;*.gcm;*.tgc;*.wia;*.wad", "-e", "", "");
+            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)|*.iso;*.wbfs;*.ciso;*.gcz;*.rvz;*.gcm;*.tgc;*.wia;*.wad", "-e", "", "");
             Dolphin.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
             EmulatorsList.Add(Dolphin);
 
