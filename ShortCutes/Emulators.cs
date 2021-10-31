@@ -20,31 +20,30 @@ namespace ShortCutes
 
             //CEMU
             //Works as expected
-            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)|*.rpx;*.wud;*.wux;*.elf;*.iso", "-g", "", "-f", true);
+            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)", "-g", "", "-f", true);
             CEMU.SetGamesPath(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 
             //Dolphin
             //Works as expected
-            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)|*.iso;*.wbfs;*.ciso;*.gcz;*.rvz;*.gcm;*.tgc;*.wia;*.wad", "-e", "", "");
+            var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)", "-e", "", "");
             Dolphin.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
             EmulatorsList.Add(Dolphin);
 
             //SNES9X
             //Works as expected
-            EmulatorsList.Add(new Emulator("SNES9X", "snes9x.exe", "SNES Games (*.smc; *.sfc; *.swc; *.zip)|*.smc;*.sfc;*.swc;*.zip", "", "..\\\\", "-fullscreen"));
+            EmulatorsList.Add(new Emulator("SNES9X", "snes9x.exe", "SNES Games (*.smc; *.sfc; *.swc; *.zip)", "", "..\\\\", "-fullscreen"));
 
             //PJ64
             //Need to activate fullscreen through Emulator GUI
-            var PJ64 = new Emulator("PJ64", "Project64.exe",
-                "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)|*.n64;*.z64;*.v64;*.u64;*.zip;*.7z;*.rar;*.rom;*.jap;*.pal;*.usa *.bin;*.ndd;*.d64");
+            var PJ64 = new Emulator("PJ64", "Project64.exe", "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)");
             PJ64.DescriptionChange("Activate fullscreen through PJ64 GUI");
             PJ64.SetGamesPath(@"\Config\Project64.cfg", "Game Directory", "Directory");
             EmulatorsList.Add(PJ64);
 
             //YUZU
             //Need to activate fullscreen through Emulator GUI
-            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca)| *.xci;*.nsp;*.nso;*.nro;*.nca", "-f -g", "", "", true);
+            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca)", "-f -g", "", "", true);
             YUZU.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
@@ -55,19 +54,19 @@ namespace ShortCutes
 
             //VBA-M
             //Only works on NightBuild
-            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin)|*.gba;*.gbc;*.gb;*.zip;*.agb;*.7z;*.rar;*.mb;*.bin", "/f", "", "");
+            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin)", "/f", "", "");
             VBA_M.DescriptionChange("Only works on nightbuild. Don't exit fullscreen, do ALT+F4", true);
             EmulatorsList.Add(VBA_M);
 
             //RPCS3
             //Need to activate close when process finishes and fullscreen
-            var RPCS3 = new Emulator("RPCS3", "rpcs3.exe", "PS3 Games (*.bin)|*.bin");
+            var RPCS3 = new Emulator("RPCS3", "rpcs3.exe", "PS3 Games (*.bin)");
             RPCS3.DescriptionChange("Activate RPCS3 close when process finish and fullscreen");
             EmulatorsList.Add(RPCS3);
 
             //PCSX2
             //Works as expected
-            EmulatorsList.Add(new Emulator("PCSX2", "pcsx2.exe", "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)|*.iso;*.mdf;*.nrg;*.bin;*.img;*.dump;*.gz;*.csp", "", "", "--fullscreen --nogui"));
+            EmulatorsList.Add(new Emulator("PCSX2", "pcsx2.exe", "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)", "", "", "--fullscreen --nogui"));
 
             //To find if emulator shortcut exist for easy use of Shortcutes
             ShortcutsFinder();
@@ -143,7 +142,7 @@ namespace ShortCutes
             argumentsP1 = ArgumentsP1 + " \\\"";
             argumentsPmid = ArgumentsPmid;
             argumentsP2 = "\\\" " + ArgumentsP2;
-            gamesfilters = Filters;
+            gamesfilters = Filters + "|" + Filters.Split('(', ')')[1];
             WaitWindowChangeP = waitWindowChange;
         }
 
@@ -153,7 +152,7 @@ namespace ShortCutes
             exe = Exe;
             argumentsP1 = "\\\"";
             argumentsP2 = "\\\"";
-            gamesfilters = Filters;
+            gamesfilters = Filters + "|" + Filters.Split('(', ')')[1];
         }
 
         public void DescriptionChange(string desc, bool red = false)

@@ -245,11 +245,11 @@ namespace ShortCutes
             {
                 if (SelectedEmu.TryGetGamesPath() != "" && SelectedEmu.GamesPath != null)
                     GamesPath = SelectedEmu.GamesPath;
-                else if (Directory.Exists(Path.GetDirectoryName(Gdirbox.Text)))
+                else if (!string.IsNullOrWhiteSpace(Gdirbox.Text) && Directory.Exists(Path.GetDirectoryName(Gdirbox.Text)))
                     GamesPath = Path.GetDirectoryName(Gdirbox.Text);
                 else if (Edirbox.Text != "")
                     GamesPath = Edirbox.Text;
-
+                
                 var File = FileDialog(GamesPath, SelectedEmu.Gamesfilters);
 
                 if (File != null)
