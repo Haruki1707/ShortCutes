@@ -431,6 +431,12 @@ namespace ShortCutes
                 return success.DialogResult == DialogResult.Yes;
             }
         }
+
+        private void InfoButton_Click(object sender, EventArgs e)
+        {
+            using (var info = new MessageForm("ShortCutes  v" + EZ_Updater.ActualVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
+                info.ShowDialog();
+        }
     }
 
     public static class StringExtensions

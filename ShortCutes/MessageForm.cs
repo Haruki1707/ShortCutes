@@ -100,6 +100,12 @@ namespace ShortCutes
                     Messagelbl.Text = "ShortCutes update download progress";
                     EZ_Updater.Update(CanceledDownload, RetryDownload, DownloadProgress, RestartProgram);
                     break;
+                //Info2 message
+                case 5:
+                    YESbtn.Hide();
+                    NObtn.Hide();
+                    iconPB.Image = SystemIcons.Information.ToBitmap();
+                    break;
                 default:
                     break;
             }
