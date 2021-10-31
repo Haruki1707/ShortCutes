@@ -140,6 +140,7 @@
             this.Shortcutbox.Size = new System.Drawing.Size(254, 22);
             this.Shortcutbox.TabIndex = 1;
             this.Shortcutbox.TextChanged += new System.EventHandler(this.Shortcutbox_TextChanged);
+            this.Shortcutbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
             this.Shortcutbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Shortcutbox_KeyPress);
             // 
             // label4

@@ -20,18 +20,18 @@ namespace ShortCutes
                 case 0:
                     YESbtn.Hide();
                     NObtn.Hide();
-                    iconPB.Image = System.Drawing.SystemIcons.Exclamation.ToBitmap();
+                    iconPB.Image = SystemIcons.Exclamation.ToBitmap();
                     break;
                 //Error message
                 case 1:
                     YESbtn.Hide();
                     NObtn.Hide();
-                    iconPB.Image = System.Drawing.SystemIcons.Error.ToBitmap();
+                    iconPB.Image = SystemIcons.Error.ToBitmap();
                     break;
-                //Succes message
+                //Success message
                 case 2:
                     OKbtn.Hide();
-                    iconPB.Image = System.Drawing.SystemIcons.Information.ToBitmap();
+                    iconPB.Image = SystemIcons.Information.ToBitmap();
                     break;
                 case 3:
                     this.Size = new Size(440, 336);
@@ -39,14 +39,12 @@ namespace ShortCutes
                     iconPB.Hide();
                     Messagelbl.Size = new Size(382, 20);
                     Messagelbl.Location = new Point(18, 10);
-                    Messagelbl.TextAlign = ContentAlignment.TopCenter;
+                    Messagelbl.TextAlign = ContentAlignment.TopRight;
                     Messagelbl.Text = "ShortCute Design";
                     YESbtn.Text = "Square";
                     NObtn.Text = "Rectangular";
                     YESbtn.Location = new Point(YESbtn.Location.X - 35, YESbtn.Location.Y);
                     NObtn.Location = new Point(NObtn.Location.X + 65, NObtn.Location.Y);
-
-                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
                     PictureBox image;
                     image = new PictureBox()
@@ -55,7 +53,7 @@ namespace ShortCutes
                         Location = new Point(15, 60),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
-                        Image = global::ShortCutes.Properties.Resources.square,
+                        Image = Properties.Resources.square,
                     };
                     this.Controls.Add(image);
 
@@ -66,7 +64,7 @@ namespace ShortCutes
                         Location = new Point(225, 35),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
-                        Image = global::ShortCutes.Properties.Resources.rectangular,
+                        Image = Properties.Resources.rectangular,
                     };
                     this.Controls.Add(image2);
 

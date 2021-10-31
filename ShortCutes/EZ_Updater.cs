@@ -34,6 +34,7 @@ namespace ShortCutes
                 GitHubrepoAPI = "https://api.github.com/repos/" + value + "/releases/latest";
             }
         }
+        public static string ActualVersion = "";
         private static string GitHubrepo = null;
         private static string GitHubrepoAPI = null;
         private static string GitHubrepoDOWNLOAD = null;
@@ -124,8 +125,7 @@ namespace ShortCutes
             }
 
             string[] ARVersion = ProgramVersion.Split('.');
-            string ActualVersion = "";
-
+            ActualVersion = "";
             for (int i = 0; i < ARVersion.Length; i++)
             {
                 if (int.Parse(ARVersion[i]) != 0)

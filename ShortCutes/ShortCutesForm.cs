@@ -16,7 +16,6 @@ namespace ShortCutes
     {
         readonly private string temppath = Path.GetTempPath();
         readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
-        private Stream AssemblyResource(string resource) => System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutes.Resources." + resource);
         readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
         readonly private string InvalidFileNameChars = "";
         //Emuthings
@@ -40,9 +39,7 @@ namespace ShortCutes
             if (File.Exists(appdata + @"squaredesign"))
                 RectangularDesign = false;
 
-            using (Stream stream = AssemblyResource("loading.gif"))
-            using (Bitmap bitmap = new Bitmap(stream))
-                bitmap.Save(temppath + @"loading.gif");
+            Properties.Resources.loading.Save(temppath + @"loading.gif");
 
             //Extracting XCI-Explorer, which I don't own and only has a little modification || Original Reporsitory: https://github.com/StudentBlake/XCI-Explorer
             //Still thinking if necessary to implement
@@ -62,6 +59,9 @@ namespace ShortCutes
                 System.IO.Compression.ZipFile.ExtractToDirectory(appdata + @"XCI-Explorer.zip", appdata + @"XCI-Explorer");
                 File.Delete(appdata + @"XCI-Explorer.zip");
             }*/
+            //MessageBox.Show("");
+            /*Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            MessageBox.Show((string)Resources.GetObject("Prueba"));*/
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
@@ -113,9 +113,9 @@ namespace ShortCutes
             else
             {
                 if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
-                    code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""), Edirbox.Text);
+                    code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""));
                 else if (Success("Emulator and games' folder must be on the same path to avoid issues.\n\nWant to continue without the same path? (still works)"))
-                    code = Roslyn_FormCode(Gdirbox.Text, Edirbox.Text);
+                    code = Roslyn_FormCode(Gdirbox.Text);
                 else
                     return;
 
@@ -185,12 +185,9 @@ namespace ShortCutes
             }
         }
 
-        private string Roslyn_FormCode(string gamedir, string emulatordir)
+        private string Roslyn_FormCode(string gamedir)
         {
-            string code = null;
-            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ShortCutes.Roslyn Form Code.cs"))
-            using (StreamReader reader = new StreamReader(stream))
-                code = reader.ReadToEnd();
+            string code = Properties.Resources.Roslyn_Form_Code;
 
             string size = "256";
             if (RectangularDesign)
@@ -301,7 +298,7 @@ namespace ShortCutes
                 }
                 catch
                 {
-                    Error("URL provided isn´t an image...");
+                    Error("URL provided isn't an image...");
                 }
                 Shortcutbox.Focus();
             }
@@ -328,7 +325,7 @@ namespace ShortCutes
 
         private void ICOurl_KeyDown(object sender, KeyEventArgs e)
         {
-            InputIsCommand = e.Control == true && (e.KeyCode == Keys.V);
+            InputIsCommand = e.KeyCode == Keys.V && e.Modifiers == Keys.Control;
         }
 
         string urltext;
@@ -384,6 +381,11 @@ namespace ShortCutes
         }
         private void Shortcutbox_TextChanged(object sender, EventArgs e)
         {
+            if (InputIsCommand && containsABadCharacter.IsMatch(Shortcutbox.Text))
+            {
+                Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
+                Shortcutbox.Text = Regex.Replace(Shortcutbox.Text, containsABadCharacter.ToString(), "");
+            }
             if (TextRenderer.MeasureText(Shortcutbox.Text, Shortcutbox.Font).Width > Shortcutbox.Width)
                 Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size - 1);
             else if (Shortcutbox.Font.Size < 12 && TextRenderer.MeasureText(Shortcutbox.Text, new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1)).Width < Shortcutbox.Width)
