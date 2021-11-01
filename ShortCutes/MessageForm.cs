@@ -39,7 +39,7 @@ namespace ShortCutes
                     iconPB.Hide();
                     Messagelbl.Size = new Size(382, 20);
                     Messagelbl.Location = new Point(18, 10);
-                    Messagelbl.TextAlign = ContentAlignment.TopRight;
+                    Messagelbl.TextAlign = ContentAlignment.TopCenter;
                     Messagelbl.Text = "ShortCute Design";
                     YESbtn.Text = "Square";
                     NObtn.Text = "Rectangular";
