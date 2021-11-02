@@ -85,6 +85,12 @@ namespace ShortCutes
             label6.ForeColor = SelectedEmu.Cdesc;
             Edirbox.Text = SelectedEmu.Path();
 
+            if (!string.IsNullOrWhiteSpace(Edirbox.Text) && Directory.Exists(Edirbox.Text) && !Directory.Exists(Edirbox.Text + @"ShortCutes"))
+            {
+                Directory.CreateDirectory(Edirbox.Text + @"ShortCutes");
+                Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder: " + Edirbox.Text + "ShortCutes");
+            }
+
             Shortcutbox.Focus();
         }
 
