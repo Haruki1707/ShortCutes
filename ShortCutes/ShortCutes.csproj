@@ -175,7 +175,6 @@
     <None Include="Resources\minimizebtn.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\XCI-Explorer.zip" />
     <None Include="Resources\ShortCute.png" />
   </ItemGroup>
   <ItemGroup>

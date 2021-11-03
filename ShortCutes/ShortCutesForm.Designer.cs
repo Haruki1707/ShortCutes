@@ -377,7 +377,6 @@
             // 
             // ICOpic
             // 
-            this.ICOpic.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ICOpic.BackgroundImage")));
             this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;

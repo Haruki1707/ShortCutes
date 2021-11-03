@@ -44,27 +44,15 @@ namespace ShortCutes
 
             Properties.Resources.loading.Save(temppath + @"loading.gif");
 
-            //Extracting XCI-Explorer, which I don't own and only has a little modification || Original Reporsitory: https://github.com/StudentBlake/XCI-Explorer
-            //Still thinking if necessary to implement
-            /*if (!File.Exists(appdata + @"XCI-Explorer\XCI-Explorer.exe"))
+            Bitmap flag = new Bitmap(ICOpic.Width, ICOpic.Height);
+            using (Graphics flagGraphics = Graphics.FromImage(flag))
             {
-                using (Stream stream = AssemblyResource("XCI-Explorer.zip"))
-                using (FileStream bw = new FileStream(appdata + @"XCI-Explorer.zip", FileMode.Create))
-                {
-                    while (stream.Position < stream.Length)
-                    {
-                        byte[] bits = new byte[stream.Length];
-                        stream.Read(bits, 0, (int)stream.Length);
-                        bw.Write(bits, 0, (int)stream.Length);
-                    }
-                }
-
-                System.IO.Compression.ZipFile.ExtractToDirectory(appdata + @"XCI-Explorer.zip", appdata + @"XCI-Explorer");
-                File.Delete(appdata + @"XCI-Explorer.zip");
-            }*/
-            //MessageBox.Show("");
-            /*Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-            MessageBox.Show((string)Resources.GetObject("Prueba"));*/
+                flagGraphics.FillRectangle(new SolidBrush(Color.FromArgb(30, 30, 30)), 0, 0, ICOpic.Width, ICOpic.Height);
+                flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (22F * 2));
+                flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F/2));
+                flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
+            }
+            ICOpic.BackgroundImage = flag;
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
