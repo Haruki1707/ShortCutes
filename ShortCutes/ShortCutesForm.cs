@@ -8,13 +8,14 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShortCutes
 {
     public partial class ShortCutes : Form
     {
-        readonly private string temppath = Path.GetTempPath();
+        readonly private string temppath = Path.GetTempPath() + @"\ShortCutes\";
         readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
         readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
         readonly private string InvalidFileNameChars = "";
@@ -33,6 +34,8 @@ namespace ShortCutes
                 if (!char.IsWhiteSpace(ch) && !char.IsControl(ch))
                     InvalidFileNameChars += ch + " ";
 
+            if (!Directory.Exists(temppath.Remove(temppath.Length - 1)))
+                Directory.CreateDirectory(temppath.Remove(temppath.Length - 1));
             if (!Directory.Exists(appdata.Remove(appdata.Length - 1)))
                 Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
 
@@ -268,19 +271,47 @@ namespace ShortCutes
         }
 
         private static bool Image = false;
-        private void ICOpic_Click(object sender, EventArgs e)
+        bool clicked;
+        private async void ICOpic_MouseClick(object sender, MouseEventArgs e)
         {
-            var File = FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+            if (clicked) return;
+            clicked = true;
+            await Task.Delay(SystemInformation.DoubleClickTime);
+            if (!clicked) return;
+            clicked = false;
 
-            if (File != null)
+            //Process click
+            var file = FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+
+            if (file != null)
             {
-                ImagingHelper.ConvertToIcon(File, temppath + @"temp.ico");
+                File.Copy(file, temppath + "tempORIGINAL.png", true);
+                ImagingHelper.ConvertToIcon(file, temppath + @"temp.ico");
                 ICOpic.Image = ImagingHelper.ICONbox;
                 ICOpic.Image.Save(temppath + @"temp.png");
                 Image = true;
             }
 
             Shortcutbox.Focus();
+        }
+
+        private void ICOpic_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            clicked = false;
+
+            //Process click
+            if (Image)
+                using (var CI = new CropImage_Tool())
+                {
+                    CI.ShowDialog();
+                    if(CI.DialogResult1 == DialogResult.Yes)
+                    {
+                        ImagingHelper.ConvertToIcon(temppath + "temp.png", temppath + @"temp.ico");
+                        ICOpic.Image = ImagingHelper.ICONbox;
+                    }
+                }
+            else
+                Info("First select a picture to crop");
         }
 
         private void ICOurl_TextChanged(object sender, EventArgs e)
@@ -295,6 +326,7 @@ namespace ShortCutes
                         if (bitmap != null)
                         {
                             bitmap.Save(temppath + @"temp.png");
+                            File.Copy(temppath + "temp.png", temppath + "tempORIGINAL.png", true);
                             ImagingHelper.ConvertToIcon(temppath + @"temp.png", temppath + @"temp.ico");
                             ICOpic.Image = ImagingHelper.ICONbox;
                             ICOpic.Image.Save(temppath + @"temp.png");

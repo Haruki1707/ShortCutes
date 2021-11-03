@@ -87,6 +87,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Roslyn Form Code.cs" />
+    <Compile Include="CropImage_Tool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CropImage_Tool.Designer.cs">
+      <DependentUpon>CropImage_Tool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Emulators.cs" />
     <Compile Include="EZ_Updater.cs" />
     <Compile Include="ShortCutesForm.cs">
@@ -105,6 +111,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CropImage_Tool.resx">
+      <DependentUpon>CropImage_Tool.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShortCutesForm.resx">
       <DependentUpon>ShortCutesForm.cs</DependentUpon>
       <SubType>Designer</SubType>

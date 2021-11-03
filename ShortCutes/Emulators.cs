@@ -21,13 +21,13 @@ namespace ShortCutes
             //CEMU
             //Works as expected
             var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)", "-g", "", "-f", true);
-            CEMU.SetGamesPath(@"settings.xml", "GamePaths", "Entry");
+            CEMU.SetConfigPath(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 
             //Dolphin
             //Works as expected
             var Dolphin = new Emulator("Dolphin", "dolphin.exe", "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)", "-e", "", "");
-            Dolphin.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
+            Dolphin.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Dolphin Emulator\Config\Dolphin.ini", "General", "ISOPath0");
             EmulatorsList.Add(Dolphin);
 
             //SNES9X
@@ -38,13 +38,13 @@ namespace ShortCutes
             //Need to activate fullscreen through Emulator GUI
             var PJ64 = new Emulator("PJ64", "Project64.exe", "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)");
             PJ64.DescriptionChange("Activate fullscreen through PJ64 GUI");
-            PJ64.SetGamesPath(@"\Config\Project64.cfg", "Game Directory", "Directory");
+            PJ64.SetConfigPath(@"\Config\Project64.cfg", "Game Directory", "Directory");
             EmulatorsList.Add(PJ64);
 
             //YUZU
             //Need to activate fullscreen through Emulator GUI
             var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca)", "-f -g", "", "", true);
-            YUZU.SetGamesPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
+            YUZU.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
                 YUZU.Path(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\");
@@ -216,7 +216,7 @@ namespace ShortCutes
             return gamesPath;
         }
 
-        public void SetGamesPath(string File, string Section, string Element)
+        public void SetConfigPath(string File, string Section, string Element)
         {
             ConfigPath = File;
             ConfigSection = Section;

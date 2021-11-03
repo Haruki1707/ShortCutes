@@ -45,13 +45,13 @@
             this.createshortbtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
+            this.InfoButton = new System.Windows.Forms.Button();
             this.ConfigBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.miniBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
             this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
-            this.InfoButton = new System.Windows.Forms.Button();
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
@@ -60,11 +60,12 @@
             // 
             this.label5.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(443, 50);
+            this.label5.Location = new System.Drawing.Point(443, 41);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(303, 21);
+            this.label5.Size = new System.Drawing.Size(303, 35);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Select a PNG or JPG image to set as the shortcut ICON:";
+            this.label5.Text = "Select a PNG or JPG image to set as the shortcut ICON:\r\nDouble click to crop sele" +
+    "cted image";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // OpenShortFolderCheck
@@ -74,7 +75,7 @@
             this.OpenShortFolderCheck.ForeColor = System.Drawing.Color.White;
             this.OpenShortFolderCheck.Location = new System.Drawing.Point(14, 311);
             this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
-            this.OpenShortFolderCheck.Size = new System.Drawing.Size(146, 20);
+            this.OpenShortFolderCheck.Size = new System.Drawing.Size(147, 20);
             this.OpenShortFolderCheck.TabIndex = 7;
             this.OpenShortFolderCheck.TabStop = false;
             this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
@@ -90,7 +91,7 @@
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
             this.DesktopCheck.Location = new System.Drawing.Point(302, 139);
             this.DesktopCheck.Name = "DesktopCheck";
-            this.DesktopCheck.Size = new System.Drawing.Size(114, 20);
+            this.DesktopCheck.Size = new System.Drawing.Size(115, 20);
             this.DesktopCheck.TabIndex = 5;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
@@ -151,7 +152,7 @@
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(14, 111);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 16);
+            this.label4.Size = new System.Drawing.Size(86, 16);
             this.label4.TabIndex = 25;
             this.label4.Text = "Shortcut name:";
             // 
@@ -162,7 +163,7 @@
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(14, 52);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(105, 16);
+            this.label3.Size = new System.Drawing.Size(106, 16);
             this.label3.TabIndex = 24;
             this.label3.Text = "Select an emulator:";
             // 
@@ -173,7 +174,7 @@
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(14, 242);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(110, 16);
+            this.label2.Size = new System.Drawing.Size(111, 16);
             this.label2.TabIndex = 23;
             this.label2.Text = "Game File Directory:";
             // 
@@ -184,7 +185,7 @@
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(14, 172);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 16);
+            this.label1.Size = new System.Drawing.Size(107, 16);
             this.label1.TabIndex = 20;
             this.label1.Text = "Emulator Directory:";
             // 
@@ -276,6 +277,23 @@
             this.panelBorderStyle.TabIndex = 29;
             this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
+            // InfoButton
+            // 
+            this.InfoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.InfoButton.BackgroundImage = global::ShortCutes.Properties.Resources.infobtn;
+            this.InfoButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.InfoButton.FlatAppearance.BorderSize = 0;
+            this.InfoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.InfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.InfoButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.InfoButton.Location = new System.Drawing.Point(604, 4);
+            this.InfoButton.Name = "InfoButton";
+            this.InfoButton.Size = new System.Drawing.Size(35, 35);
+            this.InfoButton.TabIndex = 4;
+            this.InfoButton.TabStop = false;
+            this.InfoButton.UseVisualStyleBackColor = false;
+            this.InfoButton.Click += new System.EventHandler(this.InfoButton_Click);
+            // 
             // ConfigBtn
             // 
             this.ConfigBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
@@ -344,7 +362,7 @@
             this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
             this.ICOurl.ForeColor = System.Drawing.Color.White;
-            this.ICOurl.Location = new System.Drawing.Point(446, 379);
+            this.ICOurl.Location = new System.Drawing.Point(446, 381);
             this.ICOurl.Multiline = true;
             this.ICOurl.Name = "ICOurl";
             this.ICOurl.Size = new System.Drawing.Size(300, 28);
@@ -363,30 +381,14 @@
             this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ICOpic.Location = new System.Drawing.Point(446, 73);
+            this.ICOpic.Location = new System.Drawing.Point(446, 75);
             this.ICOpic.Name = "ICOpic";
             this.ICOpic.Size = new System.Drawing.Size(300, 300);
             this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ICOpic.TabIndex = 26;
             this.ICOpic.TabStop = false;
-            this.ICOpic.Click += new System.EventHandler(this.ICOpic_Click);
-            // 
-            // InfoButton
-            // 
-            this.InfoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
-            this.InfoButton.BackgroundImage = global::ShortCutes.Properties.Resources.infobtn;
-            this.InfoButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.InfoButton.FlatAppearance.BorderSize = 0;
-            this.InfoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.InfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.InfoButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.InfoButton.Location = new System.Drawing.Point(604, 4);
-            this.InfoButton.Name = "InfoButton";
-            this.InfoButton.Size = new System.Drawing.Size(35, 35);
-            this.InfoButton.TabIndex = 4;
-            this.InfoButton.TabStop = false;
-            this.InfoButton.UseVisualStyleBackColor = false;
-            this.InfoButton.Click += new System.EventHandler(this.InfoButton_Click);
+            this.ICOpic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ICOpic_MouseClick);
+            this.ICOpic.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ICOpic_MouseDoubleClick);
             // 
             // ShortCutes
             // 
@@ -398,7 +400,6 @@
             this.Controls.Add(this.ICOurl);
             this.Controls.Add(this.panelBorderStyle);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.OpenShortFolderCheck);
             this.Controls.Add(this.DesktopCheck);
             this.Controls.Add(this.ICOpic);
@@ -413,6 +414,7 @@
             this.Controls.Add(this.Edirbox);
             this.Controls.Add(this.Gdirbox);
             this.Controls.Add(this.createshortbtn);
+            this.Controls.Add(this.label5);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ShortCutes";
