@@ -8,11 +8,11 @@
 ### **Examples of ShortCutes**
 * CEMU
 
-https://user-images.githubusercontent.com/72423267/140080768-30114c81-48d2-4dd3-a395-306de800a6c4.mp4
+https://user-images.githubusercontent.com/72423267/140080920-1a2c82e2-2958-42b6-b116-8b5e9f4f07e4.mp4
 
 * YUZU
 
-https://user-images.githubusercontent.com/72423267/140080920-1a2c82e2-2958-42b6-b116-8b5e9f4f07e4.mp4
+https://user-images.githubusercontent.com/72423267/140080768-30114c81-48d2-4dd3-a395-306de800a6c4.mp4
 
 * DOLPHIN
 
