@@ -5,6 +5,19 @@
 * Requires [.NET Framework 4.7.1](https://dotnet.microsoft.com/download/dotnet-framework/net471)
 * Exclude ShortCutes folder from any Anti-Virus, ShortCutes folder is created on your Emulator Path root
 
+### **Examples of ShortCutes**
+* CEMU
+
+https://user-images.githubusercontent.com/72423267/140080768-30114c81-48d2-4dd3-a395-306de800a6c4.mp4
+
+* YUZU
+
+https://user-images.githubusercontent.com/72423267/140080920-1a2c82e2-2958-42b6-b116-8b5e9f4f07e4.mp4
+
+* DOLPHIN
+
+https://user-images.githubusercontent.com/72423267/140080931-d30cc844-6427-4226-af6d-3a1999faf8f6.mp4
+
 ### **Two ShortCute launcher design**
 Can be selected on ShortCutes config (default: Rectangular)
 
