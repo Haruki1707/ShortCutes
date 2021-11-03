@@ -68,8 +68,11 @@ namespace ShortCutes
         {
             System.Threading.Thread CU = new System.Threading.Thread(() =>
             {
-                if (EZ_Updater.CheckUpdate("Haruki1707/ShortCutes"))
-                    owner.BeginInvoke(AskForUpdate);
+                if (EZ_Updater.CheckUpdate(GitHubrepository))
+                    if (owner != null)
+                        owner.BeginInvoke(AskForUpdate);
+                    else
+                        AskForUpdate();
             });
             CU.Start();
         }

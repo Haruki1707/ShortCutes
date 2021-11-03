@@ -8,6 +8,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -49,7 +50,7 @@ namespace ShortCutes
             {
                 flagGraphics.FillRectangle(new SolidBrush(Color.FromArgb(30, 30, 30)), 0, 0, ICOpic.Width, ICOpic.Height);
                 flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (22F * 2));
-                flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F/2));
+                flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F / 2));
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
             }
             ICOpic.BackgroundImage = flag;
@@ -66,6 +67,34 @@ namespace ShortCutes
             {
                 var FD = new MessageForm("", 4);
                 FD.ShowDialog();
+            }
+        }
+
+        private static void ForceUpdate()
+        {
+            var FD = new MessageForm("", 4);
+            FD.ShowDialog();
+        }
+
+        public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
+        {
+            try
+            {
+                EZ_Updater.CheckUpdate(null, ForceUpdate, "Haruki1707/ShortCutes");
+                MessageBox.Show("An application error occurred. Please contact the adminstrator with the following information:\n\n" + t.Exception.Message + "\n\nStack Trace:\n" + t.Exception.StackTrace,
+                        "Notify about this error on GitHub repo Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            catch
+            {
+                try
+                {
+                    MessageBox.Show("Fatal Windows Forms Error",
+                        "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop);
+                }
+                finally
+                {
+                    Application.Exit();
+                }
             }
         }
 

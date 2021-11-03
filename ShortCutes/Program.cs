@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Security.Principal;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ShortCutes
@@ -21,6 +22,8 @@ namespace ShortCutes
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.ThreadException += new ThreadExceptionEventHandler(ShortCutes.Form1_UIThreadException);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.Run(new ShortCutes());
         }
 
