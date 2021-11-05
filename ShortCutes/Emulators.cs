@@ -1,9 +1,11 @@
 ﻿using IWshRuntimeLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Xml.Linq;
 
 namespace ShortCutes
@@ -42,8 +44,8 @@ namespace ShortCutes
             EmulatorsList.Add(PJ64);
 
             //YUZU
-            //Need to activate fullscreen through Emulator GUI
-            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca)", "-f -g", "", "", true);
+            //Works as expected
+            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
             YUZU.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
@@ -52,10 +54,18 @@ namespace ShortCutes
                 YUZU.Path(Appdata + @"\Yuzu\yuzu-windows-msvc\");
             EmulatorsList.Add(YUZU);
 
+            //RYUJINX
+            //Works as expected
+            //Deppending on the computer could be low performance
+            var Ryujinx = new Emulator("RYUJINX", "Ryujinx.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)","-f", "", "");
+            Ryujinx.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Ryujinx\Config.json", "game_dirs", "");
+            EmulatorsList.Add(Ryujinx);
+
+
             //VBA-M
-            //Only works on NightBuild
+            //Need to enable fullscreen on UI
             var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin)", "/f", "", "");
-            VBA_M.DescriptionChange("Only works on nightbuild. Don't exit fullscreen, do ALT+F4", true);
+            VBA_M.DescriptionChange("Enable start in fullscreen. Don't exit fullscreen, do ALT+F4", true);
             EmulatorsList.Add(VBA_M);
 
             //RPCS3
@@ -76,7 +86,7 @@ namespace ShortCutes
         {
             List<Emulator> emulist = EmulatorsList;
             if (emu != null)
-                emulist = new List<Emulator>{ emu };
+                emulist = new List<Emulator> { emu };
 
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs");
@@ -209,11 +219,38 @@ namespace ShortCutes
                         }
                         catch { }
                         break;
+                    case ".json":
+                        if(Exe == "Ryujinx.exe")
+                        {
+                            try
+                            {
+                                List<string> File = System.IO.File.ReadAllText(ConfigPath).Split(',').ToList();
+                                string value = File.Where(t => t.Contains("\"" + ConfigSection + "\":")).FirstOrDefault();
+                                value = ShittyJSONvalue(value, new string[] { "\"" + ConfigSection + "\": [", "]," });
+                                value = value.Substring(value.IndexOf(',') + 1);
+                                value = value.Substring(value.IndexOf('"'));
+                                value = value.Substring(value.IndexOf('"'));
+                                value = ShittyJSONvalue(value, new string[] { ",", "]", Environment.NewLine, "\"" });
+                                value = value.Replace(@"\\", @"\");
+
+                                gamesPath = value;
+                            }
+                            catch { }
+                        }
+                        break;
                     default:
                         break;
                 }
             }
+            Debug.WriteLine(gamesPath);
             return gamesPath;
+        }
+
+        private string ShittyJSONvalue(string text, string[] concurrences, string replacement = "")
+        {
+            foreach (var item in concurrences)
+                text = text.Replace(item, replacement);
+            return text;
         }
 
         public void SetConfigPath(string File, string Section, string Element)

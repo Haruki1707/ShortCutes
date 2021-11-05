@@ -79,7 +79,7 @@ namespace Shortcutes
 			ShortCute.StartInfo.Arguments = "%ARGUMENTS%";
 			ShortCute.Start();
 
-			TimerSC.Interval = 500;
+			TimerSC.Interval = 100;
 			TimerSC.Tick -= Execute_Tick;
 			TimerSC.Tick += timer1_Tick;
 			TimerSC.Start();

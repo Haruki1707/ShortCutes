@@ -184,7 +184,7 @@ namespace ShortCutes
                                 "Line number " + CompErr.Line +
                                 ", Error Number: " + CompErr.ErrorNumber +
                                 ", '" + CompErr.ErrorText + ";" +
-                                Environment.NewLine + Environment.NewLine;
+                                Environment.NewLine;
                 }
                 Error(errors);
                 return;
@@ -275,7 +275,7 @@ namespace ShortCutes
                     GamesPath = Path.GetDirectoryName(Gdirbox.Text);
                 else if (Edirbox.Text != "")
                     GamesPath = Edirbox.Text;
-                
+
                 var File = FileDialog(GamesPath, SelectedEmu.Gamesfilters);
 
                 if (File != null)
@@ -321,7 +321,7 @@ namespace ShortCutes
                 using (var CI = new CropImage_Tool())
                 {
                     CI.ShowDialog();
-                    if(CI.DialogResult1 == DialogResult.Yes)
+                    if (CI.DialogResult1 == DialogResult.Yes)
                     {
                         ImagingHelper.ConvertToIcon(temppath + "temp.png", temppath + @"temp.ico");
                         ICOpic.Image = ImagingHelper.ICONbox;

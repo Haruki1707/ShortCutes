@@ -12,6 +12,8 @@ namespace ShortCutes
         int cropY;
         int cropWidth;
         int cropHeight;
+        int croptempX;
+        int croptempY;
         int oCropX;
         int oCropY;
         bool canpaintcrop = false;
@@ -58,11 +60,10 @@ namespace ShortCutes
             if (e.Button == MouseButtons.Left)
             {
                 Cursor = Cursors.Cross;
-                cropX = e.X;
-                cropY = e.Y;
+                croptempX = e.X;
+                croptempY = e.Y;
                 canpaintcrop = true;
             }
-            pictureBox1.Refresh();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -75,6 +76,8 @@ namespace ShortCutes
         {
             if (canpaintcrop)
             {
+                cropX = croptempX;
+                cropY = croptempY;
                 int tempcropWidth = e.X - cropX;
                 int tempcropHeight = e.Y - cropY;
                 if (tempcropWidth > tempcropHeight)
