@@ -48,7 +48,7 @@ namespace ShortCutes
             Bitmap flag = new Bitmap(ICOpic.Width, ICOpic.Height);
             using (Graphics flagGraphics = Graphics.FromImage(flag))
             {
-                flagGraphics.FillRectangle(new SolidBrush(Color.FromArgb(30, 30, 30)), 0, 0, ICOpic.Width, ICOpic.Height);
+                flagGraphics.FillRectangle(new SolidBrush(ICOpic.BackColor), 0, 0, ICOpic.Width, ICOpic.Height);
                 flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (22F * 2));
                 flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F / 2));
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
@@ -58,16 +58,7 @@ namespace ShortCutes
 
         private void ShortCutes_Shown(object sender, EventArgs e)
         {
-            EZ_Updater.CheckUpdate(this, AskForUpdate, "Haruki1707/ShortCutes");
-        }
-
-        private void AskForUpdate()
-        {
-            if (Success("New version available\nDo you want to update?"))
-            {
-                var FD = new MessageForm("", 4);
-                FD.ShowDialog();
-            }
+            EZ_Updater.CheckUpdate(this, ForceUpdate, "Haruki1707/ShortCutes");
         }
 
         private static void ForceUpdate()
@@ -325,6 +316,7 @@ namespace ShortCutes
                     {
                         ImagingHelper.ConvertToIcon(temppath + "temp.png", temppath + @"temp.ico");
                         ICOpic.Image = ImagingHelper.ICONbox;
+                        ICOpic.Image.Save(temppath + @"temp.png");
                     }
                 }
             else
