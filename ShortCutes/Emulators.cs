@@ -22,7 +22,7 @@ namespace ShortCutes
 
             //CEMU
             //Works as expected
-            var CEMU = new Emulator("CEMU", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)", "-g", "", "-f", true);
+            var CEMU = new Emulator("Cemu", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)", "-g", "", "-f", true);
             CEMU.SetConfigPath(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 
@@ -34,7 +34,7 @@ namespace ShortCutes
 
             //SNES9X
             //Works as expected
-            EmulatorsList.Add(new Emulator("SNES9X", "snes9x.exe", "SNES Games (*.smc; *.sfc; *.swc; *.zip)", "", "..\\\\", "-fullscreen"));
+            EmulatorsList.Add(new Emulator("Snes9x", "snes9x.exe", "SNES Games (*.smc; *.sfc; *.swc; *.zip)", "", "..\\\\", "-fullscreen"));
 
             //PJ64
             //Need to activate fullscreen through Emulator GUI
@@ -45,7 +45,7 @@ namespace ShortCutes
 
             //YUZU
             //Works as expected
-            var YUZU = new Emulator("YUZU", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
+            var YUZU = new Emulator("Yuzu", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
             YUZU.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
@@ -57,14 +57,36 @@ namespace ShortCutes
             //RYUJINX
             //Works as expected
             //Deppending on the computer could be low performance
-            var Ryujinx = new Emulator("RYUJINX", "Ryujinx.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)","-f", "", "");
+            var Ryujinx = new Emulator("Ryujinx", "Ryujinx.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)","-f", "", "");
             Ryujinx.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Ryujinx\Config.json", "game_dirs", "");
             EmulatorsList.Add(Ryujinx);
 
+            //CITRA
+            //Need to enable fullscreen on GUI
+            var Citra = new Emulator("Citra", "citra-qt.exe", "3DS Games(*.3ds; *.3dsx; *.elf; *.axf; *.cci; *.cxi; *.app)");
+            Citra.DescriptionChange("Need to activate fullscren in GUI");
+            EmulatorsList.Add(Citra);
+
+            //DeSmuME
+            //Works as expected
+            var DeSmuME = new Emulator("DeSmuME", "DeSmuME.exe", "DS Games(*.nds; *.ds.gba; +.srl; *.zip; *.7z; *.rar; *.gz)", "--windowed-fullscreen", "", "");
+            DeSmuME.DescriptionChange("Please check that emulator is named DeSmuME.exe");
+            EmulatorsList.Add(DeSmuME);
+
+            //mGBA
+            //Works as expected
+            EmulatorsList.Add(new Emulator("mGBA", "mGBA.exe", "GB-GBC-GBA Games (*.gba; *.zip; *.7z; *.elf; *.agb; *.mb; *.rom; *.bin; *.gb; *.gbc; *.sgb)", "-f", "", ""));
+
+            //VBA
+            //Works as expected, deprecated
+            var VBA = new Emulator("VBA", "VisualBoyAdvance.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.sgb; *.cgb; *.agb; *.bin)", "-F", "", "");
+            VBA.DescriptionChange("Deprecated, if possible better use VBA-M");
+            EmulatorsList.Add(VBA);
 
             //VBA-M
             //Need to enable fullscreen on UI
-            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin)", "/f", "", "");
+            //Fullscreen command /f
+            var VBA_M = new Emulator("VBA-M", "visualboyadvance-m.exe", "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin; *.dmg; *-cgb; *.sgb)", "", "", "");
             VBA_M.DescriptionChange("Enable start in fullscreen. Don't exit fullscreen, do ALT+F4", true);
             EmulatorsList.Add(VBA_M);
 
@@ -77,6 +99,14 @@ namespace ShortCutes
             //PCSX2
             //Works as expected
             EmulatorsList.Add(new Emulator("PCSX2", "pcsx2.exe", "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)", "", "", "--fullscreen --nogui"));
+
+            //PPSSPP
+            //Works as expected
+            EmulatorsList.Add(new Emulator("PPSSPP", "PPSSPPWindows.exe", "PSP Games(*.iso; *.cso; *.pbp; *.elf; *.prx; ¨.zip; ¨.ppdmp)", "--fullscreen", "", ""));
+
+            //PPSSPP64
+            //Works as expected
+            EmulatorsList.Add(new Emulator("PPSSPP-64", "PPSSPPWindows64.exe", "PSP Games(*.iso; *.cso; *.pbp; *.elf; *.prx; ¨.zip; ¨.ppdmp)", "--fullscreen", "", ""));
 
             //To find if emulator shortcut exist for easy use of Shortcutes
             ShortcutsFinder();
@@ -174,7 +204,7 @@ namespace ShortCutes
                 cdesc = Color.Yellow;
         }
 
-        public virtual string Path(string path = null)
+        public string Path(string path = null)
         {
             if (path != null & System.IO.File.Exists(path + exe))
                 InstallPath = path;

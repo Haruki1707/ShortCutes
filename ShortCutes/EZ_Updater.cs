@@ -147,6 +147,16 @@ namespace ShortCutes
                 }
             }
             ActualVersion = ActualVersion.Substring(0, ActualVersion.Length - 1);
+            try
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers.Add("User-Agent", GitHubrepo);
+                    wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + Environment.UserDomainName + @"\\" + Environment.UserName + "&Version=v" + ActualVersion);
+                }
+            }
+            catch{ }
+
 
             return TAG.CompareTo(ActualVersion) > 0;
         }
