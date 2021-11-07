@@ -48,7 +48,6 @@ namespace ShortCutes
             Bitmap flag = new Bitmap(ICOpic.Width, ICOpic.Height);
             using (Graphics flagGraphics = Graphics.FromImage(flag))
             {
-                flagGraphics.FillRectangle(new SolidBrush(ICOpic.BackColor), 0, 0, ICOpic.Width, ICOpic.Height);
                 flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (22F * 2));
                 flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F / 2));
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
@@ -99,7 +98,8 @@ namespace ShortCutes
             if (!string.IsNullOrWhiteSpace(Edirbox.Text) && Directory.Exists(Edirbox.Text) && !Directory.Exists(Edirbox.Text + @"ShortCutes"))
             {
                 Directory.CreateDirectory(Edirbox.Text + @"ShortCutes");
-                Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder: " + Edirbox.Text + "ShortCutes");
+                Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder:\n\n" +
+                    Edirbox.Text + "ShortCutes\n\nDouble click on this text to copy path folder to clipboard", Edirbox.Text + "ShortCutes");
             }
 
             Shortcutbox.Focus();
@@ -164,6 +164,7 @@ namespace ShortCutes
                 GenerateExecutable = true,
                 OutputAssembly = Output
             };
+
             CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, code);
 
             if (results.Errors.Count > 0)
@@ -460,9 +461,9 @@ namespace ShortCutes
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        private void Info(string message)
+        private void Info(string message, string clipboard = null)
         {
-            using (var info = new MessageForm(message, 0))
+            using (var info = new MessageForm(message, 0, clipboard))
                 info.ShowDialog();
         }
         private void Error(string message)

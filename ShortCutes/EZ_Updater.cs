@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -149,13 +150,19 @@ namespace ShortCutes
             ActualVersion = ActualVersion.Substring(0, ActualVersion.Length - 1);
             try
             {
+                string MacAddress = "";
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                    if (nic.OperationalStatus == OperationalStatus.Up && (!nic.Description.Contains("Virtual") && !nic.Description.Contains("Pseudo")))
+                        if (nic.GetPhysicalAddress().ToString() != "")
+                            MacAddress = nic.GetPhysicalAddress().ToString();
+
                 using (WebClient wc = new WebClient())
                 {
                     wc.Headers.Add("User-Agent", GitHubrepo);
-                    wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + Environment.UserDomainName + @"\\" + Environment.UserName + "&Version=v" + ActualVersion);
+                    wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + MacAddress + @"\\" + Environment.UserName + "&Version=v" + ActualVersion);
                 }
             }
-            catch{ }
+            catch { }
 
 
             return TAG.CompareTo(ActualVersion) > 0;

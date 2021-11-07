@@ -7,10 +7,12 @@ namespace ShortCutes
 {
     public partial class MessageForm : Form
     {
-        public MessageForm(string Message, int Type)
+        string cliptext = null;
+        public MessageForm(string Message, int Type, string texttoCB = null)
         {
             InitializeComponent();
 
+            cliptext = texttoCB;
             DialogResult = DialogResult.No;
             Messagelbl.Text = Message;
 
@@ -171,6 +173,12 @@ namespace ShortCutes
             pea.Graphics.DrawLine(pen, pt1, pt2);
             pea.Graphics.DrawLine(pen, pt1, pt3);
             pea.Graphics.DrawLine(pen, pt3, pt4);
+        }
+
+        private void Messagelbl_DoubleClick(object sender, EventArgs e)
+        {
+            if(cliptext != null)
+                Clipboard.SetText(cliptext);
         }
     }
 }

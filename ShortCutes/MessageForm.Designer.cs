@@ -110,6 +110,7 @@ namespace ShortCutes
             this.Messagelbl.TabIndex = 28;
             this.Messagelbl.Text = "Here will be displayed the message...";
             this.Messagelbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Messagelbl.DoubleClick += new System.EventHandler(this.Messagelbl_DoubleClick);
             // 
             // iconPB
             // 
