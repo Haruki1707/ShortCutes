@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Xml.Linq;
 
 namespace ShortCutes
@@ -57,7 +56,7 @@ namespace ShortCutes
             //RYUJINX
             //Works as expected
             //Deppending on the computer could be low performance
-            var Ryujinx = new Emulator("Ryujinx", "Ryujinx.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)","-f", "", "");
+            var Ryujinx = new Emulator("Ryujinx", "Ryujinx.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)", "-f", "", "");
             Ryujinx.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Ryujinx\Config.json", "game_dirs", "");
             EmulatorsList.Add(Ryujinx);
 
@@ -250,7 +249,7 @@ namespace ShortCutes
                         catch { }
                         break;
                     case ".json":
-                        if(Exe == "Ryujinx.exe")
+                        if (Exe == "Ryujinx.exe")
                         {
                             try
                             {

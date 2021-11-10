@@ -93,6 +93,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HistoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HistoryForm.Designer.cs">
+      <DependentUpon>HistoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XmlShortCutes.cs" />
     <None Include="Roslyn Form Code.cs" />
     <Compile Include="CropImage_Tool.cs">
       <SubType>Form</SubType>
@@ -120,6 +127,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CropImage_Tool.resx">
       <DependentUpon>CropImage_Tool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HistoryForm.resx">
+      <DependentUpon>HistoryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShortCutesForm.resx">
       <DependentUpon>ShortCutesForm.cs</DependentUpon>
@@ -190,6 +200,7 @@
     <None Include="Resources\rectangular.png" />
     <None Include="Resources\square.png" />
     <Content Include="Resources\infobtn.png" />
+    <None Include="Resources\SCHistory.png" />
     <Content Include="Resources\shortcute_OzB_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

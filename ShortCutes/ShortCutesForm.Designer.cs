@@ -45,6 +45,7 @@
             this.createshortbtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
+            this.HistoryBtn = new System.Windows.Forms.Button();
             this.InfoButton = new System.Windows.Forms.Button();
             this.ConfigBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -52,6 +53,7 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
+            this.ClearSCSelected = new System.Windows.Forms.Button();
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
@@ -60,7 +62,7 @@
             // 
             this.label5.Font = new System.Drawing.Font("Bahnschrift SemiBold SemiConden", 9.75F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(443, 41);
+            this.label5.Location = new System.Drawing.Point(443, 42);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(303, 35);
             this.label5.TabIndex = 27;
@@ -265,6 +267,8 @@
             // panelBorderStyle
             // 
             this.panelBorderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(17)))), ((int)(((byte)(23)))));
+            this.panelBorderStyle.Controls.Add(this.ClearSCSelected);
+            this.panelBorderStyle.Controls.Add(this.HistoryBtn);
             this.panelBorderStyle.Controls.Add(this.InfoButton);
             this.panelBorderStyle.Controls.Add(this.ConfigBtn);
             this.panelBorderStyle.Controls.Add(this.label7);
@@ -277,16 +281,33 @@
             this.panelBorderStyle.TabIndex = 29;
             this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
             // 
+            // HistoryBtn
+            // 
+            this.HistoryBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.HistoryBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("HistoryBtn.BackgroundImage")));
+            this.HistoryBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.HistoryBtn.FlatAppearance.BorderSize = 0;
+            this.HistoryBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.HistoryBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HistoryBtn.ForeColor = System.Drawing.SystemColors.Control;
+            this.HistoryBtn.Location = new System.Drawing.Point(602, 4);
+            this.HistoryBtn.Name = "HistoryBtn";
+            this.HistoryBtn.Size = new System.Drawing.Size(35, 35);
+            this.HistoryBtn.TabIndex = 5;
+            this.HistoryBtn.TabStop = false;
+            this.HistoryBtn.UseVisualStyleBackColor = false;
+            this.HistoryBtn.Click += new System.EventHandler(this.HistoryBtn_Click);
+            // 
             // InfoButton
             // 
             this.InfoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
             this.InfoButton.BackgroundImage = global::ShortCutes.Properties.Resources.infobtn;
             this.InfoButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.InfoButton.FlatAppearance.BorderSize = 0;
-            this.InfoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.InfoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.InfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.InfoButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.InfoButton.Location = new System.Drawing.Point(604, 4);
+            this.InfoButton.Location = new System.Drawing.Point(564, 4);
             this.InfoButton.Name = "InfoButton";
             this.InfoButton.Size = new System.Drawing.Size(35, 35);
             this.InfoButton.TabIndex = 4;
@@ -300,10 +321,10 @@
             this.ConfigBtn.BackgroundImage = global::ShortCutes.Properties.Resources.config;
             this.ConfigBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ConfigBtn.FlatAppearance.BorderSize = 0;
-            this.ConfigBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.ConfigBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.ConfigBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ConfigBtn.ForeColor = System.Drawing.SystemColors.Control;
-            this.ConfigBtn.Location = new System.Drawing.Point(642, 4);
+            this.ConfigBtn.Location = new System.Drawing.Point(640, 4);
             this.ConfigBtn.Name = "ConfigBtn";
             this.ConfigBtn.Size = new System.Drawing.Size(35, 35);
             this.ConfigBtn.TabIndex = 3;
@@ -329,7 +350,7 @@
             this.miniBtn.BackgroundImage = global::ShortCutes.Properties.Resources.minimizebtn;
             this.miniBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.miniBtn.FlatAppearance.BorderSize = 0;
-            this.miniBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.miniBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.miniBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.miniBtn.ForeColor = System.Drawing.SystemColors.Control;
             this.miniBtn.Location = new System.Drawing.Point(682, 4);
@@ -362,7 +383,7 @@
             this.ICOurl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOurl.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
             this.ICOurl.ForeColor = System.Drawing.Color.White;
-            this.ICOurl.Location = new System.Drawing.Point(446, 381);
+            this.ICOurl.Location = new System.Drawing.Point(446, 382);
             this.ICOurl.Multiline = true;
             this.ICOurl.Name = "ICOurl";
             this.ICOurl.Size = new System.Drawing.Size(300, 28);
@@ -381,7 +402,7 @@
             this.ICOpic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ICOpic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ICOpic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ICOpic.Location = new System.Drawing.Point(446, 75);
+            this.ICOpic.Location = new System.Drawing.Point(446, 76);
             this.ICOpic.Name = "ICOpic";
             this.ICOpic.Size = new System.Drawing.Size(300, 300);
             this.ICOpic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -389,6 +410,25 @@
             this.ICOpic.TabStop = false;
             this.ICOpic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ICOpic_MouseClick);
             this.ICOpic.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ICOpic_MouseDoubleClick);
+            // 
+            // ClearSCSelected
+            // 
+            this.ClearSCSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.ClearSCSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ClearSCSelected.FlatAppearance.BorderSize = 0;
+            this.ClearSCSelected.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.ClearSCSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ClearSCSelected.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearSCSelected.ForeColor = System.Drawing.SystemColors.Control;
+            this.ClearSCSelected.Location = new System.Drawing.Point(323, 3);
+            this.ClearSCSelected.Name = "ClearSCSelected";
+            this.ClearSCSelected.Size = new System.Drawing.Size(75, 35);
+            this.ClearSCSelected.TabIndex = 6;
+            this.ClearSCSelected.TabStop = false;
+            this.ClearSCSelected.Text = "CLEAR";
+            this.ClearSCSelected.UseVisualStyleBackColor = false;
+            this.ClearSCSelected.Visible = false;
+            this.ClearSCSelected.Click += new System.EventHandler(this.ClearSCSelected_Click);
             // 
             // ShortCutes
             // 
@@ -456,6 +496,8 @@
         private System.Windows.Forms.TextBox ICOurl;
         private System.Windows.Forms.Button ConfigBtn;
         private System.Windows.Forms.Button InfoButton;
+        private System.Windows.Forms.Button HistoryBtn;
+        private System.Windows.Forms.Button ClearSCSelected;
     }
 }
 

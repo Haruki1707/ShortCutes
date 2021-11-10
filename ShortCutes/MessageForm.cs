@@ -177,7 +177,7 @@ namespace ShortCutes
 
         private void Messagelbl_DoubleClick(object sender, EventArgs e)
         {
-            if(cliptext != null)
+            if (cliptext != null)
                 Clipboard.SetText(cliptext);
         }
     }

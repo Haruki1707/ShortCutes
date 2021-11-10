@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace ShortCutes
 {
@@ -18,11 +19,18 @@ namespace ShortCutes
     {
         readonly private string temppath = Path.GetTempPath() + @"\ShortCutes\";
         readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
+        private XmlDocument ShortCutesXml = new XmlDocument();
         readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
         readonly private string InvalidFileNameChars = "";
-        //Emuthings
+        private bool Emulatorcb_HasSelectedItem => emulatorcb.SelectedItem != null;
         private List<Emulator> EmulatorsList => Emulators.EmulatorsList;
         private Emulator SelectedEmu => EmulatorsList[emulatorcb.SelectedIndex];
+        private int SSCH = -1;
+        private int SelectedShortCuteHis
+        {
+            get { return SSCH; }
+            set { SSCH = value; Shortcutbox.Focus(); _ = value == -1 ? ClearSCSelected.Visible = false : ClearSCSelected.Visible = true; }
+        }
 
         public ShortCutes()
         {
@@ -62,8 +70,7 @@ namespace ShortCutes
 
         private static void ForceUpdate()
         {
-            var FD = new MessageForm("", 4);
-            FD.ShowDialog();
+            new MessageForm("", 4).ShowDialog();
         }
 
         public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
@@ -105,11 +112,6 @@ namespace ShortCutes
             Shortcutbox.Focus();
         }
 
-        private bool Emulatorcb_HasSelectedItem()
-        {
-            return emulatorcb.SelectedItem != null;
-        }
-
         private void CreateShortCute_Click(object sender, EventArgs e)
         {
             string code;
@@ -117,7 +119,7 @@ namespace ShortCutes
             if (!Edirbox.Text.EndsWith(@"\") && !string.IsNullOrWhiteSpace(Edirbox.Text))
                 Edirbox.Text += @"\";
 
-            if (!Emulatorcb_HasSelectedItem())
+            if (!Emulatorcb_HasSelectedItem)
                 Error("Emulator must be selected!");
             else if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
                 Error("Shortcut name cannot be empty");
@@ -182,6 +184,30 @@ namespace ShortCutes
                 return;
             }
 
+            File.Delete(XmlDocSC.ShortCutes[SelectedShortCuteHis].Image);
+            if (!Directory.Exists(appdata + SelectedEmu.Name))
+                Directory.CreateDirectory(appdata + SelectedEmu.Name);
+            File.Copy(temppath + "tempORIGINAL.png", appdata + SelectedEmu.Name + @"\" + $"{Filename}.png", true);
+
+            if (SelectedShortCuteHis == -1)
+                XmlDocSC.ShortCutes.Add(new ShortCute(Filename, Edirbox.Text + SelectedEmu.Exe, Gdirbox.Text, appdata + SelectedEmu.Name + @"\" + $"{Filename}.png"));
+            else
+            {
+                var shortcute = XmlDocSC.ShortCutes[SelectedShortCuteHis];
+                if (shortcute.Name != Filename)
+                {
+                    File.Delete(emupath + shortcute.Name + ".exe");
+                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{shortcute.Name}.lnk");
+                }
+                shortcute.Name = Filename;
+                shortcute.EmuPath = Edirbox.Text + SelectedEmu.Exe;
+                shortcute.GamePath = Gdirbox.Text;
+                shortcute.Image = appdata + SelectedEmu.Name + @"\" + $"{Filename}.png";
+
+
+                SelectedShortCuteHis = -1;
+            }
+
             if (DesktopCheck.Checked)
             {
                 object shDesktop = (object)"Desktop";
@@ -221,22 +247,25 @@ namespace ShortCutes
             return code;
         }
 
+        string TempString = null;
         private void EmuBrow_Click(object sender, EventArgs e)
         {
             string EmuDir = "C:\\";
             if (Edirbox.Text != "")
                 EmuDir = Edirbox.Text;
 
-            var File = FileDialog(EmuDir, "Executable File (*.exe)|*.exe");
+            var file = TempString != null ? TempString : FileDialog(EmuDir, "Executable File (*.exe)|*.exe");
+            TempString = null;
 
-            if (File != null)
+            if (file != null)
             {
                 bool exists = false;
                 foreach (var emu in EmulatorsList)
                 {
-                    if (emu.Exe.ToLower() == Path.GetFileName(File).ToLower())
+                    if (emu.Exe.ToLower() == Path.GetFileName(file).ToLower())
                     {
-                        emu.Path(Path.GetDirectoryName(File) + @"\");
+                        if (File.Exists(file))
+                            emu.Path(Path.GetDirectoryName(file) + @"\");
                         emulatorcb.SelectedIndex = EmulatorsList.IndexOf(emu);
                         Emulatorcb_SelectedIndexChanged(null, null);
                         exists = true;
@@ -259,7 +288,7 @@ namespace ShortCutes
         {
             string GamesPath = "C:\\";
 
-            if (Emulatorcb_HasSelectedItem())
+            if (Emulatorcb_HasSelectedItem)
             {
                 if (SelectedEmu.TryGetGamesPath() != "" && SelectedEmu.GamesPath != null)
                     GamesPath = SelectedEmu.GamesPath;
@@ -268,10 +297,11 @@ namespace ShortCutes
                 else if (Edirbox.Text != "")
                     GamesPath = Edirbox.Text;
 
-                var File = FileDialog(GamesPath, SelectedEmu.Gamesfilters);
+                var file = TempString != null ? TempString : FileDialog(GamesPath, SelectedEmu.Gamesfilters);
+                TempString = null;
 
-                if (File != null)
-                    Gdirbox.Text = File;
+                if (file != null && File.Exists(file))
+                    Gdirbox.Text = file;
             }
             else
                 Info("Emulator must be selected!");
@@ -280,7 +310,7 @@ namespace ShortCutes
         }
 
         private static bool Image = false;
-        bool clicked;
+        private bool clicked;
         private async void ICOpic_MouseClick(object sender, MouseEventArgs e)
         {
             if (clicked) return;
@@ -290,12 +320,13 @@ namespace ShortCutes
             clicked = false;
 
             //Process click
-            var file = FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+            var file = TempString != null ? TempString : FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+            TempString = null;
 
-            if (file != null)
+            if (file != null && File.Exists(file))
             {
                 File.Copy(file, temppath + "tempORIGINAL.png", true);
-                ImagingHelper.ConvertToIcon(file, temppath + @"temp.ico");
+                ImagingHelper.ConvertToIcon(temppath + "tempORIGINAL.png", temppath + @"temp.ico");
                 ICOpic.Image = ImagingHelper.ICONbox;
                 ICOpic.Image.Save(temppath + @"temp.png");
                 Image = true;
@@ -335,9 +366,8 @@ namespace ShortCutes
                     {
                         if (bitmap != null)
                         {
-                            bitmap.Save(temppath + @"temp.png");
-                            File.Copy(temppath + "temp.png", temppath + "tempORIGINAL.png", true);
-                            ImagingHelper.ConvertToIcon(temppath + @"temp.png", temppath + @"temp.ico");
+                            bitmap.Save(temppath + @"tempORIGINAL.png");
+                            ImagingHelper.ConvertToIcon(temppath + @"tempORIGINAL.png", temppath + @"temp.ico");
                             ICOpic.Image = ImagingHelper.ICONbox;
                             ICOpic.Image.Save(temppath + @"temp.png");
                             Image = true;
@@ -423,6 +453,51 @@ namespace ShortCutes
             }
         }
 
+        private void HistoryBtn_Click(object sender, EventArgs e)
+        {
+            using (var History = new HistoryForm())
+            {
+                History.ShowDialog();
+
+                if (History.ShortCuteIndex != -1)
+                {
+                    var ShortCute = XmlDocSC.ShortCutes[History.ShortCuteIndex];
+
+                    Shortcutbox.Text = ShortCute.Name;
+                    TempString = ShortCute.EmuPath;
+                    EmuBrow_Click(null, null);
+                    TempString = ShortCute.GamePath;
+                    GameBrow_Click(null, null);
+
+                    TempString = ShortCute.Image;
+                    SelectedShortCuteHis = History.ShortCuteIndex;
+                    History.Dispose();
+
+                    ICOpic_MouseClick(null, null);
+                }
+            }
+
+            Shortcutbox.Focus();
+            Shortcutbox.SelectionStart = Shortcutbox.Text.Length;
+        }
+
+        private void InfoButton_Click(object sender, EventArgs e)
+        {
+            using (var info = new MessageForm("ShortCutes  v" + EZ_Updater.ActualVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
+                info.ShowDialog();
+        }
+
+
+        private void ClearSCSelected_Click(object sender, EventArgs e)
+        {
+            SelectedShortCuteHis = -1;
+            Shortcutbox.Text = null;
+            Gdirbox.Text = null;
+            ICOpic.Image = null;
+
+            Shortcutbox.Focus();
+        }
+
         private void Shortcutbox_Focus(object sender, EventArgs e)
         {
             Shortcutbox.Focus();
@@ -478,12 +553,6 @@ namespace ShortCutes
                 success.ShowDialog();
                 return success.DialogResult == DialogResult.Yes;
             }
-        }
-
-        private void InfoButton_Click(object sender, EventArgs e)
-        {
-            using (var info = new MessageForm("ShortCutes  v" + EZ_Updater.ActualVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
-                info.ShowDialog();
         }
     }
 
