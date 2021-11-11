@@ -29,7 +29,18 @@ namespace ShortCutes
         private int SelectedShortCuteHis
         {
             get { return SSCH; }
-            set { SSCH = value; Shortcutbox.Focus(); _ = value == -1 ? ClearSCSelected.Visible = false : ClearSCSelected.Visible = true; }
+            set { SSCH = value; Shortcutbox.Focus();
+                if (value == -1)
+                {
+                    ClearSCSelected.Visible = false;
+                    createshortbtn.Text = "Create ShortCute";
+                }
+                else
+                {
+                     ClearSCSelected.Visible = true;
+                    createshortbtn.Text = "Modify ShortCute";
+                }
+            }
         }
 
         public ShortCutes()

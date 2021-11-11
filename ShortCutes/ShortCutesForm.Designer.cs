@@ -75,7 +75,7 @@
             this.OpenShortFolderCheck.AutoSize = true;
             this.OpenShortFolderCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.OpenShortFolderCheck.ForeColor = System.Drawing.Color.White;
-            this.OpenShortFolderCheck.Location = new System.Drawing.Point(14, 311);
+            this.OpenShortFolderCheck.Location = new System.Drawing.Point(147, 311);
             this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
             this.OpenShortFolderCheck.Size = new System.Drawing.Size(146, 20);
             this.OpenShortFolderCheck.TabIndex = 7;
@@ -91,7 +91,7 @@
             this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
-            this.DesktopCheck.Location = new System.Drawing.Point(302, 139);
+            this.DesktopCheck.Location = new System.Drawing.Point(15, 311);
             this.DesktopCheck.Name = "DesktopCheck";
             this.DesktopCheck.Size = new System.Drawing.Size(114, 20);
             this.DesktopCheck.TabIndex = 5;
@@ -267,7 +267,6 @@
             // panelBorderStyle
             // 
             this.panelBorderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(17)))), ((int)(((byte)(23)))));
-            this.panelBorderStyle.Controls.Add(this.ClearSCSelected);
             this.panelBorderStyle.Controls.Add(this.HistoryBtn);
             this.panelBorderStyle.Controls.Add(this.InfoButton);
             this.panelBorderStyle.Controls.Add(this.ConfigBtn);
@@ -413,19 +412,17 @@
             // 
             // ClearSCSelected
             // 
-            this.ClearSCSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.ClearSCSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.ClearSCSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
             this.ClearSCSelected.FlatAppearance.BorderSize = 0;
-            this.ClearSCSelected.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.ClearSCSelected.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.ClearSCSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ClearSCSelected.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearSCSelected.ForeColor = System.Drawing.SystemColors.Control;
-            this.ClearSCSelected.Location = new System.Drawing.Point(323, 3);
+            this.ClearSCSelected.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
+            this.ClearSCSelected.ForeColor = System.Drawing.Color.White;
+            this.ClearSCSelected.Location = new System.Drawing.Point(302, 124);
             this.ClearSCSelected.Name = "ClearSCSelected";
-            this.ClearSCSelected.Size = new System.Drawing.Size(75, 35);
-            this.ClearSCSelected.TabIndex = 6;
-            this.ClearSCSelected.TabStop = false;
-            this.ClearSCSelected.Text = "CLEAR";
+            this.ClearSCSelected.Size = new System.Drawing.Size(119, 35);
+            this.ClearSCSelected.TabIndex = 31;
+            this.ClearSCSelected.Text = "Clear Data";
             this.ClearSCSelected.UseVisualStyleBackColor = false;
             this.ClearSCSelected.Visible = false;
             this.ClearSCSelected.Click += new System.EventHandler(this.ClearSCSelected_Click);
@@ -437,6 +434,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(760, 415);
             this.ControlBox = false;
+            this.Controls.Add(this.ClearSCSelected);
             this.Controls.Add(this.ICOurl);
             this.Controls.Add(this.panelBorderStyle);
             this.Controls.Add(this.label6);
