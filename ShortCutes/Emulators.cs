@@ -63,6 +63,7 @@ namespace ShortCutes
             //CITRA
             //Need to enable fullscreen on GUI
             var Citra = new Emulator("Citra", "citra-qt.exe", "3DS Games(*.3ds; *.3dsx; *.elf; *.axf; *.cci; *.cxi; *.app)");
+            Citra.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Citra\config\qt-config.ini", "UI", @"Paths\gamedirs\3\path");
             Citra.DescriptionChange("Need to activate fullscren in GUI");
             EmulatorsList.Add(Citra);
 
@@ -115,7 +116,21 @@ namespace ShortCutes
         {
             List<Emulator> emulist = EmulatorsList;
             if (emu != null)
+            {
                 emulist = new List<Emulator> { emu };
+
+                var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (emu.Name == "Yuzu" && System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + emu.Exe))
+                {
+                    emu.Path(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\");
+                    return;
+                }
+                else if (emu.Name == "Yuzu")
+                {
+                    emu.Path(Appdata + @"\Yuzu\yuzu-windows-msvc\");
+                    return;
+                }
+            }
 
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GetLnkFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs");
@@ -209,6 +224,7 @@ namespace ShortCutes
                 InstallPath = path;
             else if (string.IsNullOrWhiteSpace(path) && !System.IO.File.Exists(InstallPath + exe))
                 Emulators.ShortcutsFinder(this);
+
             return InstallPath;
         }
 

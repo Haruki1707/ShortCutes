@@ -7,6 +7,25 @@ namespace ShortCutes
 {
     public partial class MessageForm : Form
     {
+        public static void Info(string message, string clipboard = null)
+        {
+            using (var info = new MessageForm(message, 0, clipboard))
+                info.ShowDialog();
+        }
+        public static void Error(string message)
+        {
+            using (var error = new MessageForm(message, 1))
+                error.ShowDialog();
+        }
+        public static bool Success(string message)
+        {
+            using (var success = new MessageForm(message, 2))
+            {
+                success.ShowDialog();
+                return success.DialogResult == DialogResult.Yes;
+            }
+        }
+
         string cliptext = null;
         public MessageForm(string Message, int Type, string texttoCB = null)
         {
@@ -178,7 +197,10 @@ namespace ShortCutes
         private void Messagelbl_DoubleClick(object sender, EventArgs e)
         {
             if (cliptext != null)
+            {
                 Clipboard.SetText(cliptext);
+                Messagelbl.Text = Messagelbl.Text.Replace("Double click on this text to copy path folder to clipboard", "Path copied to clipboard");
+            }
         }
     }
 }

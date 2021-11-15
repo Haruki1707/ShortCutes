@@ -18,7 +18,7 @@ namespace ShortCutes
     public partial class ShortCutes : Form
     {
         readonly private string temppath = Path.GetTempPath() + @"\ShortCutes\";
-        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Shortcutes\";
+        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\ShortCutes\";
         private XmlDocument ShortCutesXml = new XmlDocument();
         readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
         readonly private string InvalidFileNameChars = "";
@@ -29,7 +29,9 @@ namespace ShortCutes
         private int SelectedShortCuteHis
         {
             get { return SSCH; }
-            set { SSCH = value; Shortcutbox.Focus();
+            set
+            {
+                SSCH = value; Shortcutbox.Focus();
                 if (value == -1)
                 {
                     ClearSCSelected.Visible = false;
@@ -37,7 +39,7 @@ namespace ShortCutes
                 }
                 else
                 {
-                     ClearSCSelected.Visible = true;
+                    ClearSCSelected.Visible = true;
                     createshortbtn.Text = "Modify ShortCute";
                 }
             }
@@ -72,6 +74,8 @@ namespace ShortCutes
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
             }
             ICOpic.BackgroundImage = flag;
+
+            //MessageForm.Info();
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
@@ -90,7 +94,7 @@ namespace ShortCutes
             {
                 EZ_Updater.CheckUpdate(null, ForceUpdate, "Haruki1707/ShortCutes");
                 MessageBox.Show("An application error occurred. Please contact the adminstrator with the following information:\n\n" + t.Exception.Message + "\n\nStack Trace:\n" + t.Exception.StackTrace,
-                        "Notify about this error on GitHub repo Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        "Notify about this error on GitHub repository Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             catch
             {
@@ -116,7 +120,7 @@ namespace ShortCutes
             if (!string.IsNullOrWhiteSpace(Edirbox.Text) && Directory.Exists(Edirbox.Text) && !Directory.Exists(Edirbox.Text + @"ShortCutes"))
             {
                 Directory.CreateDirectory(Edirbox.Text + @"ShortCutes");
-                Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder:\n\n" +
+                MessageForm.Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder:\n\n" +
                     Edirbox.Text + "ShortCutes\n\nDouble click on this text to copy path folder to clipboard", Edirbox.Text + "ShortCutes");
             }
 
@@ -131,25 +135,25 @@ namespace ShortCutes
                 Edirbox.Text += @"\";
 
             if (!Emulatorcb_HasSelectedItem)
-                Error("Emulator must be selected!");
+                MessageForm.Error("Emulator must be selected!");
             else if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
-                Error("Shortcut name cannot be empty");
+                MessageForm.Error("Shortcut name cannot be empty");
             else if (!File.Exists(Edirbox.Text + SelectedEmu.Exe))
-                Error("Emulator doesn't exist in the specified path\nCheck if the path or the selected emulator is correct");
+                MessageForm.Error("Emulator doesn't exist in the specified path\nCheck if the path or the selected emulator is correct");
             else if (!File.Exists(Gdirbox.Text))
-                Error("Game file doesn't exist in the specified path");
+                MessageForm.Error("Game file doesn't exist in the specified path");
             else if (!Image)
-                Error("Select a picture to continue");
+                MessageForm.Error("Select a picture to continue");
             else
             {
                 if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
                     code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""));
-                else if (Success("Emulator and games' folder must be on the same path to avoid issues.\n\nWant to continue without the same path? (still works)"))
+                else if (MessageForm.Success("Emulator and games' folder must be on the same path to avoid issues.\n\nWant to continue without the same path? (still works)"))
                     code = Roslyn_FormCode(Gdirbox.Text);
                 else
                     return;
 
-                Compile(code, Edirbox.Text, Shortcutbox.Text);
+                Compile(code);
                 if (OpenShortFolderCheck.Checked)
                     Process.Start("explorer.exe", Edirbox.Text + @"ShortCutes");
 
@@ -160,9 +164,10 @@ namespace ShortCutes
             Shortcutbox.Focus();
         }
 
-        private void Compile(string code, string emupath, string Filename)
+        private void Compile(string code)
         {
-            emupath += @"ShortCutes";
+            string Filename = Shortcutbox.Text;
+            string emupath = Edirbox.Text + "ShortCutes";
             if (!Directory.Exists(emupath))
                 Directory.CreateDirectory(emupath);
             emupath += @"\";
@@ -191,14 +196,12 @@ namespace ShortCutes
                                 ", '" + CompErr.ErrorText + ";" +
                                 Environment.NewLine;
                 }
-                Error(errors);
+                MessageForm.Error(errors);
                 return;
             }
 
-            File.Delete(XmlDocSC.ShortCutes[SelectedShortCuteHis].Image);
             if (!Directory.Exists(appdata + SelectedEmu.Name))
                 Directory.CreateDirectory(appdata + SelectedEmu.Name);
-            File.Copy(temppath + "tempORIGINAL.png", appdata + SelectedEmu.Name + @"\" + $"{Filename}.png", true);
 
             if (SelectedShortCuteHis == -1)
                 XmlDocSC.ShortCutes.Add(new ShortCute(Filename, Edirbox.Text + SelectedEmu.Exe, Gdirbox.Text, appdata + SelectedEmu.Name + @"\" + $"{Filename}.png"));
@@ -209,6 +212,7 @@ namespace ShortCutes
                 {
                     File.Delete(emupath + shortcute.Name + ".exe");
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{shortcute.Name}.lnk");
+                    File.Delete(shortcute.Image);
                 }
                 shortcute.Name = Filename;
                 shortcute.EmuPath = Edirbox.Text + SelectedEmu.Exe;
@@ -217,7 +221,9 @@ namespace ShortCutes
 
 
                 SelectedShortCuteHis = -1;
+
             }
+            File.Copy(temppath + "tempORIGINAL.png", appdata + SelectedEmu.Name + @"\" + $"{Filename}.png", true);
 
             if (DesktopCheck.Checked)
             {
@@ -231,7 +237,7 @@ namespace ShortCutes
                 shortcut.Save();
             }
 
-            if (Success("Shortcut created!\nExecute shortcut?"))
+            if (MessageForm.Success("Shortcut created!\nExecute shortcut?"))
             {
                 var starto = new Process();
                 starto.StartInfo.FileName = Output;
@@ -286,7 +292,7 @@ namespace ShortCutes
 
                 if (exists == false)
                 {
-                    Info("The emulator isn't supported yet. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
+                    MessageForm.Info("The emulator isn't supported yet. You can contribute to make it compatible on GitHub (Haruki1707/ShortCutes repo)" +
                         "\n\n!!!This also may occur because you changed the emulator executable name." +
                         "Make sure you are using the original emulator name!!!");
                 }
@@ -315,7 +321,7 @@ namespace ShortCutes
                     Gdirbox.Text = file;
             }
             else
-                Info("Emulator must be selected!");
+                MessageForm.Info("Emulator must be selected!");
 
             Shortcutbox.Focus();
         }
@@ -363,7 +369,7 @@ namespace ShortCutes
                     }
                 }
             else
-                Info("First select a picture to crop");
+                MessageForm.Info("First select a picture to crop");
         }
 
         private void ICOurl_TextChanged(object sender, EventArgs e)
@@ -387,7 +393,7 @@ namespace ShortCutes
                 }
                 catch
                 {
-                    Error("URL provided isn't an image...");
+                    MessageForm.Error("URL provided isn't an image...");
                 }
                 Shortcutbox.Focus();
             }
@@ -473,17 +479,15 @@ namespace ShortCutes
                 if (History.ShortCuteIndex != -1)
                 {
                     var ShortCute = XmlDocSC.ShortCutes[History.ShortCuteIndex];
+                    SelectedShortCuteHis = History.ShortCuteIndex;
+                    History.Dispose();
 
                     Shortcutbox.Text = ShortCute.Name;
                     TempString = ShortCute.EmuPath;
                     EmuBrow_Click(null, null);
                     TempString = ShortCute.GamePath;
                     GameBrow_Click(null, null);
-
                     TempString = ShortCute.Image;
-                    SelectedShortCuteHis = History.ShortCuteIndex;
-                    History.Dispose();
-
                     ICOpic_MouseClick(null, null);
                 }
             }
@@ -517,7 +521,7 @@ namespace ShortCutes
         {
             if (InputIsCommand && containsABadCharacter.IsMatch(Shortcutbox.Text))
             {
-                Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
+                MessageForm.Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
                 Shortcutbox.Text = Regex.Replace(Shortcutbox.Text, containsABadCharacter.ToString(), "");
             }
             if (TextRenderer.MeasureText(Shortcutbox.Text, Shortcutbox.Font).Width > Shortcutbox.Width)
@@ -529,7 +533,7 @@ namespace ShortCutes
         {
             if (containsABadCharacter.IsMatch(e.KeyChar.ToString()) && !Char.IsControl(e.KeyChar))
             {
-                Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
+                MessageForm.Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
                 e.Handled = true;
             }
         }
@@ -545,25 +549,6 @@ namespace ShortCutes
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        private void Info(string message, string clipboard = null)
-        {
-            using (var info = new MessageForm(message, 0, clipboard))
-                info.ShowDialog();
-        }
-        private void Error(string message)
-        {
-            using (var error = new MessageForm(message, 1))
-                error.ShowDialog();
-        }
-        private bool Success(string message)
-        {
-            using (var success = new MessageForm(message, 2))
-            {
-                success.ShowDialog();
-                return success.DialogResult == DialogResult.Yes;
-            }
         }
     }
 

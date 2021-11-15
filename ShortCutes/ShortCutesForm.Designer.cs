@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortCutes));
             this.label5 = new System.Windows.Forms.Label();
             this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
@@ -54,6 +55,7 @@
             this.ICOurl = new System.Windows.Forms.TextBox();
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.ClearSCSelected = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
@@ -112,6 +114,7 @@
             this.gameBrow.Size = new System.Drawing.Size(119, 35);
             this.gameBrow.TabIndex = 3;
             this.gameBrow.Text = "Open Game";
+            this.toolTip.SetToolTip(this.gameBrow, "Opens a filedialog to select a game for the emulator");
             this.gameBrow.UseVisualStyleBackColor = false;
             this.gameBrow.Click += new System.EventHandler(this.GameBrow_Click);
             // 
@@ -128,6 +131,7 @@
             this.emuBrow.Size = new System.Drawing.Size(119, 35);
             this.emuBrow.TabIndex = 2;
             this.emuBrow.Text = "Open Emulator";
+            this.toolTip.SetToolTip(this.emuBrow, "Opens a filedialog to select a emulator");
             this.emuBrow.UseVisualStyleBackColor = false;
             this.emuBrow.Click += new System.EventHandler(this.EmuBrow_Click);
             // 
@@ -294,6 +298,7 @@
             this.HistoryBtn.Size = new System.Drawing.Size(35, 35);
             this.HistoryBtn.TabIndex = 5;
             this.HistoryBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.HistoryBtn, "History");
             this.HistoryBtn.UseVisualStyleBackColor = false;
             this.HistoryBtn.Click += new System.EventHandler(this.HistoryBtn_Click);
             // 
@@ -311,6 +316,7 @@
             this.InfoButton.Size = new System.Drawing.Size(35, 35);
             this.InfoButton.TabIndex = 4;
             this.InfoButton.TabStop = false;
+            this.toolTip.SetToolTip(this.InfoButton, "ShortCutes Information");
             this.InfoButton.UseVisualStyleBackColor = false;
             this.InfoButton.Click += new System.EventHandler(this.InfoButton_Click);
             // 
@@ -328,6 +334,7 @@
             this.ConfigBtn.Size = new System.Drawing.Size(35, 35);
             this.ConfigBtn.TabIndex = 3;
             this.ConfigBtn.TabStop = false;
+            this.toolTip.SetToolTip(this.ConfigBtn, "Configuration");
             this.ConfigBtn.UseVisualStyleBackColor = false;
             this.ConfigBtn.Click += new System.EventHandler(this.ConfigBtn_Click);
             // 
@@ -422,10 +429,18 @@
             this.ClearSCSelected.Name = "ClearSCSelected";
             this.ClearSCSelected.Size = new System.Drawing.Size(119, 35);
             this.ClearSCSelected.TabIndex = 31;
-            this.ClearSCSelected.Text = "Clear Data";
+            this.ClearSCSelected.Text = "Clean Data";
+            this.toolTip.SetToolTip(this.ClearSCSelected, "Clean UI from selected history data");
             this.ClearSCSelected.UseVisualStyleBackColor = false;
             this.ClearSCSelected.Visible = false;
             this.ClearSCSelected.Click += new System.EventHandler(this.ClearSCSelected_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 250;
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 250;
+            this.toolTip.ReshowDelay = 50;
             // 
             // ShortCutes
             // 
@@ -496,6 +511,7 @@
         private System.Windows.Forms.Button InfoButton;
         private System.Windows.Forms.Button HistoryBtn;
         private System.Windows.Forms.Button ClearSCSelected;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 

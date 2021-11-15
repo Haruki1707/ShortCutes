@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,11 @@ namespace ShortCutes
             button1.Size = new Size(button1.Width - VScrollWidth, button1.Height);
             label2.Size = new Size(label2.Width - VScrollWidth, label2.Height);
 
-            foreach (var ShortCute in XmlDocSC.ShortCutes)
+            var Copylist = XmlDocSC.ShortCutes.ToList();
+            Copylist.Reverse();
+            Namenum = Copylist.Count - 1;
+
+            foreach (var ShortCute in Copylist)
                 DrawShortCute(ShortCute);
         }
 
@@ -57,7 +62,8 @@ namespace ShortCutes
                 SizeMode = pictureBox1.SizeMode,
                 Location = new Point(btn.FlatAppearance.BorderSize, btn.FlatAppearance.BorderSize),
             };
-            picbox.Image = Image.FromFile(SC.Image);
+            if(File.Exists(SC.Image))
+                picbox.Image = Image.FromFile(SC.Image);
             picbox.Click += new EventHandler(Control_Click);
             picbox.MouseEnter += new EventHandler(Control_MouseEnter);
             picbox.MouseLeave += new EventHandler(Control_MouseLeave);
@@ -76,7 +82,7 @@ namespace ShortCutes
             var label = new Label()
             {
                 Text = emuname + ": " + SC.Name,
-                Name = "LBL" + Namenum++.ToString(),
+                Name = "LBL" + Namenum--.ToString(),
                 TextAlign = label2.TextAlign,
                 Font = label2.Font,
                 BackColor = label2.BackColor,
@@ -108,6 +114,12 @@ namespace ShortCutes
         {
             var button = ((Button)sender);
             ShortCuteIndex = int.Parse(button.Name.Replace("BTN", ""));
+
+            foreach (var btn in panel1.Controls.OfType<Button>())
+                foreach (var pB in btn.Controls.OfType<PictureBox>())
+                    if(pB.Image != null)
+                        pB.Image.Dispose();
+
             Close();
         }
         private void Control_Click(Object sender, EventArgs e)

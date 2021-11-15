@@ -132,7 +132,7 @@ namespace Shortcutes
 			e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			e.Graphics.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
 			e.Graphics.DrawString("   %EMUNAME%", new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
-			e.Graphics.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.LightGray, 0, standarHeight - 10);
+			e.Graphics.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, standarHeight - 10);
 		}
 
 		protected override CreateParams CreateParams
