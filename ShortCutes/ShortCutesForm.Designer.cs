@@ -113,8 +113,7 @@
             this.gameBrow.Name = "gameBrow";
             this.gameBrow.Size = new System.Drawing.Size(119, 35);
             this.gameBrow.TabIndex = 3;
-            this.gameBrow.Text = "Open Game";
-            this.toolTip.SetToolTip(this.gameBrow, "Opens a filedialog to select a game for the emulator");
+            this.gameBrow.Text = "Select Game";
             this.gameBrow.UseVisualStyleBackColor = false;
             this.gameBrow.Click += new System.EventHandler(this.GameBrow_Click);
             // 
@@ -130,8 +129,7 @@
             this.emuBrow.Name = "emuBrow";
             this.emuBrow.Size = new System.Drawing.Size(119, 35);
             this.emuBrow.TabIndex = 2;
-            this.emuBrow.Text = "Open Emulator";
-            this.toolTip.SetToolTip(this.emuBrow, "Opens a filedialog to select a emulator");
+            this.emuBrow.Text = "Select Emulator";
             this.emuBrow.UseVisualStyleBackColor = false;
             this.emuBrow.Click += new System.EventHandler(this.EmuBrow_Click);
             // 
@@ -430,7 +428,7 @@
             this.ClearSCSelected.Size = new System.Drawing.Size(119, 35);
             this.ClearSCSelected.TabIndex = 31;
             this.ClearSCSelected.Text = "Clean Data";
-            this.toolTip.SetToolTip(this.ClearSCSelected, "Clean UI from selected history data");
+            this.toolTip.SetToolTip(this.ClearSCSelected, "Cleans UI from selected history data");
             this.ClearSCSelected.UseVisualStyleBackColor = false;
             this.ClearSCSelected.Visible = false;
             this.ClearSCSelected.Click += new System.EventHandler(this.ClearSCSelected_Click);
