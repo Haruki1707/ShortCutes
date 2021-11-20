@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+}
+
+.navbar-logo{
+    width: auto;
+    height: 40px;
+    margin: 5px;
+}
+
+ul.navbar-nav .nav-item .nav-link{
+    height: 50px;
+    line-height: 35px;
+    text-align: center;
+}
