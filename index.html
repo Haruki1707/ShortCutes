@@ -2,34 +2,377 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
-    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
+	<link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <link rel="shortcut icon" type="image/jpg" href="img/ShortCute.png"/>
+    <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+	<script src="js/script.js"></script>
+	<link rel="shortcut icon" type="image/jpg" href="img/ShortCutes.png"/>
     <title>ShortCutes</title>
 </head>
 <body>
     <header class="sticky-top">		
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="#"><img src="img/ShortCute.png" alt="ShortCutes Logo" class="d-inline-block align-text-top navbar-logo"></a>
-			<a class="navbar-brand" href="#">ShortCutes</a>
-			<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+			<a class="navbar-brand" onclick="scrollToE('Main')"><img src="img/ShortCutes.png" alt="ShortCutes Logo" class="d-inline-block align-text-top"></a>
+			<a class="navbar-brand" onclick="scrollToE('Main')">ShortCutes</a>
+			<button id="navbar-toggler" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="navbar-collapse collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
 					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="#Download">Download</a></li>
-						<li class="nav-item"><a class="nav-link" href="#Compatibilty">Compatibility</a></li>
-						<li class="nav-item"><a class="nav-link" href="#Screenshots">Screenshots/Examples</a></li>
-						<li class="nav-item"><a class="nav-link" href="https://github.com/Haruki1707/ShortCutes" target="_blank"><i class="fab fa-github fa-2x"></i></a></li>
+						<li class="nav-item"><a class="nav-link" onclick="scrollToE('Screenshots')">Example Screenshots</a></li>
+						<li class="nav-item"><a class="nav-link" onclick="scrollToE('Emulators')">Supported Emulators</a></li>
+						<li class="nav-item"><a class="nav-link" onclick="scrollToE('Download')">Download</a></li>
+						<li class="nav-item"><a class="nav-link" onclick="scrollToE('FAQs')">Recommendations & FAQs</a></li>
+						<li class="nav-item" id="nav-item-icons"><a class="nav-link" href="https://github.com/Haruki1707/ShortCutes" target="_blank"><i class="fab fa-github fa-nav"></i></a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
+
+	<div class="container-fluid" id="Main">
+		<div class="row justify-content-center">
+			<div class="col-xl-5 col-lg-5 MainText">
+				<p class="text-left" width="100%">
+					<span class="Title">Shortcuts creator for emulators</span><br>
+					ShortCutes is a tool to easily create shortcuts on desktop for some of your favorites emulators. (Windows only)<br><br>
+					Is not neccesary to remember every emulator parameter, just select an emulator, game and image; whoala shortcut created. <br><br>
+					ShortCutes has its own GUI while waiting for an emulator to open. (Check Screenshots for some GUI examples) (The wait depends on your hardware) <br>
+				</p>
+				<br>
+				<div class="buttons">
+					<a class="btn btn-outline-light btn-lg" onclick="scrollToE('Download', true)">
+						<span class="icon"><i class="fas fa-arrow-down"></i></span>
+						<span>Download</span>
+					</a>
+					<a class="btn btn-outline-light btn-lg" href="https://github.com/Haruki1707/ShortCutes" target="_blank">
+						<span class="icon"><i class="fab fa-github"></i></span>
+						<span>Source code</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-7 col-lg-6">
+				<div class="content_center">
+					<img src="img/ShortCutes Program.png">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="Screenshots">
+		<div class="container">
+			<span class="Title">Example Screenshots</span>
+			<div class="row justify-content-center text-center">
+				<div class="col-md-8 col-lg-4">
+					<div class="row">
+						Cemu
+					</div>
+					<div class="row">
+						<video class="VIF" src="img/ShortCutes - Zelda BoTW.mp4" width="100%" autoplay loop muted>
+							<img src="img/ShortCutes - Zelda BoTW.png">
+						</video>
+					</div>
+					<div class="row">
+						<video src="https://user-images.githubusercontent.com/72423267/140080920-1a2c82e2-2958-42b6-b116-8b5e9f4f07e4.mp4" width="100%" autoplay loop muted>
+							Your browser does not support the video tag.
+						</video>
+					</div>
+				</div>
+				<div class="col-md-8 col-lg-4">
+					<div class="row">
+						Yuzu
+					</div>
+					<div class="row">
+						<video class="VIF" src="img/ShortCutes - Super Mario Odyssey.mp4" width="100%" autoplay loop muted>
+							<img src="img/ShortCutes - Super Mario Odyssey.png">
+						</video>
+					</div>
+					<div class="row">
+						<video src="https://user-images.githubusercontent.com/72423267/140080768-30114c81-48d2-4dd3-a395-306de800a6c4.mp4" width="100%" autoplay loop muted>
+							Your browser does not support the video tag.
+						</video>
+					</div>
+				</div>
+				<div class="col-md-8 col-lg-4">
+					<div class="row">
+						Dolphin
+					</div>
+					<div class="row">
+						<video class="VIF" src="img/ShortCutes - Mario Party 6.mp4" width="100%" autoplay loop muted>
+							<img src="img/ShortCutes - Mario Party 6.png">
+						</video>
+					</div>
+					<div class="row">
+						<video src="https://user-images.githubusercontent.com/72423267/140080931-d30cc844-6427-4226-af6d-3a1999faf8f6.mp4" width="100%" autoplay loop muted>
+							Your browser does not support the video tag.
+						</video>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="Emulators">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="Title">Supported Emulators</span><br>
+					<div id="EmulatorsTable">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="Download">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="Title">Download</span><br>
+					ShortCutes isn't signed. This leads to most navigators and Windows to prompt an insecurity alert (False Positive).
+					To avoid this problem ShortCutes needs to get some downloads to be trusted by the navigators and Windows or you can build ShortCutes yourself with the
+					<a href="https://github.com/Haruki1707/ShortCutes" class="text-info">source code</a> and Visual Studio 2019 or 2022.
+					<br><br>
+					<div class="card text-white bg-dark mb-3">
+						<div class="card-body">
+							<p class="card-text"><span class="text-info">You can check here a VirusTotal scan report</span>
+								<br>
+								<a href="https://www.virustotal.com/gui/file/9cb856212b5f31735a0aba3092ebf5bd495f700f46fe1011ff8cece26a10d322" class="text-white" target="_blank">
+									Open report here
+								</a>
+							</p>
+						</div>
+					</div>
+					Exclude ShortCutes folder from any Anti-Virus to avoid problems, ShortCutes folder is created on your Emulator Path root. <br>
+					(ShortCutes gives you the path the first time for every emulator).
+					<br><br>
+					<div class="card text-white bg-dark mb-3">
+						<div class="card-body">
+							<p class="card-text"><span class="text-info">ShortCutes requires .NET Framework 4.8 Runtime to work</span>
+								<br> <a href="https://dotnet.microsoft.com/download/dotnet-framework/net48" class="text-white" target="_blank">
+									Download .NET Framework 4.8 here
+								</a>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-12 text-center">
+					<a class="btn btn-outline-dark btn-lg btn-light" href="https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.exe">
+						<span class="icon"><i class="fas fa-download"></i></span>
+						<span>Download ShortCutes Portable for Windows</span>
+					</a>
+					<br>
+					<a class="btn btn-outline-light btn-lg" href="https://github.com/Haruki1707/ShortCutes/releases" target="_blank">
+						<span class="icon"><i class="fab fa-github-alt"></i></span>
+						<span>See releases on GitHub</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="FAQs">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="Title">Recommendations</span><br>
+					<ul>
+						<li>Make sure the emulators have their original name (Example: 
+							<span class="text-danger"><i class="fas fa-times-circle"></i> Cemu 1.23.exe</span> | <span class="text-success"><i class="fas fa-check-circle"></i> Cemu.exe</span>)</li>
+						<li>For a better user experience make sure you have a shortcut to the emulators on desktop, task bar or Windows menu</li>
+						<li>Exclude ShortCutes folder from any Anti-Virus to avoid problems, ShortCutes folder is created on your Emulator Path root. 
+							(ShortCutes gives you the path the first time for every emulator)</li>
+						<li>Re-doing a shortcut overwrites the old shortcut (You can find all your shortcuts on the history and modify them)</li>
+					</ul>
+
+					<span class="Title">FAQs</span><br>
+					<div class="Question">
+						Why ShortCutes as name?<br>
+						<span class="answer">
+							It all started with a Console App of little size (we could say "cute" size), but most important because I misspelled Shortcuts and I wrote
+							ShortCutes. Then I noticed it but I liked the idea, so I kept working on the project around that naming. Now it has it's on Cute GUI, "Cute size" for every shortcut, etc.
+						</span>
+					</div>
+
+					<div class="Question">
+						Why should I use ShortCutes instead of normal Windows shortcuts?<br>
+						<span class="answer">
+							Simple, because the launcher looks good while waiting for the emulator to open, you don't need to remember every argument for every emulator and the shortcut
+							can be added to steam or any game launcher instead of windows shortcuts which are recognized as the same program.<br>
+							<br>
+							But if you are not interested on any of those advantages, you can use the arguments listed below to create your own shortcuts (Knowledge is power).
+						</span>
+					</div>
+
+					<div class="Question">
+						What file should I select on Cemu or RPCS3 emulator which has decompressed games? <br>
+						<div class="card text-white bg-dark mb-3 Cemu">
+							<div class="card-header"><span>Cemu</span><br>
+								For Cemu emulator you need to select *.rpx file located in your game folder (Cemu supports: *.rpx; *.wud; *.wux; *.elf; *.iso files)
+							</div>
+							<div class="card-body">
+								<p class="card-text">
+									File Directory: <br>
+									<tabdir>Your-Game-Folder-Path/code/File-Name.rpx</tabdir>
+									<br>
+									Example: <br>
+									<tabdir>The Legend of Zelda Breath of The Wild/code/U-King.rpx</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 RPCS3">
+							<div class="card-header"><span>RPCS3</span><br>
+								For RPCS3 emulator you need to select EBOOT.bin file located in your game folder (game folder could be inside RPCS3 nand)
+							</div>
+							<div class="card-body">
+								<p class="card-text">
+									File Directory: <br>
+									<tabdir>Your-Game-Folder-Path/PS3_GAME/USRDIR/EBOOT.bin</tabdir>
+									<br>
+									Example: <br>
+									<tabdir>BLUS30481/PS3_GAME/USRDIR/EBOOT.bin</tabdir>
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="Question">
+						Which are the arguments used for every supported emulator? <br>
+
+						<span class="answer">The arguments for every emulator are listed below</span>
+
+						<div class="card text-white bg-dark mb-3 Cemu">
+							<div class="card-body">
+								<p class="card-text">
+									<span>Cemu</span><br>
+									<tabdir>emu-path/cemu.exe -g "game-dir" -f</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 PJ64">
+							<div class="card-body">
+								<p class="card-text">
+									<span>Project64</span><br>
+									<tabdir>emu-path/Project64.exe "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 SNES9X">
+							<div class="card-body">
+								<p class="card-text">
+									<span>SNES9X</span><br>
+									<tabdir>emu-path/snes9x.exe "..\game-dir" -fullscreen</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 Dolphin">
+							<div class="card-body">
+								<p class="card-text">
+									<span>Dolphin</span><br>
+									<tabdir>emu-path/dolphin.exe -e "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 yuzu">
+							<div class="card-body">
+								<p class="card-text">
+									<span>yuzu</span><br>
+									<tabdir>emu-path/yuzu.exe -f -g "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 Ryujinx">
+							<div class="card-body">
+								<p class="card-text">
+									<span>Ryujinx</span><br>
+									<tabdir>emu-path/Ryujinx.exe -f "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 desmume">
+							<div class="card-body">
+								<p class="card-text">
+									<span>DeSmuME</span><br>
+									<tabdir>emu-path/DeSmuME.exe --windowed-fullscreen "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 mGBA">
+							<div class="card-body">
+								<p class="card-text">
+									<span>mGBA</span><br>
+									<tabdir>emu-path/mGBA.exe -f "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 vba">
+							<div class="card-body">
+								<p class="card-text">
+									<span>VBA</span><br>
+									<tabdir>emu-path/VisualBoyAdvance.exe -F "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 vba-m">
+							<div class="card-body">
+								<p class="card-text">
+									<span>VBA-M</span><br>
+									<tabdir>emu-path/visualboyadvance-m.exe "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 RPCS3">
+							<div class="card-body">
+								<p class="card-text">
+									<span>RPCS3</span><br>
+									<tabdir>emu-path/rpcs3.exe "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 pcsx2">
+							<div class="card-body">
+								<p class="card-text">
+									<span>PCSX2</span><br>
+									<tabdir>emu-path/pcsx2.exe --fullscreen --nogui "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+
+						<div class="card text-white bg-dark mb-3 ppsspp">
+							<div class="card-body">
+								<p class="card-text">
+									<span>PPSSPP</span><br>
+									<tabdir>emu-path/PPSSPPWindows.exe --fullscreen "game-dir"</tabdir>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="justify-content-center text-center">
+		Copyright <i class="far fa-copyright"></i> 2021 Haruki1707 <br>
+		All this project was inspired by BSOD Cemu shortcuts video and wanting these to work on Steam.
+	</footer>
 </body>
 </html>

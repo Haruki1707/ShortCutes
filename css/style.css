@@ -1,15 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap');
 *{
     margin: 0;
 }
 
-.navbar-logo{
+body{
+    font-family: 'Montserrat', sans-serif;
+    background-color: #212529;
+    color: white;
+    user-select: none;
+}
+
+.content_center {
+    position: relative;
+    top:50%;
+    transform: translateY(-50%);
+}
+
+.navbar-brand{
+    font-family: 'Poppins', sans-serif;
+    font-size: x-large;
+    font-weight: 700;
+}
+
+#navbar-toggler{
+    margin-right: 7.5px;
+}
+
+.navbar-brand img{
     width: auto;
     height: 40px;
-    margin: 5px;
+    margin: 0px 0px 0px 8px;
 }
 
 ul.navbar-nav .nav-item .nav-link{
-    height: 50px;
-    line-height: 35px;
+    height: 55px;
+    line-height: 42.5px;
     text-align: center;
+}
+
+.navbar a{
+    cursor:pointer;
+}
+
+.fa-nav{
+    font-size: 40px;
+}
+
+.Title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 35px;
+    font-weight: 400;
+    margin: 25px 0px;
+    display: inline-block;
+}
+
+.MainText{
+    padding: 2.5% 5%;
+}
+
+#Main .Title{
+    margin-top: 0;
+}
+
+#Main .btn{
+    margin: 1px 5px;
+}
+
+#Main img{
+    display: block;
+    margin: auto;
+    width: 90%;
+}
+
+#Screenshots{
+    background-color: #2C384A;
+}
+
+#Screenshots img{
+    width: auto;
+    height: 325px;
+}
+
+#Screenshots .VIF{
+    width: auto;
+    height: 325px;
+}
+
+#Screenshots .col-lg-4{
+    margin-bottom: 35px;
+}
+
+#Screenshots .col-lg-4 .row{
+    border: 1px solid #49515a;
+    padding: 15px;
+}
+
+#Screenshots .col-lg-4 .row:nth-child(1){
+    border-top-width: 2px;
+}
+
+#Screenshots .col-lg-4:nth-child(1) .row{
+    border-left-width: 2px;
+}
+
+#Screenshots .col-lg-4:nth-child(3) .row{
+    border-right-width: 2px;
+}
+
+#Screenshots .col-lg-4 .row:nth-child(3){
+    border-bottom-width: 2px;
+    padding: 10px 0px;
+}
+
+#Emulators{
+    background-color: #1d2430;
+}
+
+#EmulatorsTable table, th, td{
+    margin: auto;
+    padding: 7px;
+    text-align: center;
+    border: 2px solid #49515a;
+}
+
+#EmulatorsTable table{
+    margin-bottom: 40px;
+}
+
+#Download{
+    background-color: #0d1116;
+}
+
+#Download .btn{
+    margin: 20px 0px;
+}
+
+#Download .btn:first-child{
+    margin-top: 35px;
+    border-width: 2px;
+    font-weight: 500;
+}
+
+#Download .btn:last-child{
+    margin-bottom: 50px;
+}
+
+#FAQs{
+    user-select: text;
+}
+
+#FAQs li{
+    padding: 4px 0px;
+}
+
+.card{
+    border-left: 3px solid #17a2b8;
+    border-radius: 7px;
+}
+
+.Question{
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.Question::before{
+    content:"• ";
+}
+
+.Question .answer{
+    font-weight: 300;
+    margin-top: 5px;
+    margin-left: 25px;
+    display: inline-block;
+}
+
+.Question .card{
+    font-weight: 300;
+    margin: 10px 0px;
+    margin-left: 25px;
+}
+
+.Question .card-header{
+    background-color: #1d2430;
+    font-weight: 400;
+}
+
+.Question .card-header span, .card-body span{
+    font-family: 'Shippori Antique', sans-serif;
+    font-weight: 700;
+    font-size: larger;
+}
+
+.Question .card-body{
+    background-color: #0d1116;
+}
+
+tabdir{
+    margin-left: 25px;
+    font-style: italic;
+    word-break: break-all;
+    display: inline-block;
+}
+
+.Cemu, .Cemu span{
+    border-left-color: #00a1dd;
+    color: #00a1dd;
+}
+
+.RPCS3, .RPCS3 span{
+    border-left-color: #6b5ffb;
+    color: #6b5ffb;
+}
+
+.SNES9X, .SNES9X span{
+    border-left-color: #5d38ba;
+    color: #5d38ba;
+}
+
+.Dolphin, .Dolphin span{
+    border-left-color: #30b5ff;
+    color: #30b5ff;
+}
+
+.yuzu, .yuzu span{
+    border-left-color: #ff3c28;
+    color: #ff3c28;
+}
+
+.PJ64, .PJ64 span{
+    border-left-color: #46c42f;
+    color: #46c42f;
+}
+
+.Ryujinx, .Ryujinx span{
+    border-left-color: #ff5f55;
+    color: #ff5f55;
+}
+
+.citra, .citra span{
+    border-left-color: #ffc503;
+    color: #ffc503;
+}
+
+.desmume, .desmume span{
+    border-left-color: #8586c3;
+    color: #8586c3;
+}
+
+.mGBA, .mGBA span{
+    border-left-color: #6a37bc;
+    color: #6a37bc;
+}
+
+.vba, .vba span{
+    border-left-color: #714db0;
+    color: #714db0;
+}
+
+.vba-m, .vba-m span{
+    border-left-color: #8f70bb;
+    color: #8f70bb;
+}
+
+.pcsx2, .pcsx2 span{
+    border-left-color: #1d51fe;
+    color: #1d51fe;
+}
+
+.ppsspp, .ppsspp span{
+    border-left-color: #addbe8;
+    color: #addbe8;
+}
+
+footer{
+    padding: 20px 0px;
+    background-color: #1e1e1e;
+}
+
+@media (max-width: 991px){
+    #Main img{
+        width: 100%;
+        padding-top: 17px;
+        padding-bottom: 17px;
+    }
+
+    #Main .btn{
+        margin: 15px 0px;
+    }
+
+    #Main .buttons{
+        text-align: center;
+    }
+
+    #EmulatorsTable table, th, td{
+        padding: 2px;
+    }
+
+    #Screenshots img{
+        width: 75%;
+        height: auto;
+    }
+
+    #Screenshots .VIF{
+        width: 75%;
+        height: auto;
+    }
+
+    #Screenshots .col-lg-4 .row{
+        border-right-width: 2px;
+        border-left-width: 2px;
+    }
+}
+
+@media (min-width: 992px){
+    #nav-item-icons{
+        position: absolute;
+        right: 50px;
+    }
+}
+
+@media (min-width: 1600px){
+    #Main img{
+        width: 70%;
+    }
 }
