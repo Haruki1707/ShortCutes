@@ -74,8 +74,6 @@ namespace ShortCutes
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
             }
             ICOpic.BackgroundImage = flag;
-
-            //MessageForm.Info();
         }
 
         private void ShortCutes_Shown(object sender, EventArgs e)
@@ -174,7 +172,7 @@ namespace ShortCutes
 
             string Output = emupath + Filename + ".exe";
 
-            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll" })
+            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll", "System.Runtime.InteropServices.dll" })
             {
                 CompilerOptions = "-win32icon:" + temppath + "temp.ico \n -target:winexe " +
                     "\n -resource:" + temppath + @"temp.png" +
@@ -543,7 +541,7 @@ namespace ShortCutes
         private extern static void ReleaseCapture();
 
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         private void FormDisp_MouseDown(object sender, MouseEventArgs e)
         {

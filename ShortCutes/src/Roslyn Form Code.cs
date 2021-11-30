@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 
 namespace Shortcutes
@@ -36,7 +37,7 @@ namespace Shortcutes
 				Size = new Size(256, standarHeight),
 				Location = new Point(0, 0),
 				SizeMode = PictureBoxSizeMode.CenterImage,
-				BorderStyle = BorderStyle.FixedSingle,
+				BorderStyle = BorderStyle.None,
 				Image = new Bitmap(assembly.GetManifestResourceStream("loading.gif")),
 				Padding = new Padding(192, standarHeight - 66, 0, 0),
 				BackColor = Color.Transparent
@@ -57,11 +58,8 @@ namespace Shortcutes
 				Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold)
 			};
 			CLOSEbutton.Click += (object sender, EventArgs e) => { this.Close(); };
+			BG.MouseDown += FormDisp_MouseDown;
 			this.Controls.Add(BG);
-
-			Screen s = Screen.FromPoint(Cursor.Position);
-			Rectangle b = s.WorkingArea;
-			Cursor.Position = new Point(b.Left + b.Width / 2, b.Top + b.Height / 2);
 
 			TimerSC.Interval = 700;
 			TimerSC.Tick += Execute_Tick;
@@ -133,6 +131,19 @@ namespace Shortcutes
 			e.Graphics.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
 			e.Graphics.DrawString("   %EMUNAME%", new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
 			e.Graphics.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, standarHeight - 10);
+		}
+
+		//Let the form to be moved
+		[DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+		private extern static void ReleaseCapture();
+
+		[DllImport("user32.DLL", EntryPoint = "SendMessage")]
+		private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+		private void FormDisp_MouseDown(object sender, MouseEventArgs e)
+		{
+			ReleaseCapture();
+			SendMessage(this.Handle, 0x112, 0xf012, 0);
 		}
 
 		protected override CreateParams CreateParams

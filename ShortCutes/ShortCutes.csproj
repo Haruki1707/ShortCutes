@@ -53,7 +53,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\shortcute_OzB_icon.ico</ApplicationIcon>
@@ -93,49 +93,49 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HistoryForm.cs">
+    <Compile Include="UI-forms\HistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HistoryForm.Designer.cs">
+    <Compile Include="UI-forms\HistoryForm.Designer.cs">
       <DependentUpon>HistoryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="XmlShortCutes.cs" />
-    <None Include="Roslyn Form Code.cs" />
-    <Compile Include="CropImage_Tool.cs">
+    <Compile Include="src\XmlShortCutes.cs" />
+    <None Include="src\Roslyn Form Code.cs" />
+    <Compile Include="UI-forms\CropImage_Tool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CropImage_Tool.Designer.cs">
+    <Compile Include="UI-forms\CropImage_Tool.Designer.cs">
       <DependentUpon>CropImage_Tool.cs</DependentUpon>
     </Compile>
-    <Compile Include="Emulators.cs" />
-    <Compile Include="EZ_Updater.cs" />
+    <Compile Include="src\Emulators.cs" />
+    <Compile Include="src\EZ_Updater.cs" />
     <Compile Include="ShortCutesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ShortCutesForm.Designer.cs">
       <DependentUpon>ShortCutesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImagingHelper.cs" />
-    <Compile Include="IniFile.cs" />
-    <Compile Include="MessageForm.cs">
+    <Compile Include="src\ImagingHelper.cs" />
+    <Compile Include="src\IniFile.cs" />
+    <Compile Include="UI-forms\MessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MessageForm.Designer.cs">
+    <Compile Include="UI-forms\MessageForm.Designer.cs">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="CropImage_Tool.resx">
+    <EmbeddedResource Include="UI-forms\CropImage_Tool.resx">
       <DependentUpon>CropImage_Tool.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HistoryForm.resx">
+    <EmbeddedResource Include="UI-forms\HistoryForm.resx">
       <DependentUpon>HistoryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShortCutesForm.resx">
       <DependentUpon>ShortCutesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageForm.resx">
+    <EmbeddedResource Include="UI-forms\MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -148,7 +148,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.manifest" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -160,7 +160,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="App.config" />
+    <AdditionalFiles Include="Properties\App.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
@@ -195,10 +195,10 @@
     <None Include="Resources\ShortCute.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\loading.gif" />
     <None Include="Resources\config.png" />
     <None Include="Resources\rectangular.png" />
     <None Include="Resources\square.png" />
+    <Content Include="Resources\loading.gif" />
     <Content Include="Resources\infobtn.png" />
     <None Include="Resources\SCHistory.png" />
     <Content Include="Resources\shortcute_OzB_icon.ico" />

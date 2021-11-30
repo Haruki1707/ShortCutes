@@ -285,7 +285,7 @@
             // HistoryBtn
             // 
             this.HistoryBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
-            this.HistoryBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("HistoryBtn.BackgroundImage")));
+            this.HistoryBtn.BackgroundImage = global::ShortCutes.Properties.Resources.SCHistory;
             this.HistoryBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.HistoryBtn.FlatAppearance.BorderSize = 0;
             this.HistoryBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));

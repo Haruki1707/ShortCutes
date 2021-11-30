@@ -128,6 +128,7 @@ namespace ShortCutes.Properties {
         ///using System.Drawing.Imaging;
         ///using System.Diagnostics;
         ///using System.Windows.Forms;
+        ///using System.Runtime.InteropServices;
         ///
         ///
         ///namespace Shortcutes
@@ -139,7 +140,7 @@ namespace ShortCutes.Properties {
         ///		private Button CLOSEbutton;
         ///		private int standarHeight = %HEIGHT%;
         ///		private bool WaitForWindowChange = %WAITCHANGE%;
-        ///		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();        /// [resto de la cadena truncado]&quot;;.
+        ///		System.Reflection.Assembly assembly = System.Refle [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string Roslyn_Form_Code {
             get {

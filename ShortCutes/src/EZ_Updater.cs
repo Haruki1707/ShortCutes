@@ -69,7 +69,7 @@ namespace ShortCutes
         {
             System.Threading.Thread CU = new System.Threading.Thread(() =>
             {
-                if (EZ_Updater.CheckUpdate(GitHubrepository))
+                if (CheckUpdate(GitHubrepository))
                     if (owner != null)
                         owner.BeginInvoke(AskForUpdate);
                     else

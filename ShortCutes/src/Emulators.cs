@@ -37,14 +37,14 @@ namespace ShortCutes
 
             //PJ64
             //Need to activate fullscreen through Emulator GUI
-            var PJ64 = new Emulator("PJ64", "Project64.exe", "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)");
+            var PJ64 = new Emulator("Project64", "Project64.exe", "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)");
             PJ64.DescriptionChange("Activate fullscreen through PJ64 GUI");
             PJ64.SetConfigPath(@"\Config\Project64.cfg", "Game Directory", "Directory");
             EmulatorsList.Add(PJ64);
 
             //YUZU
             //Works as expected
-            var YUZU = new Emulator("Yuzu", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
+            var YUZU = new Emulator("yuzu", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
             YUZU.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
             var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
