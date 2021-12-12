@@ -1,4 +1,4 @@
-function onload(){
+window.onload = function(){
     var markdowntext;
     fetch('emulators.md')
     .then(response => response.text())
