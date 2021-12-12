@@ -1,4 +1,4 @@
-window.onload = function(){
+function onload(){
     var markdowntext;
     fetch('emulators.md')
     .then(response => response.text())
@@ -29,7 +29,12 @@ window.onload = function(){
             rows[j].classList.add("justify-content-center"); 
         }
     }
+
+    if (location.href.indexOf("#") != -1) {
+        scrollToE(location.href.slice(location.href.indexOf("#") + 1));
+    }
 }
+
 var element;
 function scrollToE(element, navbartoggler = false){
     window.element = element;
