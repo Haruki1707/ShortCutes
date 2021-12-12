@@ -31,7 +31,7 @@ window.onload = function(){
     }
 
     if (location.href.indexOf("#") != -1) {
-        scrollToE(location.href.slice(location.href.indexOf("#") + 1));
+        scrollToE(location.href.slice(location.href.indexOf("#") + 1), true);
     }
 }
 
