@@ -21,7 +21,7 @@ Creates executable ShortCutes for your emulated games.
 * Requires [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 * Exclude ShortCutes folder from any Anti-Virus, ShortCutes folder is created on your Emulator path root
 
-### **Two ShortCute launcher design**
+### **ShortCutes launcher design**
 Can be selected on ShortCutes config (default: Rectangular)
 
 Squared | Rectangular

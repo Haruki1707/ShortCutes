@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
+using EZ_Updater;
 
 namespace ShortCutes
 {
@@ -61,7 +62,7 @@ namespace ShortCutes
                     Messagelbl.Size = new Size(382, 20);
                     Messagelbl.Location = new Point(18, 10);
                     Messagelbl.TextAlign = ContentAlignment.TopCenter;
-                    Messagelbl.Text = "ShortCute Design";
+                    Messagelbl.Text = "ShortCutes Design";
                     YESbtn.Text = "Square";
                     NObtn.Text = "Rectangular";
                     YESbtn.Location = new Point(YESbtn.Location.X - 35, YESbtn.Location.Y);
@@ -76,6 +77,7 @@ namespace ShortCutes
                         BorderStyle = BorderStyle.None,
                         Image = Properties.Resources.square,
                     };
+                    image.Click += YESbtn_Click;
                     this.Controls.Add(image);
 
                     PictureBox image2;
@@ -87,6 +89,7 @@ namespace ShortCutes
                         BorderStyle = BorderStyle.None,
                         Image = Properties.Resources.rectangular,
                     };
+                    image2.Click += NObtn_Click; 
                     this.Controls.Add(image2);
 
                     Size tempsize = image.Size;
@@ -114,12 +117,13 @@ namespace ShortCutes
                     YESbtn.Hide();
                     NObtn.Hide();
                     iconPB.Hide();
+                    closeBtn.Hide();
 
                     Messagelbl.Size = new Size(382, 75);
                     Messagelbl.Location = new Point(18, 10);
                     Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
-                    Messagelbl.Text = "ShortCutes update download progress";
-                    EZ_Updater.Update(CanceledDownload, RetryDownload, DownloadProgress, RestartProgram);
+                    Messagelbl.Text = Updater.Message;
+                    Updater.Update(UIChange);
                     break;
                 //Info2 message
                 case 5:
@@ -130,36 +134,25 @@ namespace ShortCutes
                 default:
                     break;
             }
+
+            closeBtn.Location = new Point(this.Size.Width - closeBtn.Width, 0);
         }
 
-        private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        private void UIChange(object sender, EventArgs e)
         {
-            Messagelbl.Text = "ShortCutes update download progress";
+            Messagelbl.Text = Updater.Message;
+            progressBar1.Value = Updater.ProgressPercentage;
 
-            double bytesIn = double.Parse(e.BytesReceived.ToString());
-            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-            double percentage = bytesIn / totalBytes * 100;
-
-            progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
-            test = 1;
-        }
-        int test = 1;
-        private void RetryDownload()
-        {
-            Messagelbl.Text = "Retrying download... " + test++ + "/4";
-            return;
-        }
-
-        private void CanceledDownload()
-        {
-            Messagelbl.Text = "Download canceled";
-            progressBar1.Value = 0;
-            OKbtn.Visible = true;
-        }
-
-        private void RestartProgram()
-        {
-            Application.Restart();
+            switch (Updater.State)
+            {
+                case UpdaterState.Canceled:
+                case UpdaterState.InstallFailed:
+                    OKbtn.Visible = true;
+                    break;
+                case UpdaterState.Installed:
+                    Application.Restart();
+                    break;
+            }
         }
 
         private void OKbtn_Click(object sender, EventArgs e)
@@ -201,6 +194,11 @@ namespace ShortCutes
                 Clipboard.SetText(cliptext);
                 Messagelbl.Text = Messagelbl.Text.Replace("Double click on this text to copy path folder to clipboard", "Path copied to clipboard");
             }
+        }
+
+        private void closeBtn_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

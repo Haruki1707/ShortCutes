@@ -6,6 +6,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShortCutes
 {
@@ -265,23 +267,12 @@ namespace ShortCutes
                         catch { }
                         break;
                     case ".json":
-                        if (Exe == "Ryujinx.exe")
+                        try
                         {
-                            try
-                            {
-                                List<string> File = System.IO.File.ReadAllText(ConfigPath).Split(',').ToList();
-                                string value = File.Where(t => t.Contains("\"" + ConfigSection + "\":")).FirstOrDefault();
-                                value = ShittyJSONvalue(value, new string[] { "\"" + ConfigSection + "\": [", "]," });
-                                value = value.Substring(value.IndexOf(',') + 1);
-                                value = value.Substring(value.IndexOf('"'));
-                                value = value.Substring(value.IndexOf('"'));
-                                value = ShittyJSONvalue(value, new string[] { ",", "]", Environment.NewLine, "\"" });
-                                value = value.Replace(@"\\", @"\");
-
-                                gamesPath = value;
-                            }
-                            catch { }
+                            var json = JsonConvert.DeserializeObject<JToken>(System.IO.File.ReadAllText(ConfigPath));
+                            gamesPath = (string)json[ConfigSection][0];
                         }
+                        catch { }
                         break;
                     default:
                         break;
@@ -289,13 +280,6 @@ namespace ShortCutes
             }
             Debug.WriteLine(gamesPath);
             return gamesPath;
-        }
-
-        private string ShittyJSONvalue(string text, string[] concurrences, string replacement = "")
-        {
-            foreach (var item in concurrences)
-                text = text.Replace(item, replacement);
-            return text;
         }
 
         public void SetConfigPath(string File, string Section, string Element)

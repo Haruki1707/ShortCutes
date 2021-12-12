@@ -36,6 +36,7 @@ namespace ShortCutes
             this.Messagelbl = new System.Windows.Forms.Label();
             this.iconPB = new System.Windows.Forms.PictureBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.closeBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPB)).BeginInit();
             this.SuspendLayout();
@@ -130,12 +131,29 @@ namespace ShortCutes
             this.progressBar1.TabIndex = 30;
             this.progressBar1.Visible = false;
             // 
+            // closeBtn
+            // 
+            this.closeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(22)))), ((int)(((byte)(27)))));
+            this.closeBtn.BackgroundImage = global::ShortCutes.Properties.Resources.closebtn;
+            this.closeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.closeBtn.FlatAppearance.BorderSize = 0;
+            this.closeBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeBtn.Location = new System.Drawing.Point(393, 0);
+            this.closeBtn.Name = "closeBtn";
+            this.closeBtn.Size = new System.Drawing.Size(25, 25);
+            this.closeBtn.TabIndex = 31;
+            this.closeBtn.TabStop = false;
+            this.closeBtn.UseVisualStyleBackColor = false;
+            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
+            // 
             // MessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(42)))), ((int)(((byte)(56)))));
             this.ClientSize = new System.Drawing.Size(418, 195);
+            this.Controls.Add(this.closeBtn);
             this.Controls.Add(this.iconPB);
             this.Controls.Add(this.Messagelbl);
             this.Controls.Add(this.panel1);
@@ -161,5 +179,6 @@ namespace ShortCutes
         private System.Windows.Forms.Button YESbtn;
         private System.Windows.Forms.PictureBox iconPB;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button closeBtn;
     }
 }

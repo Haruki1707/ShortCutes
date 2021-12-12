@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using EZ_Updater;
 
 namespace ShortCutes
 {
@@ -76,21 +77,19 @@ namespace ShortCutes
             ICOpic.BackgroundImage = flag;
         }
 
-        private void ShortCutes_Shown(object sender, EventArgs e)
+        private async void ShortCutes_Shown(object sender, EventArgs e)
         {
-            EZ_Updater.CheckUpdate(this, ForceUpdate, "Haruki1707/ShortCutes");
-        }
-
-        private static void ForceUpdate()
-        {
-            new MessageForm("", 4).ShowDialog();
+            if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes"))
+            {
+                new MessageForm("", 4).ShowDialog();
+            }
         }
 
         public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
         {
             try
             {
-                EZ_Updater.CheckUpdate(null, ForceUpdate, "Haruki1707/ShortCutes");
+                if (Updater.CheckUpdate("Haruki1707", "ShortCutes")) new MessageForm("", 4).ShowDialog();
                 MessageBox.Show("An application error occurred. Please contact the adminstrator with the following information:\n\n" + t.Exception.Message + "\n\nStack Trace:\n" + t.Exception.StackTrace,
                         "Notify about this error on GitHub repository Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
@@ -345,6 +344,7 @@ namespace ShortCutes
                 ICOpic.Image = ImagingHelper.ICONbox;
                 ICOpic.Image.Save(temppath + @"temp.png");
                 Image = true;
+                createshortbtn.Enabled = true;
             }
 
             Shortcutbox.Focus();
@@ -470,6 +470,7 @@ namespace ShortCutes
 
         private void HistoryBtn_Click(object sender, EventArgs e)
         {
+            createshortbtn.Enabled = false;
             using (var History = new HistoryForm())
             {
                 History.ShowDialog();
@@ -488,6 +489,8 @@ namespace ShortCutes
                     TempString = ShortCute.Image;
                     ICOpic_MouseClick(null, null);
                 }
+                else
+                    createshortbtn.Enabled = true;
             }
 
             Shortcutbox.Focus();
@@ -496,7 +499,7 @@ namespace ShortCutes
 
         private void InfoButton_Click(object sender, EventArgs e)
         {
-            using (var info = new MessageForm("ShortCutes  v" + EZ_Updater.ActualVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
+            using (var info = new MessageForm("ShortCutes  v" + Updater.ProgramFileVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
                 info.ShowDialog();
         }
 

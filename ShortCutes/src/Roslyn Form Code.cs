@@ -67,6 +67,20 @@ namespace Shortcutes
 			TimerSC.Start();
 		}
 
+		private Image[] getFrames(Image originalImg)
+		{
+			int numberOfFrames = originalImg.GetFrameCount(FrameDimension.Time);
+			Image[] frames = new Image[numberOfFrames];
+
+			for (int i = 0; i < numberOfFrames; i++)
+			{
+				originalImg.SelectActiveFrame(FrameDimension.Time, i);
+				frames[i] = ((Image)originalImg.Clone());
+			}
+
+			return frames;
+		}
+
 		Process ShortCute = new Process();
 		private void Execute_Tick(object sender, EventArgs e)
 		{

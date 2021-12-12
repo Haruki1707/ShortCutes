@@ -114,7 +114,7 @@
             this.closeBtn.TabIndex = 3;
             this.closeBtn.TabStop = false;
             this.closeBtn.UseVisualStyleBackColor = false;
-            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
+            this.closeBtn.Click += new System.EventHandler(this.Button_Click);
             // 
             // HistoryForm
             // 
@@ -130,6 +130,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "HistoryForm";
+            this.Load += new System.EventHandler(this.HistoryForm_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

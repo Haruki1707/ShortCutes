@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShortCutes
@@ -23,16 +26,21 @@ namespace ShortCutes
 
             button1.Size = new Size(button1.Width - VScrollWidth, button1.Height);
             label2.Size = new Size(label2.Width - VScrollWidth, label2.Height);
+        }
 
+        private async void HistoryForm_Load(object sender, EventArgs e)
+        {
             var Copylist = XmlDocSC.ShortCutes.ToList();
             Copylist.Reverse();
             Namenum = Copylist.Count - 1;
 
             foreach (var ShortCute in Copylist)
-                DrawShortCute(ShortCute);
+            {
+                await DrawShortCute(ShortCute);
+            }
         }
 
-        private void DrawShortCute(ShortCute SC)
+        private async Task<bool> DrawShortCute(ShortCute SC)
         {
             var btn = new Button()
             {
@@ -48,7 +56,6 @@ namespace ShortCutes
                     BorderSize = button1.FlatAppearance.BorderSize,
                     MouseOverBackColor = button1.FlatAppearance.MouseOverBackColor
                 },
-                Location = new Point(0, Ypos),
             };
             btn.Click += new EventHandler(Button_Click);
 
@@ -62,7 +69,7 @@ namespace ShortCutes
                 SizeMode = pictureBox1.SizeMode,
                 Location = new Point(btn.FlatAppearance.BorderSize, btn.FlatAppearance.BorderSize),
             };
-            if(File.Exists(SC.Image))
+            if (File.Exists(SC.Image))
                 picbox.Image = Image.FromFile(SC.Image);
             picbox.Click += new EventHandler(Control_Click);
             picbox.MouseEnter += new EventHandler(Control_MouseEnter);
@@ -97,10 +104,9 @@ namespace ShortCutes
             label.MouseLeave += new EventHandler(Control_MouseLeave);
             btn.Controls.Add(label);
 
-
-            Ypos += button1.Height;
-
+            btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
             panel1.Controls.Add(btn);
+            Ypos += button1.Height;
 
             if (panel1.VerticalScroll.Visible && !alreadyvisible)
             {
@@ -108,17 +114,30 @@ namespace ShortCutes
                 panel1.Location = new Point(panel1.Location.X - (VScrollWidth / 2), panel1.Location.Y);
                 alreadyvisible = true;
             }
+
+            await Task.Delay(1);
+            return true;
         }
 
-        private void Button_Click(Object sender, EventArgs e)
+        private void Button_Click(object sender, EventArgs e)
         {
-            var button = ((Button)sender);
-            ShortCuteIndex = int.Parse(button.Name.Replace("BTN", ""));
+            try
+            {
+                var button = ((Button)sender);
+                ShortCuteIndex = int.Parse(button.Name.Replace("BTN", ""));
+            }
+            catch { }
 
-            foreach (var btn in panel1.Controls.OfType<Button>())
+            Parallel.ForEach(panel1.Controls.OfType<Button>(), btn => {
+                foreach (var pB in btn.Controls.OfType<PictureBox>())
+                    if (pB.Image != null)
+                        pB.Image.Dispose();
+            });
+
+            /*foreach (var btn in panel1.Controls.OfType<Button>())
                 foreach (var pB in btn.Controls.OfType<PictureBox>())
                     if(pB.Image != null)
-                        pB.Image.Dispose();
+                        pB.Image.Dispose();*/
 
             Close();
         }
@@ -171,11 +190,6 @@ namespace ShortCutes
 
             CurrentButton(number).BackColor = button1.BackColor;
 
-        }
-
-        private void closeBtn_Click(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }
