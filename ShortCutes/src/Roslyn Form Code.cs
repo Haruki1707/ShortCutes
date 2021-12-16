@@ -15,6 +15,8 @@ namespace Shortcutes
 		private PictureBox BG;
 		private Timer TimerSC = new Timer();
 		private Button CLOSEbutton;
+		private string Emulator = "%EMULATOR%";
+		private string GameFile = @"%GAMEFILE%";
 		private int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -67,27 +69,32 @@ namespace Shortcutes
 			TimerSC.Start();
 		}
 
-		private Image[] getFrames(Image originalImg)
-		{
-			int numberOfFrames = originalImg.GetFrameCount(FrameDimension.Time);
-			Image[] frames = new Image[numberOfFrames];
-
-			for (int i = 0; i < numberOfFrames; i++)
-			{
-				originalImg.SelectActiveFrame(FrameDimension.Time, i);
-				frames[i] = ((Image)originalImg.Clone());
-			}
-
-			return frames;
-		}
-
 		Process ShortCute = new Process();
 		private void Execute_Tick(object sender, EventArgs e)
 		{
 			TimerSC.Stop();
+			var emupath = AppContext.BaseDirectory.ToString();
+				emupath = emupath.Remove(emupath.Length - 1);
+				emupath = emupath.Substring(0, emupath.LastIndexOf(@"\") + 1);
+
+			if (!File.Exists("..\\" + Emulator))
+            {
+				MessageError("emulator", emupath + Emulator);
+				Environment.Exit(0);
+			}
+			if (!Path.IsPathRooted(GameFile) && !File.Exists("..\\" + GameFile))
+			{
+				MessageError("game", emupath + GameFile);
+				Environment.Exit(0);
+			}
+			else if (Path.IsPathRooted(GameFile) && !File.Exists(GameFile))
+			{
+				MessageError("game", GameFile);
+				Environment.Exit(0);
+			}
 			//Emulator execution
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
-			ShortCute.StartInfo.FileName = "..\\%EMULATOR%";
+			ShortCute.StartInfo.FileName = "..\\" + Emulator;
 			ShortCute.StartInfo.Arguments = "%ARGUMENTS%";
 			ShortCute.Start();
 
@@ -124,6 +131,15 @@ namespace Shortcutes
 				BG.Controls.Add(CLOSEbutton);
 			timer2_times++;
 			ShortCute.Refresh();
+		}
+
+		private void MessageError(string type, string path)
+        {
+			MessageBox.Show("Make sure that the " + type + " is located in:\n" +
+				path + 
+				"\n\nif you moved the " + type + ", re-doing the ShortCute could fix the problem" +
+				"\n\nThis ShortCute will be closed");
+
 		}
 
 		private void OnPaint(object sender, PaintEventArgs e)

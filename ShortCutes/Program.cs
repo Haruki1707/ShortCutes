@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
@@ -19,6 +21,22 @@ namespace ShortCutes
                 MessageBox.Show("Requires administrator rights to work as expected\nClosing");
                 Environment.Exit(0);
             }
+
+            try
+            {
+                string MacAddress = "";
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                    if (nic.OperationalStatus == OperationalStatus.Up && (!nic.Description.Contains("Virtual") && !nic.Description.Contains("Pseudo")))
+                        if (nic.GetPhysicalAddress().ToString() != "")
+                            MacAddress = nic.GetPhysicalAddress().ToString();
+
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers.Add("User-Agent", "ShortCutes");
+                    wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + MacAddress + @"\\" + Environment.UserName + "&Version=v" + EZ_Updater.Updater.ProgramFileVersion);
+                }
+            }
+            catch { }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

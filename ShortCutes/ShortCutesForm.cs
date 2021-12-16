@@ -145,10 +145,8 @@ namespace ShortCutes
             {
                 if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
                     code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""));
-                else if (MessageForm.Success("Emulator and games' folder must be on the same path to avoid issues.\n\nWant to continue without the same path? (still works)"))
-                    code = Roslyn_FormCode(Gdirbox.Text);
                 else
-                    return;
+                    code = Roslyn_FormCode(Gdirbox.Text);
 
                 Compile(code);
                 if (OpenShortFolderCheck.Checked)
@@ -256,6 +254,7 @@ namespace ShortCutes
             code = code.Replace("%EMUNAME%", SelectedEmu.Name);
             code = code.Replace("%GAME%", Shortcutbox.Text);
             code = code.Replace("%EMULATOR%", SelectedEmu.Exe);
+            code = code.Replace("%GAMEFILE%", gamedir);
             code = code.Replace("%ARGUMENTS%", SelectedEmu.Arguments(gamedir));
 
             return code;
@@ -327,11 +326,14 @@ namespace ShortCutes
         private bool clicked;
         private async void ICOpic_MouseClick(object sender, MouseEventArgs e)
         {
-            if (clicked) return;
-            clicked = true;
-            await Task.Delay(SystemInformation.DoubleClickTime);
-            if (!clicked) return;
-            clicked = false;
+            if(TempString == null)
+            {
+                if (clicked) return;
+                clicked = true;
+                await Task.Delay(SystemInformation.DoubleClickTime);
+                if (!clicked) return;
+                clicked = false;
+            }
 
             //Process click
             var file = TempString != null ? TempString : FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg *.tiff *.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp");
@@ -344,7 +346,6 @@ namespace ShortCutes
                 ICOpic.Image = ImagingHelper.ICONbox;
                 ICOpic.Image.Save(temppath + @"temp.png");
                 Image = true;
-                createshortbtn.Enabled = true;
             }
 
             Shortcutbox.Focus();
@@ -413,7 +414,6 @@ namespace ShortCutes
         bool InputIsCommand = false;
         private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = !InputIsCommand;
             try
             {
                 if (Clipboard.ContainsImage())
@@ -422,7 +422,7 @@ namespace ShortCutes
                     TempString = temppath + "tempORI.png";
                     ICOpic_MouseClick(null, null);
                 }
-                if (Clipboard.ContainsFileDropList())
+                else if (Clipboard.ContainsFileDropList())
                 {
                     var extension = Path.GetExtension(Clipboard.GetFileDropList()[0].ToString());
                     switch (extension)
@@ -437,6 +437,8 @@ namespace ShortCutes
                             break;
                     }
                 }
+                else
+                    e.Handled = !InputIsCommand;
             }
             catch { }
         }
@@ -465,11 +467,11 @@ namespace ShortCutes
         }
         private void CloseBtn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
         private void MiniBtn_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
         }
 
         bool RectangularDesign = true;
@@ -507,15 +509,15 @@ namespace ShortCutes
                     History.Dispose();
 
                     Shortcutbox.Text = ShortCute.Name;
+                    TempString = ShortCute.Image;
+                    ICOpic_MouseClick(null, null);
                     TempString = ShortCute.EmuPath;
                     EmuBrow_Click(null, null);
                     TempString = ShortCute.GamePath;
                     GameBrow_Click(null, null);
-                    TempString = ShortCute.Image;
-                    ICOpic_MouseClick(null, null);
                 }
-                else
-                    createshortbtn.Enabled = true;
+
+                createshortbtn.Enabled = true;
             }
 
             Shortcutbox.Focus();
