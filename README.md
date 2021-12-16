@@ -17,7 +17,7 @@ Creates executable ShortCutes for your emulated games.
 <br><br>
 </h3>
 
-## **[Download ShortCutes.exe](https://haruki1707.github.io/ShortCutes)** in download page
+## **[Download ShortCutes.exe](https://haruki1707.github.io/ShortCutes/#Download)** in download page
 * Requires [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 * Exclude ShortCutes folder from any Anti-Virus, ShortCutes folder is created on your Emulator path root
 

@@ -70,8 +70,8 @@ namespace ShortCutes
             Bitmap flag = new Bitmap(ICOpic.Width, ICOpic.Height);
             using (Graphics flagGraphics = Graphics.FromImage(flag))
             {
-                flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (22F * 2));
-                flagGraphics.DrawString("or", new Font("Bahnschrift SemiBold SemiConden", 16F), Brushes.White, (ICOpic.Width / 2) - 15, (ICOpic.Height / 2) - (22F / 2));
+                flagGraphics.DrawString("Click here to select an image", new Font("Bahnschrift SemiBold SemiConden", 18F), Brushes.White, 10, (ICOpic.Height / 2) - (35F));
+                flagGraphics.DrawString("(PNG, JPG, JPEG, BMP, TIFF)", new Font("Bahnschrift SemiBold SemiConden", 12F), Brushes.White, 55, (ICOpic.Height / 2) - (22F / 2));
                 flagGraphics.DrawString("Double click to crop selected image", new Font("Bahnschrift SemiBold SemiConden", 15F), Brushes.White, 10, (ICOpic.Height / 2) + (22F));
             }
             ICOpic.BackgroundImage = flag;
@@ -334,7 +334,7 @@ namespace ShortCutes
             clicked = false;
 
             //Process click
-            var file = TempString != null ? TempString : FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg)|*.png;*.jpg;*.jpeg");
+            var file = TempString != null ? TempString : FileDialog(Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads"), "PNG/JPG Image (*.png; *.jpg; *.jpeg *.tiff *.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp");
             TempString = null;
 
             if (file != null && File.Exists(file))
@@ -414,6 +414,31 @@ namespace ShortCutes
         private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = !InputIsCommand;
+            try
+            {
+                if (Clipboard.ContainsImage())
+                {
+                    Clipboard.GetImage().Save(temppath + "tempORI.png");
+                    TempString = temppath + "tempORI.png";
+                    ICOpic_MouseClick(null, null);
+                }
+                if (Clipboard.ContainsFileDropList())
+                {
+                    var extension = Path.GetExtension(Clipboard.GetFileDropList()[0].ToString());
+                    switch (extension)
+                    {
+                        case ".png":
+                        case ".jpg":
+                        case ".jpeg":
+                        case ".bmp":
+                        case ".tiff":
+                            TempString = Clipboard.GetFileDropList()[0].ToString();
+                            ICOpic_MouseClick(null, null);
+                            break;
+                    }
+                }
+            }
+            catch { }
         }
 
         private void ICOurl_KeyDown(object sender, KeyEventArgs e)

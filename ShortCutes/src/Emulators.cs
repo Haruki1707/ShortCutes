@@ -278,7 +278,6 @@ namespace ShortCutes
                         break;
                 }
             }
-            Debug.WriteLine(gamesPath);
             return gamesPath;
         }
 

@@ -68,8 +68,8 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(303, 35);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Select a PNG or JPG image to set as the shortcut ICON:\r\nDouble click to crop sele" +
-    "cted image";
+            this.label5.Text = "Select an  image to set as the shortcut ICON:\r\nDouble click to crop selected imag" +
+    "e";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // OpenShortFolderCheck
@@ -392,7 +392,7 @@
             this.ICOurl.Name = "ICOurl";
             this.ICOurl.Size = new System.Drawing.Size(300, 28);
             this.ICOurl.TabIndex = 30;
-            this.ICOurl.Text = "or paste an Image URL here...";
+            this.ICOurl.Text = "or paste an image or an URL here...";
             this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
             this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);

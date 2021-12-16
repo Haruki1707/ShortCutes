@@ -20,7 +20,7 @@ namespace ShortCutes
             {
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
-                settings.IndentChars = "    "; //  "\t";
+                settings.IndentChars = "    ";
                 settings.OmitXmlDeclaration = false;
                 settings.Encoding = Encoding.UTF8;
 

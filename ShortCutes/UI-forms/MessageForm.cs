@@ -191,13 +191,18 @@ namespace ShortCutes
         {
             if (cliptext != null)
             {
-                Clipboard.SetText(cliptext);
-                Messagelbl.Text = Messagelbl.Text.Replace("Double click on this text to copy path folder to clipboard", "Path copied to clipboard");
+                try
+                {
+                    Clipboard.SetText(cliptext);
+                    Messagelbl.Text = Messagelbl.Text.Replace("Double click on this text to copy path folder to clipboard", "Path copied to clipboard");
+                }
+                catch { }
             }
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.No;
             Close();
         }
     }

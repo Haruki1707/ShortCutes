@@ -134,11 +134,6 @@ namespace ShortCutes
                         pB.Image.Dispose();
             });
 
-            /*foreach (var btn in panel1.Controls.OfType<Button>())
-                foreach (var pB in btn.Controls.OfType<PictureBox>())
-                    if(pB.Image != null)
-                        pB.Image.Dispose();*/
-
             Close();
         }
         private void Control_Click(Object sender, EventArgs e)
