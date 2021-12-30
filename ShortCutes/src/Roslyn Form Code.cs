@@ -2,39 +2,39 @@
 using System.IO;
 using System.Text;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-
 
 namespace Shortcutes
 {
 	public class CuteLauncher : Form
 	{
-		private PictureBox BG;
-		private Timer TimerSC = new Timer();
 		private Button CLOSEbutton;
+		private PictureBox PictureBoxSC;
+		private Timer TimerSC = new Timer();
 		private string Emulator = "%EMULATOR%";
+		private string EmuName = "%EMUNAME%";
 		private string GameFile = @"%GAMEFILE%";
+		private string GameName = "%GAME%";
 		private int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
 		public CuteLauncher()
 		{
 			//standarHeight = 256 || 322;
+			FormBorderStyle = FormBorderStyle.None;
+			ClientSize = new Size(256, standarHeight);
+			BackColor = Color.FromArgb(47, 49, 54);
+			StartPosition = FormStartPosition.CenterScreen;
+			Text = GameName + " ShortCute";
+			DoubleBuffered = true;
+			ShowInTaskbar = false;
+			TopMost = true;
 
-			this.FormBorderStyle = FormBorderStyle.None;
-			this.ClientSize = new Size(256, standarHeight);
-			this.BackColor = Color.Black;
-			this.StartPosition = FormStartPosition.CenterScreen;
-			this.Text = "%GAME%" + " ShortCute";
-			this.DoubleBuffered = true;
-			this.ShowInTaskbar = false;
-			this.Paint += this.OnPaint;
-			this.TopMost = true;
-
-			BG = new PictureBox()
+			PictureBoxSC = new PictureBox()
 			{
 				Size = new Size(256, standarHeight),
 				Location = new Point(0, 0),
@@ -48,7 +48,7 @@ namespace Shortcutes
 			{
 				Size = new Size(20, 20),
 				Location = new Point(236, 0),
-				FlatStyle = System.Windows.Forms.FlatStyle.Flat,
+				FlatStyle = FlatStyle.Flat,
 				BackColor = Color.FromArgb(199, 80, 80),
 				Text = "X",
 				ForeColor = Color.White,
@@ -57,20 +57,43 @@ namespace Shortcutes
 					BorderSize = 0,
 					MouseOverBackColor = Color.Red
                 },
-				Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold)
+				Font = new Font("Bahnschrift Condensed", 11.25F, FontStyle.Bold)
 			};
-			CLOSEbutton.Click += (object sender, EventArgs e) => { this.Close(); };
-			BG.MouseDown += FormDisp_MouseDown;
-			this.Controls.Add(BG);
+			CLOSEbutton.Hide();
+			CLOSEbutton.Click += (object sender, EventArgs e) => { Close(); };
+			PictureBoxSC.MouseDown += FormDisp_MouseDown;
+			PictureBoxSC.Controls.Add(CLOSEbutton);
+			Controls.Add(PictureBoxSC);
 
-			TimerSC.Interval = 700;
-			TimerSC.Tick += Execute_Tick;
-			TimerSC.Enabled = true;
+			//PictureBox Background
+			Bitmap PBGImage = new Bitmap(256, standarHeight);
+			using (Graphics graph = Graphics.FromImage(PBGImage))
+            {
+				Bitmap BGbit = new Bitmap(assembly.GetManifestResourceStream("temp.png"));
+				Icon = Icon.FromHandle(BGbit.GetHicon());
+
+				Image BGImage = (Image)BGbit;
+				if (Height == 256)
+					using (Graphics g = Graphics.FromImage(BGImage))
+						g.FillRectangle(new SolidBrush(Color.FromArgb(150, 22, 28, 38)), new Rectangle(0, 190, 256, 72));
+				else
+					graph.FillRectangle(new SolidBrush(Color.FromArgb(47, 49, 54)), new Rectangle(0, 256, 256, 72));
+
+				graph.DrawImage(BGImage, 0, 0, new Rectangle(0, 0, 256, 256), GraphicsUnit.Pixel);
+				graph.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+				graph.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
+				graph.DrawString("   " + EmuName, new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
+				graph.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, standarHeight - 10);
+				PictureBoxSC.BackgroundImage = PBGImage;
+            }
+
+			TimerSC.Interval = 500;
+			TimerSC.Tick += ExecuteEmu_Tick;
 			TimerSC.Start();
 		}
 
 		Process ShortCute = new Process();
-		private void Execute_Tick(object sender, EventArgs e)
+		private void ExecuteEmu_Tick(object sender, EventArgs e)
 		{
 			TimerSC.Stop();
 			var emupath = AppContext.BaseDirectory.ToString();
@@ -78,20 +101,12 @@ namespace Shortcutes
 				emupath = emupath.Substring(0, emupath.LastIndexOf(@"\") + 1);
 
 			if (!File.Exists("..\\" + Emulator))
-            {
 				MessageError("emulator", emupath + Emulator);
-				Environment.Exit(0);
-			}
-			if (!Path.IsPathRooted(GameFile) && !File.Exists("..\\" + GameFile))
-			{
+			else if (!Path.IsPathRooted(GameFile) && !File.Exists("..\\" + GameFile))
 				MessageError("game", emupath + GameFile);
-				Environment.Exit(0);
-			}
 			else if (Path.IsPathRooted(GameFile) && !File.Exists(GameFile))
-			{
 				MessageError("game", GameFile);
-				Environment.Exit(0);
-			}
+
 			//Emulator execution
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
@@ -99,13 +114,24 @@ namespace Shortcutes
 			ShortCute.Start();
 
 			TimerSC.Interval = 100;
-			TimerSC.Tick -= Execute_Tick;
-			TimerSC.Tick += timer1_Tick;
+			TimerSC.Tick -= ExecuteEmu_Tick;
+			TimerSC.Tick += WaitEmuToBeOpen_Tick;
 			TimerSC.Start();
+
+			var ShowCloseTimer = new Timer();
+			ShowCloseTimer.Interval = 60000;
+			ShowCloseTimer.Tick += ShowCloseBtn;
+			ShowCloseTimer.Start();
 		}
 
+		private void ShowCloseBtn(object sender, EventArgs e)
+        {
+			((Timer)sender).Stop();
+			CLOSEbutton.Show();
+        }
+
 		string EMainWindowTitle = null;
-		private void timer1_Tick(object sender, EventArgs e)
+		private void WaitEmuToBeOpen_Tick(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
             {
@@ -113,23 +139,23 @@ namespace Shortcutes
 				if (WaitForWindowChange)
 				{
 					TimerSC.Interval = 250;
-					TimerSC.Tick -= timer1_Tick;
-					TimerSC.Tick += timer2_Tick;
+					TimerSC.Tick -= WaitEmuToBeOpen_Tick;
+					TimerSC.Tick += WaitEmuToLoad_Tick;
 				}
 				else
-					Environment.Exit(0);
+					Close();
             }
 			ShortCute.Refresh();
 		}
 
-		int timer2_times = 0;
-		private void timer2_Tick(object sender, EventArgs e)
+		int WaitingLoop = 0;
+		private void WaitEmuToLoad_Tick(object sender, EventArgs e)
         {
 			if(ShortCute.MainWindowTitle != EMainWindowTitle)
-				Environment.Exit(0);
-			if(timer2_times == 12)
-				BG.Controls.Add(CLOSEbutton);
-			timer2_times++;
+				Close();
+			if (WaitingLoop == 40)
+				CLOSEbutton.Show();
+			WaitingLoop++;
 			ShortCute.Refresh();
 		}
 
@@ -139,28 +165,7 @@ namespace Shortcutes
 				path + 
 				"\n\nif you moved the " + type + ", re-doing the ShortCute could fix the problem" +
 				"\n\nThis ShortCute will be closed");
-
-		}
-
-		private void OnPaint(object sender, PaintEventArgs e)
-		{
-			Bitmap BGbit = new Bitmap(assembly.GetManifestResourceStream("temp.png"));
-			this.Icon = Icon.FromHandle(BGbit.GetHicon());
-
-			Image BGImage = (Image)BGbit;
-			if (this.Height == 256)
-			{
-				using (Graphics g = Graphics.FromImage(BGImage))
-					g.FillRectangle(new SolidBrush(Color.FromArgb(150, 22, 28, 38)), new Rectangle(0, 190, 256, 72));
-			}
-			else
-				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(47, 49, 54)), new Rectangle(0, 256, 256, 72));
-
-			e.Graphics.DrawImage(BGImage, 0, 0, new Rectangle(0, 0, 256, 256), GraphicsUnit.Pixel);
-			e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-			e.Graphics.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
-			e.Graphics.DrawString("   %EMUNAME%", new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
-			e.Graphics.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, standarHeight - 10);
+			Environment.Exit(0);
 		}
 
 		//Let the form to be moved
@@ -176,12 +181,12 @@ namespace Shortcutes
 			SendMessage(this.Handle, 0x112, 0xf012, 0);
 		}
 
+		//Enable form over any other app
 		protected override CreateParams CreateParams
 		{
 			get
 			{
 				CreateParams cp = base.CreateParams;
-				// turn on WS_EX_TOOLWINDOW style bit
 				cp.ExStyle |= 0x80;
 				return cp;
 			}

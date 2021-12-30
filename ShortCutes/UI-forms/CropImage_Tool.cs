@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace ShortCutes
 {
@@ -44,13 +45,13 @@ namespace ShortCutes
             if (image.Height > OriginalImageT.Width)
             {
                 pictureBox1.Height = panel1.Height;
-                pictureBox1.Width = (int)Math.Round(((float)image.Width / (float)image.Height) * panel1.Width);
+                pictureBox1.Width = (int)Math.Round((float)image.Width / image.Height * panel1.Width);
                 pictureBox1.Location = new Point((int)Math.Round((float)(panel1.Width - pictureBox1.Width) / 2), 0);
             }
             else
             {
                 pictureBox1.Width = panel1.Width;
-                pictureBox1.Height = (int)Math.Round(((float)image.Height / (float)image.Width) * panel1.Height);
+                pictureBox1.Height = (int)Math.Round((float)image.Height / image.Width * panel1.Height);
                 pictureBox1.Location = new Point(0, (int)Math.Round((float)(panel1.Height - pictureBox1.Height) / 2));
             }
         }
@@ -76,6 +77,18 @@ namespace ShortCutes
         {
             if (canpaintcrop)
             {
+                if ((ModifierKeys & Keys.Control) == Keys.Control)
+                {
+                    if (e.X > pictureBox1.Width)
+                        Cursor.Position = pictureBox1.PointToScreen(new Point(pictureBox1.Width, e.Y));
+                    else if (e.X < 0)
+                        Cursor.Position = pictureBox1.PointToScreen(new Point(0, e.Y));
+                    if (e.Y > pictureBox1.Height)
+                        Cursor.Position = pictureBox1.PointToScreen(new Point(e.X, pictureBox1.Height));
+                    else if (e.Y < 0)
+                        Cursor.Position = pictureBox1.PointToScreen(new Point(e.X, 0));
+                }
+
                 cropX = croptempX;
                 cropY = croptempY;
                 int tempcropWidth = e.X - cropX;
@@ -196,7 +209,9 @@ namespace ShortCutes
 
         private void closeBtn_Click(object sender, EventArgs e)
         {
+            ActualImage.Dispose();
             OriginalImageT.Dispose();
+            pictureBox1.Image.Dispose();
             Dispose();
         }
 
@@ -213,5 +228,37 @@ namespace ShortCutes
                 e.Graphics.DrawRectangle(cropPen, oCropX, oCropY, Math.Abs(cropWidth), Math.Abs(cropHeight));
             }
         }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control && e.Button == MouseButtons.Left)
+            {
+                var X = e.X;
+                var Y = e.Y;
+
+                if (pictureBox1.Width > pictureBox1.Height)
+                    if (e.Y < pictureBox1.Height)
+                        Y = 0;
+                    else
+                        Y = pictureBox1.Height - 1;
+                else
+                    if (e.X < pictureBox1.Width)
+                    X = 0;
+                else
+                    X = pictureBox1.Width - 1;
+
+                mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+                Cursor.Position = pictureBox1.PointToScreen(new Point(X, Y));
+                mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+            }
+        }
+
+        private const int MOUSEEVENTF_MOVE = 0x0001; /* mouse move */
+        private const int MOUSEEVENTF_LEFTDOWN = 0x0002; /* left button down */
+        private const int MOUSEEVENTF_LEFTUP = 0x0004; /* left button up */
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x0008; /* right button down */
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ShortCutes
 {
@@ -14,9 +12,10 @@ namespace ShortCutes
     {
         int Ypos = 0;
         int Namenum = 0;
-        bool alreadyvisible = false;
         int VScrollWidth = SystemInformation.VerticalScrollBarWidth;
         public int ShortCuteIndex = -1;
+        List<ShortCute> Copylist;
+        List<HistoryButton> Buttonlist = new List<HistoryButton>();
         public HistoryForm()
         {
             InitializeComponent();
@@ -30,13 +29,15 @@ namespace ShortCutes
 
         private async void HistoryForm_Load(object sender, EventArgs e)
         {
-            var Copylist = XmlDocSC.ShortCutes.ToList();
+            Copylist = XmlDocSC.ShortCutes.ToList();
             Copylist.Reverse();
             Namenum = Copylist.Count - 1;
 
             foreach (var ShortCute in Copylist)
             {
-                await DrawShortCute(ShortCute);
+                try { await DrawShortCute(ShortCute); }
+                catch { }
+                SearchBox.Focus();
             }
         }
 
@@ -45,6 +46,8 @@ namespace ShortCutes
             var btn = new Button()
             {
                 Name = "BTN" + Namenum.ToString(),
+                Text = Namenum.ToString(),
+                TextAlign = ContentAlignment.TopLeft,
                 Size = button1.Size,
                 BackColor = button1.BackColor,
                 ForeColor = button1.ForeColor,
@@ -58,6 +61,7 @@ namespace ShortCutes
                 },
             };
             btn.Click += new EventHandler(Button_Click);
+            btn.Paint += new PaintEventHandler(button_paint);
 
             var picbox = new PictureBox()
             {
@@ -69,6 +73,7 @@ namespace ShortCutes
                 SizeMode = pictureBox1.SizeMode,
                 Location = new Point(btn.FlatAppearance.BorderSize, btn.FlatAppearance.BorderSize),
             };
+
             if (File.Exists(SC.Image))
                 picbox.Image = Image.FromFile(SC.Image);
             picbox.Click += new EventHandler(Control_Click);
@@ -78,13 +83,11 @@ namespace ShortCutes
 
             string emuname = "";
             foreach (var emu in Emulators.EmulatorsList)
-            {
                 if (emu.Exe.ToLower() == Path.GetFileName(SC.EmuPath).ToLower())
                 {
                     emuname = emu.Name;
                     break;
                 }
-            }
 
             var label = new Label()
             {
@@ -104,15 +107,15 @@ namespace ShortCutes
             label.MouseLeave += new EventHandler(Control_MouseLeave);
             btn.Controls.Add(label);
 
-            btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
+            Buttonlist.Add(new HistoryButton(btn, SC.Name));
             panel1.Controls.Add(btn);
+            btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
             Ypos += button1.Height;
 
-            if (panel1.VerticalScroll.Visible && !alreadyvisible)
+            if (panel1.HorizontalScroll.Visible)
             {
                 panel1.Size = new Size(panel1.Width + VScrollWidth, panel1.Height);
                 panel1.Location = new Point(panel1.Location.X - (VScrollWidth / 2), panel1.Location.Y);
-                alreadyvisible = true;
             }
 
             await Task.Delay(1);
@@ -121,30 +124,22 @@ namespace ShortCutes
 
         private void Button_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var button = ((Button)sender);
-                ShortCuteIndex = int.Parse(button.Name.Replace("BTN", ""));
-            }
-            catch { }
+            if (!string.IsNullOrEmpty(((Control)sender).Text))
+                ShortCuteIndex = int.Parse(((Control)sender).Text);
 
-            Parallel.ForEach(panel1.Controls.OfType<Button>(), btn => {
+            Parallel.ForEach(panel1.Controls.OfType<Button>(), btn =>
+            {
                 foreach (var pB in btn.Controls.OfType<PictureBox>())
                     if (pB.Image != null)
                         pB.Image.Dispose();
             });
 
+            Buttonlist = null;
             Close();
         }
         private void Control_Click(Object sender, EventArgs e)
         {
-            string number = "";
-            if (sender is PictureBox)
-                number = ((PictureBox)sender).Name.Replace("PTB", "");
-            else
-                number = ((Label)sender).Name.Replace("LBL", "");
-
-            CurrentButton(number).PerformClick();
+            ((Button)((Control)sender).Parent).PerformClick();
         }
 
         protected override void OnPaint(PaintEventArgs pea)
@@ -161,30 +156,59 @@ namespace ShortCutes
             pea.Graphics.DrawLine(pen, pt1, pt3);
             pea.Graphics.DrawLine(pen, pt3, pt4);
             pea.Graphics.DrawLine(pen, pt2, pt4);
+
+            ShortCutes.DrawLine(this.Controls, pea);
+
+            pea.Graphics.DrawLine(new Pen(Color.White, 2),
+                new PointF(pictureBox2.Location.X, pictureBox2.Location.Y + pictureBox2.Height + 3),
+                new PointF(pictureBox2.Location.X + pictureBox2.Width, pictureBox2.Location.Y + pictureBox2.Height + 3));
         }
 
-        private Button CurrentButton(string number) => panel1.Controls.OfType<Button>().FirstOrDefault(b => b.Name == "BTN" + number);
         private void Control_MouseEnter(object sender, EventArgs e)
         {
-            string number = "";
-            if (sender is PictureBox)
-                number = ((PictureBox)sender).Name.Replace("PTB", "");
-            else
-                number = ((Label)sender).Name.Replace("LBL", "");
-
-            CurrentButton(number).BackColor = button1.FlatAppearance.MouseOverBackColor;
+            ((Button)((Control)sender).Parent).BackColor = button1.FlatAppearance.MouseOverBackColor;
         }
 
         private void Control_MouseLeave(object sender, EventArgs e)
         {
-            string number = "";
-            if (sender is PictureBox)
-                number = ((PictureBox)sender).Name.Replace("PTB", "");
-            else
-                number = ((Label)sender).Name.Replace("LBL", "");
+            ((Button)((Control)sender).Parent).BackColor = button1.BackColor;
+        }
 
-            CurrentButton(number).BackColor = button1.BackColor;
+        private void SearchBox_TextChanged(object sender, EventArgs e)
+        {
+            var results = Buttonlist.FindAll(
+            delegate (HistoryButton HB) {
+                return HB.Name.Contains(SearchBox.Text.ToLower(), StringComparison.OrdinalIgnoreCase);
+            });
 
+            Ypos = 0;
+            panel1.VerticalScroll.Value = 0;
+            foreach (var item in results)
+            {
+                item.Button.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
+                Ypos += item.Button.Height;
+            }
+
+            foreach (var item in Buttonlist)
+                if (!results.Contains(item))
+                    item.Button.Location = new Point(0, -item.Button.Height);
+        }
+
+        private void button_paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+        }
+    }
+
+    class HistoryButton
+    {
+        public Button Button;
+        public string Name;
+
+        public HistoryButton(Button btn, string Nm)
+        {
+            Button = btn;
+            Name = Nm;
         }
     }
 }

@@ -125,22 +125,22 @@ namespace ShortCutes.Properties {
         ///using System.IO;
         ///using System.Text;
         ///using System.Drawing;
-        ///using System.Drawing.Imaging;
         ///using System.Diagnostics;
         ///using System.Windows.Forms;
+        ///using System.Drawing.Imaging;
         ///using System.Runtime.InteropServices;
-        ///
         ///
         ///namespace Shortcutes
         ///{
         ///	public class CuteLauncher : Form
         ///	{
-        ///		private PictureBox BG;
-        ///		private Timer TimerSC = new Timer();
         ///		private Button CLOSEbutton;
-        ///		private int standarHeight = %HEIGHT%;
-        ///		private bool WaitForWindowChange = %WAITCHANGE%;
-        ///		System.Reflection.Assembly assembly = System.Refle [resto de la cadena truncado]&quot;;.
+        ///		private PictureBox PictureBoxSC;
+        ///		private Timer TimerSC = new Timer();
+        ///		private string Emulator = &quot;%EMULATOR%&quot;;
+        ///		private string EmuName = &quot;%EMUNAME%&quot;;
+        ///		private string GameFile = @&quot;%GAMEFILE%&quot;;
+        ///		private [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string Roslyn_Form_Code {
             get {
@@ -154,6 +154,16 @@ namespace ShortCutes.Properties {
         internal static System.Drawing.Bitmap SCHistory {
             get {
                 object obj = ResourceManager.GetObject("SCHistory", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap search {
+            get {
+                object obj = ResourceManager.GetObject("search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

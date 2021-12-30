@@ -1,13 +1,11 @@
-﻿using IWshRuntimeLibrary;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace ShortCutes
 {
@@ -15,6 +13,7 @@ namespace ShortCutes
     {
         public static readonly List<Emulator> EmulatorsList = new List<Emulator>();
         private static readonly List<string> Shortcuts = new List<string>();
+        private static string Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         static Emulators()
         {
@@ -48,11 +47,6 @@ namespace ShortCutes
             //Works as expected
             var YUZU = new Emulator("yuzu", "yuzu.exe", "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)", "-f -g", "", "", true);
             YUZU.SetConfigPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\yuzu\config\qt-config.ini", "UI", @"Paths\gamedirs\4\path");
-            var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            if (System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + YUZU.Exe))
-                YUZU.Path(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\");
-            else
-                YUZU.Path(Appdata + @"\Yuzu\yuzu-windows-msvc\");
             EmulatorsList.Add(YUZU);
 
             //RYUJINX
@@ -121,13 +115,12 @@ namespace ShortCutes
             {
                 emulist = new List<Emulator> { emu };
 
-                var Appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                if (emu.Name == "Yuzu" && System.IO.File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + emu.Exe))
+                if (emu.Name == "yuzu" && File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\" + emu.Exe))
                 {
                     emu.Path(Appdata + @"\Yuzu\yuzu-windows-msvc-early-access\");
                     return;
                 }
-                else if (emu.Name == "Yuzu")
+                else if (emu.Name == "yuzu" && File.Exists(Appdata + @"\Yuzu\yuzu-windows-msvc\" + emu.Exe))
                 {
                     emu.Path(Appdata + @"\Yuzu\yuzu-windows-msvc\");
                     return;
@@ -141,7 +134,7 @@ namespace ShortCutes
 
             foreach (var shortcut in Shortcuts)
             {
-                IWshShortcut lnk = new WshShell().CreateShortcut(shortcut);
+                IWshRuntimeLibrary.IWshShortcut lnk = new IWshRuntimeLibrary.WshShell().CreateShortcut(shortcut);
                 if (lnk != null)
                 {
                     foreach (var emulator in EmulatorsList)
@@ -222,9 +215,9 @@ namespace ShortCutes
 
         public string Path(string path = null)
         {
-            if (path != null & System.IO.File.Exists(path + exe))
+            if (path != null & File.Exists(path + exe))
                 InstallPath = path;
-            else if (string.IsNullOrWhiteSpace(path) && !System.IO.File.Exists(InstallPath + exe))
+            else if (string.IsNullOrWhiteSpace(path) && !File.Exists(InstallPath + exe))
                 Emulators.ShortcutsFinder(this);
 
             return InstallPath;
@@ -239,7 +232,7 @@ namespace ShortCutes
                     ConfigPath = InstallPath + ConfigPath;
                     SelfConfig = false;
                 }
-                if (!System.IO.File.Exists(ConfigPath))
+                if (!File.Exists(ConfigPath))
                     return null;
 
                 switch (System.IO.Path.GetExtension(ConfigPath))
@@ -269,7 +262,7 @@ namespace ShortCutes
                     case ".json":
                         try
                         {
-                            var json = JsonConvert.DeserializeObject<JToken>(System.IO.File.ReadAllText(ConfigPath));
+                            var json = JsonConvert.DeserializeObject<JToken>(File.ReadAllText(ConfigPath));
                             gamesPath = (string)json[ConfigSection][0];
                         }
                         catch { }

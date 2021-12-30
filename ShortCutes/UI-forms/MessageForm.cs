@@ -1,8 +1,7 @@
-﻿using System;
+﻿using EZ_Updater;
+using System;
 using System.Drawing;
-using System.Net;
 using System.Windows.Forms;
-using EZ_Updater;
 
 namespace ShortCutes
 {
@@ -59,10 +58,11 @@ namespace ShortCutes
                     this.Size = new Size(440, 336);
                     OKbtn.Hide();
                     iconPB.Hide();
-                    Messagelbl.Size = new Size(382, 20);
-                    Messagelbl.Location = new Point(18, 10);
+                    Messagelbl.Size = new Size(382, 25);
+                    Messagelbl.Location = new Point(18, 7);
                     Messagelbl.TextAlign = ContentAlignment.TopCenter;
-                    Messagelbl.Text = "ShortCutes Design";
+                    Messagelbl.Text = "ShortCute Design";
+                    Messagelbl.Font = new Font("Bahnschrift SemiBold SemiConden", 14F);
                     YESbtn.Text = "Square";
                     NObtn.Text = "Rectangular";
                     YESbtn.Location = new Point(YESbtn.Location.X - 35, YESbtn.Location.Y);
@@ -72,7 +72,7 @@ namespace ShortCutes
                     image = new PictureBox()
                     {
                         Size = new Size(200, 200),
-                        Location = new Point(15, 60),
+                        Location = new Point(15, 65),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
                         Image = Properties.Resources.square,
@@ -84,12 +84,12 @@ namespace ShortCutes
                     image2 = new PictureBox()
                     {
                         Size = new Size(200, 252),
-                        Location = new Point(225, 35),
+                        Location = new Point(225, 40),
                         SizeMode = PictureBoxSizeMode.Zoom,
                         BorderStyle = BorderStyle.None,
                         Image = Properties.Resources.rectangular,
                     };
-                    image2.Click += NObtn_Click; 
+                    image2.Click += NObtn_Click;
                     this.Controls.Add(image2);
 
                     Size tempsize = image.Size;
@@ -174,7 +174,7 @@ namespace ShortCutes
 
         protected override void OnPaint(PaintEventArgs pea)
         {
-            Pen pen = new Pen(Color.FromArgb(15, 19, 26), 10);
+            Pen pen = new Pen(panel1.BackColor, 10);
 
             PointF pt1 = new PointF(0, 0);
             PointF pt2 = new PointF(0, Height);

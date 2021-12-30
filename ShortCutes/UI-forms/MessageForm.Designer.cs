@@ -115,7 +115,7 @@ namespace ShortCutes
             // 
             // iconPB
             // 
-            this.iconPB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(42)))), ((int)(((byte)(56)))));
+            this.iconPB.BackColor = System.Drawing.Color.Transparent;
             this.iconPB.Location = new System.Drawing.Point(11, 54);
             this.iconPB.Name = "iconPB";
             this.iconPB.Size = new System.Drawing.Size(45, 45);

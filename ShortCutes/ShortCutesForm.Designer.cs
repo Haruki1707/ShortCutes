@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortCutes));
             this.label5 = new System.Windows.Forms.Label();
-            this.OpenShortFolderCheck = new System.Windows.Forms.CheckBox();
             this.DesktopCheck = new System.Windows.Forms.CheckBox();
             this.gameBrow = new System.Windows.Forms.Button();
             this.emuBrow = new System.Windows.Forms.Button();
@@ -56,6 +55,7 @@
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.ClearSCSelected = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.OpenFolder = new System.Windows.Forms.Button();
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
@@ -68,23 +68,9 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(303, 35);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Select an  image to set as the shortcut ICON:\r\nDouble click to crop selected imag" +
-    "e";
+            this.label5.Text = "Select an  image to set as the shortcut ICON\r\nDouble click to crop selected image" +
+    "";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // OpenShortFolderCheck
-            // 
-            this.OpenShortFolderCheck.AutoSize = true;
-            this.OpenShortFolderCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
-            this.OpenShortFolderCheck.ForeColor = System.Drawing.Color.White;
-            this.OpenShortFolderCheck.Location = new System.Drawing.Point(147, 311);
-            this.OpenShortFolderCheck.Name = "OpenShortFolderCheck";
-            this.OpenShortFolderCheck.Size = new System.Drawing.Size(146, 20);
-            this.OpenShortFolderCheck.TabIndex = 7;
-            this.OpenShortFolderCheck.TabStop = false;
-            this.OpenShortFolderCheck.Text = "Open ShortCutes Folder";
-            this.OpenShortFolderCheck.UseVisualStyleBackColor = true;
-            this.OpenShortFolderCheck.CheckedChanged += new System.EventHandler(this.Shortcutbox_Focus);
             // 
             // DesktopCheck
             // 
@@ -93,7 +79,7 @@
             this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
-            this.DesktopCheck.Location = new System.Drawing.Point(15, 311);
+            this.DesktopCheck.Location = new System.Drawing.Point(10, 311);
             this.DesktopCheck.Name = "DesktopCheck";
             this.DesktopCheck.Size = new System.Drawing.Size(114, 20);
             this.DesktopCheck.TabIndex = 5;
@@ -136,7 +122,6 @@
             // Shortcutbox
             // 
             this.Shortcutbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Shortcutbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
             this.Shortcutbox.ForeColor = System.Drawing.Color.White;
             this.Shortcutbox.Location = new System.Drawing.Point(14, 137);
@@ -210,7 +195,7 @@
             // Edirbox
             // 
             this.Edirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Edirbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Edirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Edirbox.Cursor = System.Windows.Forms.Cursors.Default;
             this.Edirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
             this.Edirbox.ForeColor = System.Drawing.Color.White;
@@ -226,7 +211,7 @@
             // Gdirbox
             // 
             this.Gdirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Gdirbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Gdirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Gdirbox.Cursor = System.Windows.Forms.Cursors.Default;
             this.Gdirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
             this.Gdirbox.ForeColor = System.Drawing.Color.White;
@@ -390,12 +375,12 @@
             this.ICOurl.Location = new System.Drawing.Point(446, 382);
             this.ICOurl.Multiline = true;
             this.ICOurl.Name = "ICOurl";
-            this.ICOurl.Size = new System.Drawing.Size(300, 28);
+            this.ICOurl.Size = new System.Drawing.Size(300, 22);
             this.ICOurl.TabIndex = 30;
             this.ICOurl.Text = "or paste an image or an URL here...";
             this.ICOurl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ICOurl.Click += new System.EventHandler(this.ICOurl_Click);
             this.ICOurl.TextChanged += new System.EventHandler(this.ICOurl_TextChanged);
+            this.ICOurl.Enter += new System.EventHandler(this.ICOurl_Enter);
             this.ICOurl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
             this.ICOurl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ICOurl_KeyPress);
             this.ICOurl.Leave += new System.EventHandler(this.ICOurl_Leave);
@@ -417,7 +402,7 @@
             // 
             // ClearSCSelected
             // 
-            this.ClearSCSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.ClearSCSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(84)))), ((int)(((byte)(112)))));
             this.ClearSCSelected.FlatAppearance.BorderSize = 0;
             this.ClearSCSelected.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
             this.ClearSCSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -440,6 +425,24 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 50;
             // 
+            // OpenFolder
+            // 
+            this.OpenFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(18)))), ((int)(((byte)(23)))));
+            this.OpenFolder.FlatAppearance.BorderSize = 0;
+            this.OpenFolder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.OpenFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OpenFolder.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenFolder.ForeColor = System.Drawing.Color.White;
+            this.OpenFolder.Location = new System.Drawing.Point(302, 306);
+            this.OpenFolder.Margin = new System.Windows.Forms.Padding(0);
+            this.OpenFolder.Name = "OpenFolder";
+            this.OpenFolder.Size = new System.Drawing.Size(119, 23);
+            this.OpenFolder.TabIndex = 32;
+            this.OpenFolder.TabStop = false;
+            this.OpenFolder.Text = "Open ShortCutes Folder";
+            this.OpenFolder.UseVisualStyleBackColor = false;
+            this.OpenFolder.Click += new System.EventHandler(this.OpenFolder_Click);
+            // 
             // ShortCutes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -447,11 +450,11 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(760, 415);
             this.ControlBox = false;
+            this.Controls.Add(this.OpenFolder);
             this.Controls.Add(this.ClearSCSelected);
             this.Controls.Add(this.ICOurl);
             this.Controls.Add(this.panelBorderStyle);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.OpenShortFolderCheck);
             this.Controls.Add(this.DesktopCheck);
             this.Controls.Add(this.ICOpic);
             this.Controls.Add(this.gameBrow);
@@ -485,7 +488,6 @@
         #endregion
 
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox OpenShortFolderCheck;
         private System.Windows.Forms.CheckBox DesktopCheck;
         private System.Windows.Forms.PictureBox ICOpic;
         private System.Windows.Forms.Button gameBrow;
@@ -510,6 +512,7 @@
         private System.Windows.Forms.Button HistoryBtn;
         private System.Windows.Forms.Button ClearSCSelected;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Button OpenFolder;
     }
 }
 
