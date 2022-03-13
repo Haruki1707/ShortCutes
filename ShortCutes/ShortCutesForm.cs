@@ -80,7 +80,13 @@ namespace ShortCutes
 
         private async void ShortCutes_Shown(object sender, EventArgs e)
         {
-            if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes")) new MessageForm("", 4).ShowDialog();
+            if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes"))
+            {
+                if (Updater.CannotWriteOnDir)
+                    MessageForm.Error(Updater.Message);
+                else
+                    new MessageForm("", 4).ShowDialog();
+            }
         }
 
         public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)

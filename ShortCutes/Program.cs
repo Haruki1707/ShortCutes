@@ -12,7 +12,7 @@ namespace ShortCutes
     static class Program
     {
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             if (IsUserAdministrator() == false)
             {

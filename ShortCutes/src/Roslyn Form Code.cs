@@ -20,6 +20,7 @@ namespace Shortcutes
 		private string GameName = "%GAME%";
 		private int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
+		private static string ExtraArgs = "";
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
 		public CuteLauncher()
@@ -110,7 +111,7 @@ namespace Shortcutes
 			//Emulator execution
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
-			ShortCute.StartInfo.Arguments = "%ARGUMENTS%";
+			ShortCute.StartInfo.Arguments = "%ARGUMENTS%" + ExtraArgs;
 			ShortCute.Start();
 
 			TimerSC.Interval = 100;
@@ -193,8 +194,12 @@ namespace Shortcutes
 		}
 
 		[STAThread]
-		static void Main()
+		static void Main(string[] args)
 		{
+			if (args.Length > 0)
+				foreach (string arg in args)
+					ExtraArgs += " " + arg;
+
 			Application.EnableVisualStyles();
 			Application.Run(new CuteLauncher());
 		}
