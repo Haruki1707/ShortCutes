@@ -46,6 +46,8 @@ Emulator | Version From | Version To | Description
 [PCSX2](https://pcsx2.net/) | Unknown | Latest | Works as expected
 [RPCS3](https://rpcs3.net/) | 0.0.5 | Latest | Need to activate close when process finishes and fullscreen
 [PPSSPP](https://www.ppsspp.org/) | Unknown | Latest | Works as expected
+[xemu](https://xemu.app/) | Unknown | Latest | Works as expected
+[xenia](https://xenia.jp/) | Unknown | Latest | Works as expected
 
 ### **Examples of ShortCutes**
 * CEMU
