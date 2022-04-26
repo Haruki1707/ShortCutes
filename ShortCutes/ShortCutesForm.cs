@@ -418,7 +418,7 @@ namespace ShortCutes
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.InitialDirectory = InitialDir;
-                dialog.Filter = Filter;
+                dialog.Filter = Filter + "|All files (*.*)|*.*";
                 dialog.FilterIndex = 1;
 
                 return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
@@ -572,7 +572,7 @@ namespace ShortCutes
 
         private void InfoButton_Click(object sender, EventArgs e)
         {
-            using (var info = new MessageForm("ShortCutes  v" + Updater.ProgramFileVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5))
+            using (var info = new MessageForm("ShortCutes  v" + Updater.ProgramFileVersion + "\n\nDeveloped by: Haruki1707\nGitHub: https://github.com/Haruki1707/ShortCutes", 5, "https://github.com/Haruki1707/ShortCutes"))
                 info.ShowDialog();
         }
 

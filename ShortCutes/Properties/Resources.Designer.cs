@@ -83,6 +83,16 @@ namespace ShortCutes.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GitHub_logo {
+            get {
+                object obj = ResourceManager.GetObject("GitHub_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap infobtn {
             get {
                 object obj = ResourceManager.GetObject("infobtn", resourceCulture);

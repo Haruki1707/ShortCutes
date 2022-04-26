@@ -176,9 +176,13 @@ namespace ShortCutes
 
         private void SearchBox_TextChanged(object sender, EventArgs e)
         {
+            string searchtext = SearchBox.Text.ToLower();
+            if (String.IsNullOrWhiteSpace(SearchBox.Text))
+                searchtext = "";
+
             var results = Buttonlist.FindAll(
             delegate (HistoryButton HB) {
-                return HB.Name.Contains(SearchBox.Text.ToLower(), StringComparison.OrdinalIgnoreCase);
+                return HB.Name.Contains(searchtext, StringComparison.OrdinalIgnoreCase);
             });
 
             Ypos = 0;

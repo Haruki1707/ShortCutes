@@ -201,6 +201,7 @@
     <None Include="Resources\config.png" />
     <None Include="Resources\rectangular.png" />
     <None Include="Resources\square.png" />
+    <None Include="Resources\GitHub logo.png" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\infobtn.png" />
     <None Include="Resources\SCHistory.png" />

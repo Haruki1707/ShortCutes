@@ -127,9 +127,11 @@ namespace ShortCutes
                     break;
                 //Info2 message
                 case 5:
-                    YESbtn.Hide();
                     NObtn.Hide();
-                    iconPB.Image = SystemIcons.Information.ToBitmap();
+                    YESbtn.Text = "Open GitHub";
+                    YESbtn.Location = new Point(YESbtn.Location.X + 55, YESbtn.Location.Y);
+                    YESbtn.Click += Open_GitHub;
+                    iconPB.Image = Properties.Resources.GitHub_logo;
                     break;
                 default:
                     break;
@@ -197,6 +199,11 @@ namespace ShortCutes
                 }
                 catch { }
             }
+        }
+
+        private void Open_GitHub(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(cliptext);
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
