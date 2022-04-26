@@ -240,7 +240,7 @@ tabdir{
     color: #ff5f55;
 }
 
-.citra, .citra span{
+.Citra, .Citra span{
     border-left-color: #ffc503;
     color: #ffc503;
 }
@@ -273,6 +273,16 @@ tabdir{
 .ppsspp, .ppsspp span{
     border-left-color: #addbe8;
     color: #addbe8;
+}
+
+.xemu, .xemu span{
+    border-left-color: #42e335;
+    color: #42e335;
+}
+
+.xenia, .xenia span{
+    border-left-color: #5fa7ff;
+    color: #5fa7ff;
 }
 
 footer{
