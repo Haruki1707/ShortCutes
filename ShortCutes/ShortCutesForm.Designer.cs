@@ -56,6 +56,7 @@
             this.ClearSCSelected = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.OpenFolder = new System.Windows.Forms.Button();
+            this.Timer = new System.Windows.Forms.Timer(this.components);
             this.panelBorderStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ICOpic)).BeginInit();
             this.SuspendLayout();
@@ -443,6 +444,10 @@
             this.OpenFolder.UseVisualStyleBackColor = false;
             this.OpenFolder.Click += new System.EventHandler(this.OpenFolder_Click);
             // 
+            // Timer
+            // 
+            this.Timer.Tick += new System.EventHandler(this.Timer_Tick);
+            // 
             // ShortCutes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -513,6 +518,7 @@
         private System.Windows.Forms.Button ClearSCSelected;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button OpenFolder;
+        private System.Windows.Forms.Timer Timer;
     }
 }
 

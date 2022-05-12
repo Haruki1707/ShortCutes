@@ -1,17 +1,17 @@
 ﻿using EZ_Updater;
-using System;
-using System.IO;
-using System.Net;
-using System.Drawing;
-using System.Threading;
 using Microsoft.CSharp;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Threading.Tasks;
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ShortCutes
 {
@@ -78,15 +78,19 @@ namespace ShortCutes
             OpenFolder.Hide();
         }
 
-        private async void ShortCutes_Shown(object sender, EventArgs e)
+        private void ShortCutes_Shown(object sender, EventArgs e)
         {
-            if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes"))
+            Updater.GUI_Context = SynchronizationContext.Current;
+            Thread t = new Thread(async () =>
             {
-                if (Updater.CannotWriteOnDir)
-                    MessageForm.Error(Updater.Message);
-                else
-                    new MessageForm("", 4).ShowDialog();
-            }
+                if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes"))
+                {
+                    if (Updater.CannotWriteOnDir)
+                        MessageForm.Error(Updater.Message);
+                    else
+                        new MessageForm("", 4).ShowDialog();
+                }
+            });
         }
 
         public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
@@ -275,6 +279,11 @@ namespace ShortCutes
             code = code.Replace("%GAMEFILE%", gamedir);
             code = code.Replace("%ARGUMENTS%", SelectedEmu.Arguments(gamedir));
 
+            Color color = ControlPaint.Dark(GetAverageColor(ICOpic.Image));
+            code = code.Replace("%avgR%", color.R.ToString());
+            code = code.Replace("%avgG%", color.G.ToString());
+            code = code.Replace("%avgB%", color.B.ToString());
+
             return code;
         }
 
@@ -413,18 +422,6 @@ namespace ShortCutes
             }
         }
 
-        private string FileDialog(string InitialDir, string Filter)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.InitialDirectory = InitialDir;
-                dialog.Filter = Filter + "|All files (*.*)|*.*";
-                dialog.FilterIndex = 1;
-
-                return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
-            }
-        }
-
         bool InputIsCommand = false;
         private void ICOurl_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -455,6 +452,46 @@ namespace ShortCutes
                     e.Handled = !InputIsCommand;
             }
             catch { }
+        }
+
+        private string FileDialog(string InitialDir, string Filter)
+        {
+            Edirbox.Enabled = Gdirbox.Enabled = false;
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.InitialDirectory = InitialDir;
+                dialog.Filter = Filter + "|All files (*.*)|*.*";
+                dialog.FilterIndex = 1;
+                var result = dialog.ShowDialog();
+
+                Timer.Start();
+                return result == DialogResult.OK ? dialog.FileName : null;
+            }
+        }
+
+        private Color GetAverageColor(Image image)
+        {
+            int r = 0; int g = 0; int b = 0;
+            Bitmap bmp = new Bitmap(image);
+            int total = 0;
+
+            for (int x = 0; x < bmp.Width; x++)
+            {
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    Color clr = bmp.GetPixel(x, y);
+
+                    r += clr.R;
+                    g += clr.G;
+                    b += clr.B;
+
+                    total++;
+                }
+            }
+
+            //Calculate average
+            r /= total; g /= total; b /= total;
+            return Color.FromArgb(r, g, b);
         }
 
         //UI things not that important
@@ -586,6 +623,12 @@ namespace ShortCutes
             Shortcutbox.Focus();
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Timer.Stop();
+            Gdirbox.Enabled = Edirbox.Enabled = true;
+        }
+
         private void Shortcutbox_Focus(object sender, EventArgs e)
         {
             Shortcutbox.Focus();
@@ -605,7 +648,7 @@ namespace ShortCutes
         }
         private void Shortcutbox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (containsABadCharacter.IsMatch(e.KeyChar.ToString()) && !Char.IsControl(e.KeyChar))
+            if (containsABadCharacter.IsMatch(e.KeyChar.ToString()) && !char.IsControl(e.KeyChar))
             {
                 MessageForm.Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
                 e.Handled = true;

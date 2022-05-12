@@ -134,6 +134,29 @@ namespace ShortCutes
                     iconPB.Image = Properties.Resources.GitHub_logo;
                     break;
                 default:
+                    this.Size = new Size(440, 336);
+                    NObtn.Hide();
+                    YESbtn.Hide();
+                    iconPB.Hide();
+
+                    Messagelbl.Size = new Size(382, 25);
+                    Messagelbl.Location = new Point(18, 7);
+                    Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
+                    Messagelbl.Text = "What u looking 4 here?";
+
+                    PictureBox dc = new PictureBox()
+                    {
+                        Size = new Size(250, 250),
+                        Location = new Point(95, 40),
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        BorderStyle = BorderStyle.None,
+                        BackgroundImageLayout = ImageLayout.Zoom,
+                        BackgroundImage = Properties.Resources.ShortCute,
+                        InitialImage = null,
+                        ErrorImage = null
+                    };
+                    dc.LoadAsync("https://cdn.discordapp.com/attachments/885633010475601951/974161761420853278/unknown.png");
+                    Controls.Add(dc);
                     break;
             }
 

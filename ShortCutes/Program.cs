@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Management;
 using System.Net;
+using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
-using System.Management;
 using System.Windows.Forms;
-using System.Security.Principal;
-using System.Security.Cryptography;
 
 namespace ShortCutes
 {
@@ -54,8 +54,8 @@ namespace ShortCutes
                     ManagementObjectCollection MOClist = new ManagementObjectSearcher("SELECT UUID FROM Win32_ComputerSystemProduct").Get();
                     foreach (ManagementBaseObject mo in MOClist)
                         UUID = mo["UUID"] as string;
-                    
-                    using(SHA256 shaHash = SHA256.Create())
+
+                    using (SHA256 shaHash = SHA256.Create())
                     {
                         byte[] data = shaHash.ComputeHash(Encoding.UTF8.GetBytes(UUID));
                         StringBuilder sbuild = new StringBuilder();
@@ -67,7 +67,7 @@ namespace ShortCutes
                     using (WebClient wc = new WebClient())
                     {
                         wc.Headers.Add("User-Agent", "ShortCutes");
-                        wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + UUID + @"\\" + Environment.UserName + "&Version=v" + EZ_Updater.Updater.ProgramFileVersion);
+                        wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + UUID + @"\\" + Environment.UserName + "&Version=v" + Application.ProductVersion);
                     }
                 }
                 catch { }

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShortCutes
 {
@@ -26,22 +28,42 @@ namespace ShortCutes
             button1.Size = new Size(button1.Width - VScrollWidth, button1.Height);
             label2.Size = new Size(label2.Width - VScrollWidth, label2.Height);
         }
+        internal void InvokeUI(Action a)
+        {
+            try
+            {
+                this?.Invoke(new MethodInvoker(a));
+            }
+            catch (Exception) { }
+        }
 
-        private async void HistoryForm_Load(object sender, EventArgs e)
+        internal void InvokeUIAsync(Action a)
+        {
+            try
+            {
+                this?.BeginInvoke(new MethodInvoker(a));
+            }
+            catch (Exception) { }
+        }
+
+        private void HistoryForm_Load(object sender, EventArgs e)
         {
             Copylist = XmlDocSC.ShortCutes.ToList();
             Copylist.Reverse();
             Namenum = Copylist.Count - 1;
 
-            foreach (var ShortCute in Copylist)
+            Thread t = new Thread(() =>
             {
-                try { await DrawShortCute(ShortCute); }
-                catch { }
-                SearchBox.Focus();
-            }
+                foreach (var ShortCute in Copylist)
+                {
+                    DrawShortCute(ShortCute);
+                    InvokeUIAsync(() => SearchBox.Focus());
+                }
+            });
+            t.Start();
         }
 
-        private async Task<bool> DrawShortCute(ShortCute SC)
+        private void DrawShortCute(ShortCute SC)
         {
             var btn = new Button()
             {
@@ -107,19 +129,13 @@ namespace ShortCutes
             label.MouseLeave += new EventHandler(Control_MouseLeave);
             btn.Controls.Add(label);
 
-            Buttonlist.Add(new HistoryButton(btn, SC.Name));
-            panel1.Controls.Add(btn);
-            btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
-            Ypos += button1.Height;
-
-            if (panel1.HorizontalScroll.Visible)
+            InvokeUI(() =>
             {
-                panel1.Size = new Size(panel1.Width + VScrollWidth, panel1.Height);
-                panel1.Location = new Point(panel1.Location.X - (VScrollWidth / 2), panel1.Location.Y);
-            }
-
-            await Task.Delay(1);
-            return true;
+                Buttonlist.Add(new HistoryButton(btn, SC.Name));
+                panel1.Controls.Add(btn);
+                btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
+            });
+            Ypos += button1.Height;
         }
 
         private void Button_Click(object sender, EventArgs e)
@@ -179,9 +195,17 @@ namespace ShortCutes
             string searchtext = SearchBox.Text.ToLower();
             if (String.IsNullOrWhiteSpace(SearchBox.Text))
                 searchtext = "";
+            else if (SearchBox.Text.Contains("Haruki1707"))
+            {
+                SearchBox.Text = "";
+                using (var info = new MessageForm("", -1, ""))
+                    info.ShowDialog();
+                return;
+            }
 
             var results = Buttonlist.FindAll(
-            delegate (HistoryButton HB) {
+            delegate (HistoryButton HB)
+            {
                 return HB.Name.Contains(searchtext, StringComparison.OrdinalIgnoreCase);
             });
 
@@ -201,6 +225,29 @@ namespace ShortCutes
         private void button_paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+        }
+
+        private void panel1_SizeChanged(object sender, EventArgs e)
+        {
+            if (panel1.HorizontalScroll.Visible)
+            {
+                panel1.SizeChanged -= panel1_SizeChanged;
+                panel1.Size = new Size(panel1.Width + VScrollWidth, panel1.Height);
+                panel1.Location = new Point(panel1.Location.X - (VScrollWidth / 2), panel1.Location.Y);
+            }
+        }
+
+        //Let the form to be moved
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        private void HistoryForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 

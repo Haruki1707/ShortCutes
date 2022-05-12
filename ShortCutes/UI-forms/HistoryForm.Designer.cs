@@ -62,6 +62,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(520, 348);
             this.panel1.TabIndex = 1;
+            this.panel1.SizeChanged += new System.EventHandler(this.panel1_SizeChanged);
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.button_paint);
             // 
             // label2
@@ -163,6 +164,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "HistoryForm";
             this.Load += new System.EventHandler(this.HistoryForm_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HistoryForm_MouseDown);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

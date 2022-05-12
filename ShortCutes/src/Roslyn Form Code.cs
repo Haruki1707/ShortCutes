@@ -12,28 +12,48 @@ namespace Shortcutes
 	public class CuteLauncher : Form
 	{
 		private Button CLOSEbutton;
+		private PictureBox PictureBoxImage;
 		private PictureBox PictureBoxSC;
+		private PictureBox PBFade;
 		private Timer TimerSC = new Timer();
+
+		private Image TextImage;
+
+		private int GrowInt = 1;
+		Process ShortCute = new Process();
+		private static string ExtraArgs = "";
 		private string Emulator = "%EMULATOR%";
 		private string EmuName = "%EMUNAME%";
 		private string GameFile = @"%GAMEFILE%";
 		private string GameName = "%GAME%";
-		private int standarHeight = %HEIGHT%;
+		private static int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
-		private static string ExtraArgs = "";
+		private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
 		public CuteLauncher()
 		{
 			//standarHeight = 256 || 322;
 			FormBorderStyle = FormBorderStyle.None;
-			ClientSize = new Size(256, standarHeight);
-			BackColor = Color.FromArgb(47, 49, 54);
+			ClientSize = new Size(256, 72);
+			BackColor = avgColor;
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = GameName + " ShortCute";
 			DoubleBuffered = true;
 			ShowInTaskbar = false;
 			TopMost = true;
+
+			PictureBoxImage = new PictureBox()
+			{
+				Size = new Size(256, standarHeight),
+				Location = new Point(0, 0),
+				SizeMode = PictureBoxSizeMode.CenterImage,
+				BorderStyle = BorderStyle.None,
+				Image = new Bitmap(assembly.GetManifestResourceStream("temp.png")),
+				Padding = new Padding(0, 0, 0, standarHeight - 256),
+				BackColor = Color.Transparent,
+				AutoSize = true
+			};
 
 			PictureBoxSC = new PictureBox()
 			{
@@ -41,10 +61,27 @@ namespace Shortcutes
 				Location = new Point(0, 0),
 				SizeMode = PictureBoxSizeMode.CenterImage,
 				BorderStyle = BorderStyle.None,
+				Padding = new Padding(192, 0, 0, standarHeight - 68),
 				Image = new Bitmap(assembly.GetManifestResourceStream("loading.gif")),
-				Padding = new Padding(192, standarHeight - 66, 0, 0),
-				BackColor = Color.Transparent
+				BackColor = avgColor
 			};
+
+			PBFade = new PictureBox()
+			{
+				Size = new Size(256, 80),
+				Location = new Point(0, 0),
+				BorderStyle = BorderStyle.None,
+				BackColor = avgColor
+			};
+
+			if (standarHeight == 256)
+            {
+				PBFade.Visible = false;
+				GrowInt = 8;
+            }
+            else
+				GrowInt = 10;
+
 			CLOSEbutton = new Button()
 			{
 				Size = new Size(20, 20),
@@ -63,37 +100,87 @@ namespace Shortcutes
 			CLOSEbutton.Hide();
 			CLOSEbutton.Click += (object sender, EventArgs e) => { Close(); };
 			PictureBoxSC.MouseDown += FormDisp_MouseDown;
-			PictureBoxSC.Controls.Add(CLOSEbutton);
-			Controls.Add(PictureBoxSC);
+			PictureBoxImage.MouseDown += FormDisp_MouseDown;
+			PictureBoxSC.Controls.Add(PBFade);
+			PictureBoxImage.Controls.Add(CLOSEbutton);
+			PictureBoxImage.Controls.Add(PictureBoxSC);
+			Controls.Add(PictureBoxImage);
 
 			//PictureBox Background
-			Bitmap PBGImage = new Bitmap(256, standarHeight);
-			using (Graphics graph = Graphics.FromImage(PBGImage))
+			TextImage = new Bitmap(256, standarHeight);
+			using (Graphics graph = Graphics.FromImage(TextImage))
             {
-				Bitmap BGbit = new Bitmap(assembly.GetManifestResourceStream("temp.png"));
-				Icon = Icon.FromHandle(BGbit.GetHicon());
-
-				Image BGImage = (Image)BGbit;
-				if (Height == 256)
-					using (Graphics g = Graphics.FromImage(BGImage))
-						g.FillRectangle(new SolidBrush(Color.FromArgb(150, 22, 28, 38)), new Rectangle(0, 190, 256, 72));
-				else
-					graph.FillRectangle(new SolidBrush(Color.FromArgb(47, 49, 54)), new Rectangle(0, 256, 256, 72));
-
-				graph.DrawImage(BGImage, 0, 0, new Rectangle(0, 0, 256, 256), GraphicsUnit.Pixel);
 				graph.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-				graph.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, standarHeight - 63);
-				graph.DrawString("   " + EmuName, new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, standarHeight - 43);
-				graph.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, standarHeight - 10);
-				PictureBoxSC.BackgroundImage = PBGImage;
-            }
+				graph.DrawString("Opening:", new Font("Bahnschrift SemiCondensed", 12F), Brushes.White, 0, 3);
+				graph.DrawString("   " + EmuName, new Font("Bahnschrift SemiCondensed", 22F), Brushes.White, 0, 23);
+				graph.DrawString("Created by Haruki1707", new Font("Bahnschrift SemiCondensed", 6F), Brushes.DimGray, 0, 56);
+				PictureBoxSC.BackgroundImage = TextImage;
+			}
 
-			TimerSC.Interval = 500;
-			TimerSC.Tick += ExecuteEmu_Tick;
+			TimerSC.Interval = 1;
+			TimerSC.Tick += GrowForm;
 			TimerSC.Start();
 		}
 
-		Process ShortCute = new Process();
+		private void GrowForm(object sender, EventArgs e)
+		{
+			ClientSize = new Size(256, ClientSize.Height + GrowInt);
+			Top -= GrowInt / 2;
+
+			if (ClientSize.Height >= standarHeight)
+			{
+				TimerSC.Stop();
+				TimerSC.Interval = 1;
+				TimerSC.Tick -= GrowForm;
+				TimerSC.Tick += MovePB;
+				TimerSC.Start();
+			}
+		}
+
+		private static int PBHeight = standarHeight - 72;
+		private double PBH25 = PBHeight * .25;
+		private double PBH75 = PBHeight * .75;
+		private void MovePB(object sender, EventArgs e)
+		{
+			PictureBoxSC.Location = new Point(0, PictureBoxSC.Location.Y + GrowInt);
+			if(PictureBoxSC.Location.Y >= PBH25)
+				PBFade.BackColor = Color.FromArgb((int)Math.Round(255-(float)((float)( (float)(PictureBoxSC.Location.Y - PBH25) /(float)PBH75 ) *255)), avgColor);
+			if (standarHeight == 256)
+				PictureBoxSC.BackColor = Color.FromArgb((int)Math.Round(255 - (float)((float)((float)PictureBoxSC.Location.Y / (float)435) * 255)), avgColor);
+
+
+			if (PictureBoxSC.Location.Y >= PBHeight)
+			{
+				TimerSC.Stop();
+				PictureBoxSC.Location = new Point(0, PictureBoxSC.Location.Y + GrowInt/2);
+				PBFade.BackColor = Color.Transparent;
+				if(standarHeight == 256)
+					PictureBoxSC.BackColor = Color.FromArgb(150, avgColor);
+				TimerSC.Interval = 500;
+				TimerSC.Tick -= MovePB;
+				TimerSC.Tick += ExecuteEmu_Tick;
+				TimerSC.Start();
+				GrowInt = -GrowInt;
+			}
+		}
+
+		private void ShrinkForm(object sender, EventArgs e)
+		{
+			ClientSize = new Size(256, ClientSize.Height + GrowInt);
+			PictureBoxSC.Location = new Point(0, PictureBoxSC.Location.Y + GrowInt);
+			Top -= GrowInt / 2;
+			CLOSEbutton.Hide();
+
+			if (ClientSize.Height <= 72 + Math.Abs(GrowInt)*2)
+				PictureBoxImage.Image = null;
+
+			if (ClientSize.Height < 72 / 1.5)
+			{
+				TimerSC.Stop();
+				Close();
+			}
+		}
+
 		private void ExecuteEmu_Tick(object sender, EventArgs e)
 		{
 			TimerSC.Stop();
@@ -114,7 +201,7 @@ namespace Shortcutes
 			ShortCute.StartInfo.Arguments = "%ARGUMENTS%" + ExtraArgs;
 			ShortCute.Start();
 
-			TimerSC.Interval = 100;
+			TimerSC.Interval = 250;
 			TimerSC.Tick -= ExecuteEmu_Tick;
 			TimerSC.Tick += WaitEmuToBeOpen_Tick;
 			TimerSC.Start();
@@ -134,6 +221,7 @@ namespace Shortcutes
 		string EMainWindowTitle = null;
 		private void WaitEmuToBeOpen_Tick(object sender, EventArgs e)
 		{
+			TimerSC.Interval = 100;
 			if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
             {
 				EMainWindowTitle = ShortCute.MainWindowTitle;
@@ -144,7 +232,7 @@ namespace Shortcutes
 					TimerSC.Tick += WaitEmuToLoad_Tick;
 				}
 				else
-					Close();
+					CloseForm();
             }
 			ShortCute.Refresh();
 		}
@@ -153,13 +241,24 @@ namespace Shortcutes
 		private void WaitEmuToLoad_Tick(object sender, EventArgs e)
         {
 			if(ShortCute.MainWindowTitle != EMainWindowTitle)
-				Close();
+				CloseForm();
 			if (WaitingLoop == 40)
 				CLOSEbutton.Show();
 			WaitingLoop++;
 			ShortCute.Refresh();
 		}
 
+		private void CloseForm()
+        {
+			TimerSC.Stop();
+			TimerSC.Interval = 1;
+			TimerSC.Tick -= WaitEmuToLoad_Tick;
+			TimerSC.Tick -= WaitEmuToBeOpen_Tick;
+			TimerSC.Tick += ShrinkForm;
+			TimerSC.Start();
+		}
+
+		//Tools
 		private void MessageError(string type, string path)
         {
 			MessageBox.Show("Make sure that the " + type + " is located in:\n" +
@@ -193,6 +292,8 @@ namespace Shortcutes
 			}
 		}
 
+
+		//MAIN
 		[STAThread]
 		static void Main(string[] args)
 		{

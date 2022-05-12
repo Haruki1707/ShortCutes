@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Drawing;
 using System.Xml.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace ShortCutes
 {
@@ -18,11 +18,11 @@ namespace ShortCutes
         static Emulators()
         {
             //To add a emulator call 'new Emulator();'
-            //Params: "Name of emulator", "name of exe.exe", "Game files that emulator supports", "Parameters before game file path", "Parameters in file path", "Parameters after game file path"
+            //Params: "Name of emulator", "name of exe.exe", "Game files that emulator supports", "Parameters %GAME% Parameters"
 
             //CEMU
             //Works as expected
-            var CEMU = new Emulator("Cemu", "cemu.exe", "WiiU Games (*.rpx; *.wud; *.wux; *.elf; *.iso)", "-g %GAME% -f", true);
+            var CEMU = new Emulator("Cemu", "cemu.exe", "WiiU Games (*.rpx; *.wua; *.wud; *.wux; *.elf; *.iso)", "-g %GAME% -f", true);
             CEMU.SetConfigPath(@"settings.xml", "GamePaths", "Entry");
             EmulatorsList.Add(CEMU);
 

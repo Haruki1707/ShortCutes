@@ -177,6 +177,7 @@ namespace ShortCutes
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Crop_Image";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CropImage_Tool_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
