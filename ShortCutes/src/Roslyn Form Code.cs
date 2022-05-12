@@ -68,17 +68,14 @@ namespace Shortcutes
 
 			PBFade = new PictureBox()
 			{
-				Size = new Size(256, 80),
+				Size = new Size(256, standarHeight),
 				Location = new Point(0, 0),
 				BorderStyle = BorderStyle.None,
 				BackColor = avgColor
 			};
 
 			if (standarHeight == 256)
-            {
-				PBFade.Visible = false;
 				GrowInt = 8;
-            }
             else
 				GrowInt = 10;
 
