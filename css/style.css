@@ -285,6 +285,11 @@ tabdir{
     color: #5fa7ff;
 }
 
+.duckstation, .duckstation span{
+    border-left-color: #ffb000;
+    color: #ffb000;
+}
+
 footer{
     padding: 20px 0px;
     background-color: #1e1e1e;
