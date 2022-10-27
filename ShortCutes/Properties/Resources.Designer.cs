@@ -81,6 +81,33 @@ namespace ShortCutes.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a [
+        ///  {
+        ///    &quot;Name&quot;: &quot;Cemu&quot;,
+        ///    &quot;Executable&quot;: &quot;Cemu.exe&quot;,
+        ///    &quot;GameFilters&quot;: &quot;WiiU Games (*.rpx; *.wua; *.wud; *.wux; *.elf; *.iso)&quot;,
+        ///    &quot;Arguments&quot;: &quot;-g %GAME% -f&quot;,
+        ///    &quot;WaitForIt&quot;: true,
+        ///    &quot;Config&quot;: {
+        ///      &quot;Path&quot;: null,
+        ///      &quot;File&quot;: &quot;settings.xml&quot;,
+        ///      &quot;Section&quot;: &quot;GamePaths&quot;,
+        ///      &quot;Element&quot;: &quot;Entry&quot;
+        ///    }
+        ///  },
+        ///  {
+        ///    &quot;Name&quot;: &quot;Dolphin&quot;,
+        ///    &quot;Executable&quot;: &quot;dolphin.exe&quot;,
+        ///    &quot;GameFilters&quot;: &quot;Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)&quot;,
+        ///    &quot;Argument [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string Emulators {
+            get {
+                return ResourceManager.GetString("Emulators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap GitHub_logo {
@@ -97,6 +124,15 @@ namespace ShortCutes.Properties {
             get {
                 object obj = ResourceManager.GetObject("infobtn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a https://haruki17dev.000webhostapp.com/checkLatestVersion.php?User=.
+        /// </summary>
+        internal static string LatestVersionLink {
+            get {
+                return ResourceManager.GetString("LatestVersionLink", resourceCulture);
             }
         }
         
@@ -140,17 +176,20 @@ namespace ShortCutes.Properties {
         ///using System.Drawing.Imaging;
         ///using System.Runtime.InteropServices;
         ///
-        ///namespace Shortcutes
+        ///namespace Shortcutes.src
         ///{
         ///	public class CuteLauncher : Form
         ///	{
         ///		private Button CLOSEbutton;
+        ///		private PictureBox PictureBoxImage;
         ///		private PictureBox PictureBoxSC;
+        ///		private PictureBox PBFade;
         ///		private Timer TimerSC = new Timer();
-        ///		private string Emulator = &quot;%EMULATOR%&quot;;
-        ///		private string EmuName = &quot;%EMUNAME%&quot;;
-        ///		private string GameFile = @&quot;%GAMEFILE%&quot;;
-        ///		private [resto de la cadena truncado]&quot;;.
+        ///
+        ///		private Image TextImage;
+        ///
+        ///		private int GrowInt = 1;
+        ///		Pr [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string Roslyn_Form_Code {
             get {

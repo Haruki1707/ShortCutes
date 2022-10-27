@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EZ_Updater;
+using ShortCutes.src.Utils;
+using System;
 using System.Management;
 using System.Net;
 using System.Security.Cryptography;
@@ -20,9 +22,10 @@ namespace ShortCutes
                 Environment.Exit(0);
             }
 
+            Utils.CheckLatestVersion();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.ThreadException += new ThreadExceptionEventHandler(ShortCutes.Form1_UIThreadException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ShortCutes.UIThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.Run(new ShortCutes());
         }
@@ -44,35 +47,6 @@ namespace ShortCutes
             {
                 isAdmin = false;
             }
-
-
-            Thread thread = new Thread(() =>
-            {
-                try
-                {
-                    string UUID = null;
-                    ManagementObjectCollection MOClist = new ManagementObjectSearcher("SELECT UUID FROM Win32_ComputerSystemProduct").Get();
-                    foreach (ManagementBaseObject mo in MOClist)
-                        UUID = mo["UUID"] as string;
-
-                    using (SHA256 shaHash = SHA256.Create())
-                    {
-                        byte[] data = shaHash.ComputeHash(Encoding.UTF8.GetBytes(UUID));
-                        StringBuilder sbuild = new StringBuilder();
-                        for (int i = 0; i < data.Length; i++)
-                            sbuild.Append(data[i].ToString("x2"));
-                        UUID = sbuild.ToString();
-                    }
-
-                    using (WebClient wc = new WebClient())
-                    {
-                        wc.Headers.Add("User-Agent", "ShortCutes");
-                        wc.OpenRead("http://freetests20.000webhostapp.com/ShortCutes/version.php?User=" + UUID + @"\\" + Environment.UserName + "&Version=v" + Application.ProductVersion);
-                    }
-                }
-                catch { }
-            });
-            thread.Start();
 
             return isAdmin;
         }

@@ -1,4 +1,5 @@
 ﻿using EZ_Updater;
+using ShortCutes.src.Utils;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace ShortCutes
 {
     public partial class MessageForm : Form
     {
+        internal static Color color1; internal static Color color2; internal static Color color3;
+
         public static void Info(string message, string clipboard = null)
         {
             using (var info = new MessageForm(message, 0, clipboard))
@@ -23,6 +26,25 @@ namespace ShortCutes
             {
                 success.ShowDialog();
                 return success.DialogResult == DialogResult.Yes;
+            }
+        }
+
+        public static int Colors(Color c1, Color c2, Color c3, string emuName)
+        {
+            color1 = c1;
+            color2 = c2;
+            color3 = c3;
+
+            using (var colorsform = new MessageForm(emuName, 6))
+            {
+                colorsform.ShowDialog();
+
+                if (colorsform.DialogResult == DialogResult.Yes)
+                    return 0;
+                else if (colorsform.DialogResult == DialogResult.No)
+                    return 1;
+                else
+                    return 2;
             }
         }
 
@@ -95,7 +117,7 @@ namespace ShortCutes
                     Size tempsize = image.Size;
                     Point temppoint = image.Location;
 
-                    if (Message == "True")
+                    if (Utils.RectangularDesign)
                     {
                         tempsize = image2.Size;
                         temppoint = image2.Location;
@@ -133,13 +155,77 @@ namespace ShortCutes
                     YESbtn.Click += Open_GitHub;
                     iconPB.Image = Properties.Resources.GitHub_logo;
                     break;
+                //Color Selector
+                case 6:
+                    OKbtn.Hide();
+                    YESbtn.Hide();
+                    NObtn.Hide();
+                    iconPB.Hide();
+                    closeBtn.Hide();
+
+                    Messagelbl.Size = new Size(382, 60);
+                    Messagelbl.Location = new Point(18, 10);
+                    Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 2);
+                    Messagelbl.Text = "Select the color you would like for the ShortCute:";
+
+                    Button color1Btn = new Button()
+                    {
+                        Size = new Size(125, 50),
+                        Location = new Point(10, 75),
+                        Text = Message,
+                        ForeColor = Color.White,
+                        BackColor = color1,
+                        Font = new Font("Bahnschrift SemiBold SemiConden", 14F),
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance =
+                        {
+                            BorderSize = 0,
+                        }
+                    };
+                    color1Btn.Click += YESbtn_Click;
+                    Controls.Add(color1Btn);
+
+                    Button color2Btn = new Button()
+                    {
+                        Size = new Size(125, 50),
+                        Location = new Point(145, 75),
+                        Text = Message,
+                        ForeColor = Color.White,
+                        BackColor = color2,
+                        Font = new Font("Bahnschrift SemiBold SemiConden", 14F),
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance =
+                        {
+                            BorderSize = 0,
+                        }
+                    };
+                    color2Btn.Click += NObtn_Click;
+                    Controls.Add(color2Btn);
+
+                    Button color3Btn = new Button()
+                    {
+                        Size = new Size(125, 50),
+                        Location = new Point(280, 75),
+                        Text = Message,
+                        ForeColor = Color.White,
+                        BackColor = color3,
+                        Font = new Font("Bahnschrift SemiBold SemiConden", 14F),
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance =
+                        {
+                            BorderSize = 0,
+                        }
+                    };
+                    color3Btn.Click += OKbtn_Click;
+                    Controls.Add(color3Btn);
+                    break;
                 default:
                     this.Size = new Size(440, 336);
                     NObtn.Hide();
                     YESbtn.Hide();
                     iconPB.Hide();
 
-                    Messagelbl.Size = new Size(382, 25);
+                    Messagelbl.Size = new Size(410, 25);
                     Messagelbl.Location = new Point(18, 7);
                     Messagelbl.Font = new Font(Messagelbl.Font.FontFamily, Messagelbl.Font.Size + 5);
                     Messagelbl.Text = "What u looking 4 here?";
@@ -148,7 +234,7 @@ namespace ShortCutes
                     {
                         Size = new Size(250, 250),
                         Location = new Point(95, 40),
-                        SizeMode = PictureBoxSizeMode.Zoom,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
                         BorderStyle = BorderStyle.None,
                         BackgroundImageLayout = ImageLayout.Zoom,
                         BackgroundImage = Properties.Resources.ShortCute,
@@ -157,6 +243,7 @@ namespace ShortCutes
                     };
                     dc.LoadAsync("https://cdn.discordapp.com/attachments/885633010475601951/974161761420853278/unknown.png");
                     Controls.Add(dc);
+                    OKbtn.Text = "Nothing . . .";
                     break;
             }
 

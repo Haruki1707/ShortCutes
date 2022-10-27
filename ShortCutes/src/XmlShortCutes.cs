@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace ShortCutes
+namespace ShortCutes.src
 {
     static class XmlDocSC
     {
@@ -76,6 +76,11 @@ namespace ShortCutes
         public ShortCute(XmlNode node)
         {
             setupNodes(node);
+        }
+
+        public ShortCute() : this("", "", "", "")
+        {
+            
         }
 
         public ShortCute(string name, string emupath, string gamepath, string image)

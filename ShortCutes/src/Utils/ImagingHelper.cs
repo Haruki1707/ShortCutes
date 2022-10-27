@@ -2,7 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace ShortCutes
+namespace ShortCutes.src.Utils
 {
     /// <summary>
     /// Provides helper methods for imaging

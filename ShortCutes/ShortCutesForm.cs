@@ -1,13 +1,13 @@
 ﻿using EZ_Updater;
-using Microsoft.CSharp;
+using ShortCutes.src;
+using ShortCutes.src.Utils;
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,21 +17,16 @@ namespace ShortCutes
 {
     public partial class ShortCutes : Form
     {
-        readonly private string temppath = Path.GetTempPath() + @"\ShortCutes\";
-        readonly private string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\ShortCutes\";
-        readonly private Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
-        readonly private string InvalidFileNameChars = "";
-        private bool RectangularDesign = true;
-        private bool Emulatorcb_HasSelectedItem => emulatorcb.SelectedItem != null;
-        private List<Emulator> EmulatorsList => Emulators.EmulatorsList;
-        private Emulator SelectedEmu => EmulatorsList[emulatorcb.SelectedIndex];
-        private int SSCH = -1;
-        private int SelectedShortCuteHis
+        private bool ComboBox_HasSelectedItem => EmulatorsCbB.SelectedItem != null;
+        private Emulator SelectedEmu => Emulators.EmulatorsList[EmulatorsCbB.SelectedIndex];
+        private Task<IList<Color>> tImageColors;
+        private int HistoryIndex = -1;
+        private int SelectedHistoryIndex
         {
-            get { return SSCH; }
+            get { return HistoryIndex; }
             set
             {
-                SSCH = value; Shortcutbox.Focus();
+                HistoryIndex = value; ShortCuteNameTxB.Focus();
                 if (value == -1)
                 {
                     ClearSCSelected.Visible = false;
@@ -49,22 +44,10 @@ namespace ShortCutes
         {
             InitializeComponent();
 
-            foreach (var emu in EmulatorsList)
-                emulatorcb.Items.Add(emu.Name);
+            //MessageBox.Show(Utils.MyTempPath);
 
-            foreach (char ch in Path.GetInvalidFileNameChars())
-                if (!char.IsWhiteSpace(ch) && !char.IsControl(ch))
-                    InvalidFileNameChars += ch + " ";
-
-            if (!Directory.Exists(temppath.Remove(temppath.Length - 1)))
-                Directory.CreateDirectory(temppath.Remove(temppath.Length - 1));
-            if (!Directory.Exists(appdata.Remove(appdata.Length - 1)))
-                Directory.CreateDirectory(appdata.Remove(appdata.Length - 1));
-
-            if (File.Exists(appdata + @"squaredesign"))
-                RectangularDesign = false;
-
-            Properties.Resources.loading.Save(temppath + @"loading.gif");
+            foreach (var emu in Emulators.EmulatorsList)
+                EmulatorsCbB.Items.Add(emu.Name);
 
             Bitmap flag = new Bitmap(ICOpic.Width, ICOpic.Height);
             using (Graphics flagGraphics = Graphics.FromImage(flag))
@@ -93,163 +76,76 @@ namespace ShortCutes
             });
         }
 
-        public static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
-        {
-            try
-            {
-                MessageBox.Show("An application error occurred. Please contact the adminstrator with the following information:\n\n" + t.Exception.Message + "\n\nStack Trace:\n" + t.Exception.StackTrace,
-                        "Notify about this error on GitHub repository Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                if (Updater.CheckUpdate("Haruki1707", "ShortCutes")) new MessageForm("", 4).ShowDialog();
-            }
-            catch
-            {
-                try
-                {
-                    MessageBox.Show("Fatal Windows Forms Error",
-                        "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop);
-                }
-                finally
-                {
-                    Application.Exit();
-                }
-            }
-        }
-
         private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string tempedir = Edirbox.Text;
-            Edirbox.Text = null;
+            string tempedir = EmuDirTxB.Text;
+            EmuDirTxB.Text = null;
             label6.Text = SelectedEmu.Description;
             label6.ForeColor = SelectedEmu.Cdesc;
-            Edirbox.Text = SelectedEmu.Path();
-            if (tempedir != Edirbox.Text)
-                Gdirbox.Text = null;
+            EmuDirTxB.Text = SelectedEmu.GetPath();
+            if (tempedir != EmuDirTxB.Text)
+                GameDirTxB.Text = null;
 
-            if (!string.IsNullOrWhiteSpace(Edirbox.Text) && Directory.Exists(Edirbox.Text) && !Directory.Exists(Edirbox.Text + @"ShortCutes"))
+            if (!string.IsNullOrWhiteSpace(EmuDirTxB.Text) && File.Exists(EmuDirTxB.Text) && !Directory.Exists(Utils.GetDirectoryName(EmuDirTxB.Text) + @"ShortCutes"))
             {
-                Directory.CreateDirectory(Edirbox.Text + @"ShortCutes");
+                Directory.CreateDirectory(Utils.GetDirectoryName(EmuDirTxB.Text) + @"ShortCutes");
                 MessageForm.Info("To avoid Anti-Virus problems with ShortCutes please exclude this path folder:\n\n" +
-                    Edirbox.Text + "ShortCutes\n\nDouble click on this text to copy path folder to clipboard", Edirbox.Text + "ShortCutes");
+                    Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes\n\nDouble click on this text to copy path folder to clipboard", Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes");
             }
 
-            if (Directory.Exists(Edirbox.Text + "ShortCutes"))
+            if (Directory.Exists(Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes"))
                 OpenFolder.Show();
             else
                 OpenFolder.Hide();
 
-            Shortcutbox.Focus();
+            ShortCuteNameTxB.Focus();
         }
 
         private void CreateShortCute_Click(object sender, EventArgs e)
         {
-            string code;
-
-            if (!Edirbox.Text.EndsWith(@"\") && !string.IsNullOrWhiteSpace(Edirbox.Text))
-                Edirbox.Text += @"\";
-
-            if (!Emulatorcb_HasSelectedItem)
+            if (!ComboBox_HasSelectedItem)
                 MessageForm.Error("Emulator must be selected!");
-            else if (string.IsNullOrWhiteSpace(Shortcutbox.Text))
+            else if (string.IsNullOrWhiteSpace(ShortCuteNameTxB.Text))
                 MessageForm.Error("Shortcut name cannot be empty");
-            else if (!File.Exists(Edirbox.Text + SelectedEmu.Exe))
+            else if (!File.Exists(EmuDirTxB.Text))
                 MessageForm.Error("Emulator doesn't exist in the specified path\nCheck if the path or the selected emulator is correct");
-            else if (!File.Exists(Gdirbox.Text))
+            else if (!File.Exists(GameDirTxB.Text))
                 MessageForm.Error("Game file doesn't exist in the specified path");
             else if (ICOpic.Image == null)
                 MessageForm.Error("Select a picture to continue");
             else
             {
-                if (Gdirbox.Text.Contains(Edirbox.Text, StringComparison.OrdinalIgnoreCase))
-                    code = Roslyn_FormCode(Gdirbox.Text.Replace(Edirbox.Text, @""));
-                else
-                    code = Roslyn_FormCode(Gdirbox.Text);
-
-                Compile(code);
+                StartCompilation();
 
                 ICOpic.Image = null;
-                Gdirbox.Text = Shortcutbox.Text = null;
+                GameDirTxB.Text = ShortCuteNameTxB.Text = null;
+                ShortCuteNameTxB.Focus();
             }
-            Shortcutbox.Focus();
         }
 
-        private void Compile(string code)
+        private async void StartCompilation()
         {
             Cursor = Cursors.WaitCursor;
             Application.UseWaitCursor = true;
             string message = "Shortcut created!\nExecute shortcut?";
-            string Filename = Shortcutbox.Text;
-            string emupath = Edirbox.Text + "ShortCutes";
-            if (!Directory.Exists(emupath))
-                Directory.CreateDirectory(emupath);
-            emupath += @"\";
 
-            string Output = emupath + Filename + ".exe";
+            string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""), await GetImageColor());
 
-            CompilerParameters parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll", "System.Runtime.InteropServices.dll" })
-            {
-                CompilerOptions = "-win32icon:" + temppath + "temp.ico \n -target:winexe " +
-                    "\n -resource:" + temppath + @"temp.png" +
-                    "\n -resource:" + temppath + @"loading.gif",
-                GenerateExecutable = true,
-                OutputAssembly = Output
-            };
+            string emuPath = Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes";
+            if (!Directory.Exists(emuPath))
+                Directory.CreateDirectory(emuPath);
+            emuPath += @"\";
 
-            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, code);
+            string Output = $"{emuPath}{ShortCuteNameTxB.Text}.exe";
 
-            if (results.Errors.Count > 0)
-            {
-                string errors = null;
-                foreach (CompilerError CompErr in results.Errors)
-                {
-                    errors = errors +
-                                "Line number " + CompErr.Line +
-                                ", Error Number: " + CompErr.ErrorNumber +
-                                ", '" + CompErr.ErrorText + ";" +
-                                Environment.NewLine;
-                }
-                MessageForm.Error(errors);
-                Cursor = Cursors.Default;
-                Application.UseWaitCursor = false;
+            if (!Compiler.Compile(codeToCompile, Output, ShortCuteNameTxB.Text, SelectedEmu.Name))
                 return;
-            }
 
-            if (!Directory.Exists(appdata + SelectedEmu.Name))
-                Directory.CreateDirectory(appdata + SelectedEmu.Name);
-
-            if (SelectedShortCuteHis == -1)
-                new ShortCute(Filename, Edirbox.Text + SelectedEmu.Exe, Gdirbox.Text, appdata + SelectedEmu.Name + @"\" + $"{Filename}.png");
-            else
-            {
-                var shortcute = XmlDocSC.ShortCutes[SelectedShortCuteHis];
-                if (shortcute.Name != Filename)
-                {
-                    File.Delete(emupath + shortcute.Name + ".exe");
-                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{shortcute.Name}.lnk");
-                    File.Delete(shortcute.Image);
-                }
-                shortcute.Name = Filename;
-                shortcute.EmuPath = Edirbox.Text + SelectedEmu.Exe;
-                shortcute.GamePath = Gdirbox.Text;
-                shortcute.Image = appdata + SelectedEmu.Name + @"\" + $"{Filename}.png";
-
+            if (insertInHistory(emuPath))
                 message = message.Replace("created", "modified");
-                SelectedShortCuteHis = -1;
-                Thread order = new Thread(XmlDocSC.SortList);
-                order.Start();
-            }
-            File.Copy(temppath + "tempORIGINAL.png", appdata + SelectedEmu.Name + @"\" + $"{Filename}.png", true);
 
             if (DesktopCheck.Checked)
-            {
-                object shDesktop = (object)"Desktop";
-                IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-                string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Filename + ".lnk";
-                IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutAddress);
-                shortcut.Description = "ShortCute for " + Filename;
-                shortcut.TargetPath = Output;
-                shortcut.WorkingDirectory = emupath;
-                shortcut.Save();
-            }
+                Utils.CreateShortcut(ShortCuteNameTxB.Text, Output, emuPath);
 
             Cursor = Cursors.Default;
             Application.UseWaitCursor = false;
@@ -258,41 +154,83 @@ namespace ShortCutes
             {
                 var starto = new Process();
                 starto.StartInfo.FileName = Output;
-                starto.StartInfo.WorkingDirectory = emupath;
+                starto.StartInfo.WorkingDirectory = emuPath;
                 starto.Start();
             }
         }
 
-        private string Roslyn_FormCode(string gamedir)
+        private bool insertInHistory(string emuPath)
         {
-            string code = Properties.Resources.Roslyn_Form_Code;
+            bool alreadyInHistory = false;
 
-            string size = "256";
-            if (RectangularDesign)
-                size = "322";
+            if (!Directory.Exists(Utils.MyAppData + SelectedEmu.Name))
+                Directory.CreateDirectory(Utils.MyAppData + SelectedEmu.Name);
 
-            code = code.Replace("%HEIGHT%", size);
-            code = code.Replace("%WAITCHANGE%", SelectedEmu.WaitWindowChange.ToString().ToLower());
-            code = code.Replace("%EMUNAME%", SelectedEmu.Name);
-            code = code.Replace("%GAME%", Shortcutbox.Text);
-            code = code.Replace("%EMULATOR%", SelectedEmu.Exe);
-            code = code.Replace("%GAMEFILE%", gamedir);
-            code = code.Replace("%ARGUMENTS%", SelectedEmu.Arguments(gamedir));
+            ShortCute shortCute;
 
-            Color color = ControlPaint.Dark(GetAverageColor(ICOpic.Image));
-            code = code.Replace("%avgR%", color.R.ToString());
-            code = code.Replace("%avgG%", color.G.ToString());
-            code = code.Replace("%avgB%", color.B.ToString());
+            if (SelectedHistoryIndex == -1)
+                shortCute = new ShortCute();
+            else
+            {
+                shortCute = XmlDocSC.ShortCutes[SelectedHistoryIndex];
+                if (shortCute.Name != ShortCuteNameTxB.Text)
+                {
+                    File.Delete(emuPath + shortCute.Name + ".exe");
+                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $"\\{shortCute.Name}.lnk");
+                    File.Delete(shortCute.Image);
+                }
 
-            return code;
+                alreadyInHistory = true;
+                SelectedHistoryIndex = -1;
+            }
+
+            shortCute.Name = ShortCuteNameTxB.Text;
+            shortCute.EmuPath = EmuDirTxB.Text;
+            shortCute.GamePath = GameDirTxB.Text;
+            shortCute.Image = Utils.MyAppData + SelectedEmu.Name + @"\" + $"{ShortCuteNameTxB.Text}.png";
+            File.Copy(Utils.MyTempPath + "tempORIGINAL.png", Utils.MyAppData + SelectedEmu.Name + @"\" + $"{ShortCuteNameTxB.Text}.png", true);
+
+            Thread order = new Thread(XmlDocSC.SortList);
+            order.Start();
+
+            return alreadyInHistory;
+        }
+
+        private async Task<Color> GetImageColor()
+        {
+            Color Average = (await tImageColors)[3];
+            IList<Color> MostUsed = await tImageColors;
+            MostUsed.RemoveAt(3);
+
+            if (ModifierKeys.HasFlag(Keys.Control))
+            {
+                Application.UseWaitCursor = false;
+                int indexColor = MessageForm.Colors(ControlPaint.Dark(Utils.GetAverageColor(new Color[] { MostUsed[0], Average, Average })),
+                    ControlPaint.Dark(Utils.GetAverageColor(new Color[] { MostUsed[1], Average, Average })),
+                    ControlPaint.Dark(Utils.GetAverageColor(new Color[] { MostUsed[2], Average, Average })), SelectedEmu.Name);
+                Application.UseWaitCursor = true;
+
+                return ControlPaint.Dark(Utils.GetAverageColor(new Color[] { MostUsed[indexColor], Average, Average }));
+            }
+            else
+            {
+                Color FinalColor = MostUsed[0];
+                for (int i = 1; i < MostUsed.Count(); i++)
+                {
+                    if (FinalColor.GetSaturation() < MostUsed[i].GetSaturation() && FinalColor.GetBrightness() < MostUsed[i].GetBrightness())
+                        FinalColor = MostUsed[i];
+                }
+
+                return ControlPaint.Dark(Utils.GetAverageColor(new Color[] { FinalColor, Average, Average }));
+            }
         }
 
         string TempString = null;
         private void EmuBrow_Click(object sender, EventArgs e)
         {
             string EmuDir = "C:\\";
-            if (Edirbox.Text != "")
-                EmuDir = Edirbox.Text;
+            if (!String.IsNullOrWhiteSpace(EmuDirTxB.Text))
+                EmuDir = Utils.GetDirectoryName(EmuDirTxB.Text);
 
             var file = TempString != null ? TempString : FileDialog(EmuDir, "Executable File (*.exe)|*.exe");
             TempString = null;
@@ -300,13 +238,11 @@ namespace ShortCutes
             if (file != null)
             {
                 bool exists = false;
-                foreach (var emu in EmulatorsList)
+                foreach (var emu in Emulators.EmulatorsList)
                 {
-                    if (emu.Exe.ToLower() == Path.GetFileName(file).ToLower())
+                    if (emu.CheckPath(Path.GetFullPath(file)))
                     {
-                        if (File.Exists(file))
-                            emu.Path(Path.GetDirectoryName(file) + @"\");
-                        emulatorcb.SelectedIndex = EmulatorsList.IndexOf(emu);
+                        EmulatorsCbB.SelectedIndex = Emulators.EmulatorsList.IndexOf(emu);
                         Emulatorcb_SelectedIndexChanged(null, null);
                         exists = true;
                         break;
@@ -321,32 +257,32 @@ namespace ShortCutes
                 }
             }
 
-            Shortcutbox.Focus();
+            ShortCuteNameTxB.Focus();
         }
 
         private void GameBrow_Click(object sender, EventArgs e)
         {
             string GamesPath = "C:\\";
 
-            if (Emulatorcb_HasSelectedItem)
+            if (ComboBox_HasSelectedItem)
             {
                 if (SelectedEmu.TryGetGamesPath() != "" && SelectedEmu.GamesPath != null)
                     GamesPath = SelectedEmu.GamesPath;
-                else if (!string.IsNullOrWhiteSpace(Gdirbox.Text) && Directory.Exists(Path.GetDirectoryName(Gdirbox.Text)))
-                    GamesPath = Path.GetDirectoryName(Gdirbox.Text);
-                else if (Edirbox.Text != "")
-                    GamesPath = Edirbox.Text;
+                else if (!string.IsNullOrWhiteSpace(GameDirTxB.Text) && Directory.Exists(Utils.GetDirectoryName(GameDirTxB.Text)))
+                    GamesPath = Utils.GetDirectoryName(GameDirTxB.Text);
+                else if (String.IsNullOrWhiteSpace(EmuDirTxB.Text))
+                    GamesPath = Utils.GetDirectoryName(EmuDirTxB.Text);
 
                 var file = TempString != null ? TempString : FileDialog(GamesPath, SelectedEmu.Gamesfilters);
                 TempString = null;
 
                 if (file != null && File.Exists(file))
-                    Gdirbox.Text = file;
+                    GameDirTxB.Text = file;
             }
             else
                 MessageForm.Info("Emulator must be selected!");
 
-            Shortcutbox.Focus();
+            ShortCuteNameTxB.Focus();
         }
 
         private bool clicked;
@@ -367,13 +303,19 @@ namespace ShortCutes
 
             if (file != null && File.Exists(file))
             {
-                File.Copy(file, temppath + "tempORIGINAL.png", true);
-                ImagingHelper.ConvertToIcon(temppath + "tempORIGINAL.png", temppath + @"temp.ico");
+                File.Copy(file, Utils.MyTempPath + "tempORIGINAL.png", true);
+                ImagingHelper.ConvertToIcon(Utils.MyTempPath + "tempORIGINAL.png", Utils.MyTempPath + @"temp.ico");
                 ICOpic.Image = ImagingHelper.ICONbox;
-                ICOpic.Image.Save(temppath + @"temp.png");
+                ICOpic.Image.Save(Utils.MyTempPath + @"temp.png");
             }
 
-            Shortcutbox.Focus();
+            tImageColors = Task.Run(() => {
+                IList<Color> colors = Utils.GetMostUsedColors(ICOpic.Image);
+                colors.Add(Utils.GetAverageColor(ICOpic.Image));
+                return colors;
+            });
+
+            ShortCuteNameTxB.Focus();
         }
 
         private void ICOpic_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -387,9 +329,9 @@ namespace ShortCutes
                     CI.ShowDialog();
                     if (CI.DialogResult1 == DialogResult.Yes)
                     {
-                        ImagingHelper.ConvertToIcon(temppath + "temp.png", temppath + @"temp.ico");
+                        ImagingHelper.ConvertToIcon(Utils.MyTempPath + "temp.png", Utils.MyTempPath + @"temp.ico");
                         ICOpic.Image = ImagingHelper.ICONbox;
-                        ICOpic.Image.Save(temppath + @"temp.png");
+                        ICOpic.Image.Save(Utils.MyTempPath + @"temp.png");
                     }
                 }
             else
@@ -407,10 +349,9 @@ namespace ShortCutes
                     {
                         if (bitmap != null)
                         {
-                            bitmap.Save(temppath + @"tempORIGINAL.png");
-                            ImagingHelper.ConvertToIcon(temppath + @"tempORIGINAL.png", temppath + @"temp.ico");
-                            ICOpic.Image = ImagingHelper.ICONbox;
-                            ICOpic.Image.Save(temppath + @"temp.png");
+                            bitmap.Save(Utils.MyTempPath + @"tempCLIP.png");
+                            TempString = Utils.MyTempPath + "tempCLIP.png";
+                            ICOpic_MouseClick(null, null);
                         }
                     }
                 }
@@ -418,7 +359,7 @@ namespace ShortCutes
                 {
                     MessageForm.Error("URL provided isn't an image...");
                 }
-                Shortcutbox.Focus();
+                ShortCuteNameTxB.Focus();
             }
         }
 
@@ -429,8 +370,8 @@ namespace ShortCutes
             {
                 if (Clipboard.ContainsImage())
                 {
-                    Clipboard.GetImage().Save(temppath + "tempCLIP.png");
-                    TempString = temppath + "tempCLIP.png";
+                    Clipboard.GetImage().Save(Utils.MyTempPath + "tempCLIP.png");
+                    TempString = Utils.MyTempPath + "tempCLIP.png";
                     ICOpic_MouseClick(null, null);
                 }
                 else if (Clipboard.ContainsFileDropList())
@@ -456,45 +397,19 @@ namespace ShortCutes
 
         private string FileDialog(string InitialDir, string Filter)
         {
-            Edirbox.Enabled = Gdirbox.Enabled = false;
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.InitialDirectory = InitialDir;
-                dialog.Filter = Filter + "|All files (*.*)|*.*";
-                dialog.FilterIndex = 1;
-                var result = dialog.ShowDialog();
-
-                Timer.Start();
-                return result == DialogResult.OK ? dialog.FileName : null;
-            }
+            GameDirTxB.Enabled = EmuDirTxB.Enabled = false;
+            string file = Utils.FileDialog(InitialDir, Filter);
+            Timer.Start();
+            return file;
         }
 
-        private Color GetAverageColor(Image image)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            int r = 0; int g = 0; int b = 0;
-            Bitmap bmp = new Bitmap(image);
-            int total = 0;
-
-            for (int x = 0; x < bmp.Width; x++)
-            {
-                for (int y = 0; y < bmp.Height; y++)
-                {
-                    Color clr = bmp.GetPixel(x, y);
-
-                    r += clr.R;
-                    g += clr.G;
-                    b += clr.B;
-
-                    total++;
-                }
-            }
-
-            //Calculate average
-            r /= total; g /= total; b /= total;
-            return Color.FromArgb(r, g, b);
+            Timer.Stop();
+            GameDirTxB.Enabled = EmuDirTxB.Enabled = true;
         }
 
-        //UI things not that important
+        // UI things not that important
         private void ICOurl_KeyDown(object sender, KeyEventArgs e)
         {
             InputIsCommand = e.KeyCode == Keys.V && e.Modifiers == Keys.Control;
@@ -516,36 +431,13 @@ namespace ShortCutes
 
         private void OpenFolder_Click(object sender, EventArgs e)
         {
-            if (Emulatorcb_HasSelectedItem && File.Exists(Edirbox.Text + SelectedEmu.Exe))
-                Process.Start("explorer.exe", Edirbox.Text + @"ShortCutes");
+            if (ComboBox_HasSelectedItem && File.Exists(EmuDirTxB.Text))
+                Process.Start("explorer.exe", Utils.GetDirectoryName(EmuDirTxB.Text) + @"ShortCutes");
         }
 
         private void ShortCutes_Paint(object sender, PaintEventArgs e)
         {
-            DrawLine(this.Controls, e);
-        }
-
-        public static void DrawLine(Control.ControlCollection control, PaintEventArgs g)
-        {
-            var color = Color.White;
-            Pen pen = new Pen(color, 3);
-            foreach (Control current in control)
-            {
-                if (current is TextBox || current is MaskedTextBox)
-                {
-                    if (current is TextBox)
-                        ((TextBox)current).BorderStyle = BorderStyle.None;
-                    else
-                        ((MaskedTextBox)current).BorderStyle = BorderStyle.None;
-
-                    var LX = current.Location.X;
-                    var W = current.Width;
-                    var Y = current.Location.Y + current.Height;
-
-                    g.Graphics.DrawLine(pen, new PointF(LX, Y), new PointF(LX + W, Y));
-                }
-            }
-            pen.Dispose();
+            Utils.DrawLine(this.Controls, e);
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)
@@ -560,21 +452,14 @@ namespace ShortCutes
 
         private void ConfigBtn_Click(object sender, EventArgs e)
         {
-            using (var design = new MessageForm(RectangularDesign.ToString(), 3))
+            using (var design = new MessageForm("", 3))
             {
                 design.ShowDialog();
 
                 if (design.DialogResult == DialogResult.No)
-                {
-                    if (File.Exists(appdata + @"squaredesign"))
-                        File.Delete(appdata + @"squaredesign");
-                    RectangularDesign = true;
-                }
+                    Utils.RectangularDesign = true;
                 else if (design.DialogResult == DialogResult.Yes)
-                {
-                    File.Create(appdata + @"squaredesign").Close();
-                    RectangularDesign = false;
-                }
+                    Utils.RectangularDesign = false;
             }
         }
 
@@ -587,11 +472,13 @@ namespace ShortCutes
 
                 if (History.ShortCuteIndex != -1)
                 {
+                    EmuDirTxB.Text = GameDirTxB.Text = ShortCuteNameTxB.Text = null;
+
                     var ShortCute = XmlDocSC.ShortCutes[History.ShortCuteIndex];
-                    SelectedShortCuteHis = History.ShortCuteIndex;
+                    SelectedHistoryIndex = History.ShortCuteIndex;
                     History.Dispose();
 
-                    Shortcutbox.Text = ShortCute.Name;
+                    ShortCuteNameTxB.Text = ShortCute.Name;
                     TempString = ShortCute.Image;
                     ICOpic_MouseClick(null, null);
                     TempString = ShortCute.EmuPath;
@@ -603,8 +490,8 @@ namespace ShortCutes
                 createshortbtn.Enabled = true;
             }
 
-            Shortcutbox.Focus();
-            Shortcutbox.SelectionStart = Shortcutbox.Text.Length;
+            ShortCuteNameTxB.Focus();
+            ShortCuteNameTxB.SelectionStart = ShortCuteNameTxB.Text.Length;
         }
 
         private void InfoButton_Click(object sender, EventArgs e)
@@ -615,70 +502,94 @@ namespace ShortCutes
 
         private void ClearSCSelected_Click(object sender, EventArgs e)
         {
-            SelectedShortCuteHis = -1;
-            Shortcutbox.Text = null;
-            Gdirbox.Text = null;
+            SelectedHistoryIndex = -1;
+            ShortCuteNameTxB.Text = null;
+            GameDirTxB.Text = null;
             ICOpic.Image = null;
 
-            Shortcutbox.Focus();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            Timer.Stop();
-            Gdirbox.Enabled = Edirbox.Enabled = true;
+            ShortCuteNameTxB.Focus();
         }
 
         private void Shortcutbox_Focus(object sender, EventArgs e)
         {
-            Shortcutbox.Focus();
+            ShortCuteNameTxB.Focus();
         }
 
-        private void Shortcutbox_TextChanged(object sender, EventArgs e)
+        private void EmuGameDirbox_TextChanged(object sender, EventArgs e)
         {
-            if (InputIsCommand && containsABadCharacter.IsMatch(Shortcutbox.Text))
-            {
-                MessageForm.Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
-                Shortcutbox.Text = Regex.Replace(Shortcutbox.Text, containsABadCharacter.ToString(), "");
-            }
-            if (TextRenderer.MeasureText(Shortcutbox.Text, Shortcutbox.Font).Width > Shortcutbox.Width)
-                Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size - 1);
-            else if (Shortcutbox.Font.Size < 12 && TextRenderer.MeasureText(Shortcutbox.Text, new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1)).Width < Shortcutbox.Width)
-                Shortcutbox.Font = new Font(Shortcutbox.Font.FontFamily, Shortcutbox.Font.Size + 1);
+            ChangeTextBoxFontSize(sender as TextBox, 9);
         }
-        private void Shortcutbox_KeyPress(object sender, KeyPressEventArgs e)
+
+        private void ShortCuteName_TextChanged(object sender, EventArgs e)
         {
-            if (containsABadCharacter.IsMatch(e.KeyChar.ToString()) && !char.IsControl(e.KeyChar))
+            if (InputIsCommand && Utils.InvalidFileNameCharsRegex.IsMatch(ShortCuteNameTxB.Text))
             {
-                MessageForm.Error("Invalid filename!\n Cannot contain: " + InvalidFileNameChars);
+                MessageForm.Error("Invalid filename!\n Cannot contain: " + Utils.InvalidFileNameChars);
+                ShortCuteNameTxB.Text = Regex.Replace(ShortCuteNameTxB.Text, Utils.InvalidFileNameCharsRegex.ToString(), "");
+            }
+
+            ChangeTextBoxFontSize(ShortCuteNameTxB);
+        }
+
+        private void ChangeTextBoxFontSize(TextBox TxB, int MaxFontSize = 12)
+        {
+            if (String.IsNullOrWhiteSpace(TxB.Text))
+                return;
+
+            // Measure the text Width against the TextBox Width
+            do
+            {
+                Size ActualFont = TextRenderer.MeasureText(TxB.Text, TxB.Font);
+                Size IncreasedFont = TextRenderer.MeasureText(TxB.Text, new Font(TxB.Font.FontFamily, TxB.Font.Size + 0.5F));
+
+                if (ActualFont.Width > (TxB.Width * (TxB.Height / ActualFont.Height)) - 5)
+                {
+                    TxB.Font = new Font(TxB.Font.FontFamily, TxB.Font.Size - 0.5F);
+                    Trace.WriteLine(TxB.Font.Size - 0.5F);
+                }
+                else if (TxB.Font.Size < MaxFontSize && IncreasedFont.Width < TxB.Width * (TxB.Height / IncreasedFont.Height) - 5)
+                    TxB.Font = new Font(TxB.Font.FontFamily, TxB.Font.Size + 0.5F);
+                else
+                    break;
+            } while (true);
+        }
+
+        private void ShortCuteName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Utils.InvalidFileNameCharsRegex.IsMatch(e.KeyChar.ToString()) && !char.IsControl(e.KeyChar))
+            {
+                MessageForm.Error("Invalid filename!\n Cannot contain: " + Utils.InvalidFileNameChars);
                 e.Handled = true;
             }
         }
 
-        //Let the form to be moved
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
-
-        private void FormDisp_MouseDown(object sender, MouseEventArgs e)
+        private void MoveForm_MouseDown(object sender, MouseEventArgs e)
         {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
+            this.MoveForm();
         }
-    }
 
-    public static class StringExtensions
-    {
-        public static bool Contains(this String str, String substr, StringComparison cmp)
+        //Code to be executed on UIThreadException
+        public static void UIThreadException(object sender, ThreadExceptionEventArgs t)
         {
-            if (substr == null)
-                throw new ArgumentNullException("substring substring", " cannot be null.");
-            else if (!Enum.IsDefined(typeof(StringComparison), cmp))
-                throw new ArgumentException("comp is not a member of", "StringComparison, comp");
+            try
+            {
+                MessageBox.Show("An application error occurred. Please contact the developer with the following information:\n\n" + t.Exception.Message +
+                    "\n\nStack Trace:\n" + t.Exception.StackTrace, "Notify about this error on GitHub repository Haruki1707/ShortCutes", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
-            return str.IndexOf(substr, cmp) >= 0;
+                if (Updater.CheckUpdate("Haruki1707", "ShortCutes"))
+                    new MessageForm("", 4).ShowDialog();
+            }
+            catch
+            {
+                try
+                {
+                    MessageBox.Show("Fatal Windows Forms Error", "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop);
+                }
+                finally
+                {
+                    Application.Exit();
+                }
+            }
         }
     }
 }

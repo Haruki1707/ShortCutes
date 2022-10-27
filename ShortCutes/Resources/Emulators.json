@@ -1,0 +1,166 @@
+﻿[
+  {
+    "Name": "Cemu",
+    "Executable": "Cemu.exe",
+    "GameFilters": "WiiU Games (*.rpx; *.wua; *.wud; *.wux; *.elf; *.iso)",
+    "Arguments": "-g %GAME% -f",
+    "WaitForIt": true,
+    "Config": {
+      "Path": null,
+      "File": "settings.xml",
+      "Section": "GamePaths",
+      "Element": "Entry"
+    }
+  },
+  {
+    "Name": "Dolphin",
+    "Executable": "dolphin.exe",
+    "GameFilters": "Wii/GC Games (*.iso; *.wbfs; *.ciso; *.gcz; *.rvz; *.gcm; *.tgc; *.wia; *.wad)",
+    "Arguments": "-e %GAME%",
+    "WaitForIt": false,
+    "Config": {
+      "Path": "%DOCUMENTS%\\Dolphin Emulator\\",
+      "File": "Config\\Dolphin.ini",
+      "Section": "General",
+      "Element": "ISOPath0"
+    }
+  },
+  {
+    "Name": "Snes9x",
+    "Executable": "snes9x.exe",
+    "GameFilters": "SNES Games (*.smc; *.sfc; *.swc; *.zip)",
+    "Arguments": "%..\\\\GAME% -fullscreen"
+  },
+  {
+    "Name": "Project64",
+    "Executable": "Project64.exe",
+    "GameFilters": "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)",
+    "Description": "Activate fullscreen through PJ64 GUI",
+    "Config": {
+      "Path": null,
+      "File": "Config\\Project64.cfg",
+      "Section": "Game Directory",
+      "Element": "Directory"
+    }
+  },
+  {
+    "Name": "yuzu",
+    "Executable": "yuzu.exe",
+    "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)",
+    "Arguments": "-f -g %GAME%",
+    "Config": {
+      "Path": "%APPDATA%",
+      "File": "yuzu\\config\\qt-config.ini",
+      "Section": "UI",
+      "Element": "Paths\\gamedirs\\4\\path"
+    },
+    "DefaultLocations": [
+      "%LOCALAPPDATA%\\Yuzu\\yuzu-windows-msvc-early-access\\",
+      "%LOCALAPPDATA%\\Yuzu\\yuzu-windows-msvc\\"
+    ]
+  },
+  {
+    "Name": "Ryujinx",
+    "Executable": "Ryujinx.exe",
+    "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)",
+    "Arguments": "-f %GAME%",
+    "Config": {
+      "Path": "%APPDATA%",
+      "File": "Ryujinx\\Config.json",
+      "Section": "game_dirs",
+      "Element": ""
+    }
+  },
+  {
+    "Name": "Citra",
+    "Executable": "citra-qt.exe",
+    "GameFilters": "3DS Games (*.3ds; *.3dsx; *.elf; *.axf; *.cci; *.cxi; *.app)",
+    "Config": {
+      "Path": "%APPDATA%",
+      "File": "Citra\\config\\qt-config.ini",
+      "Section": "UI",
+      "Element": "Paths\\gamedirs\\3\\path"
+    }
+  },
+  {
+    "Name": "DeSmuME",
+    "Executable": "DeSmuME.exe",
+    "GameFilters": "DS Games (*.nds; *.ds.gba; +.srl; *.zip; *.7z; *.rar; *.gz)",
+    "Arguments": "--windowed-fullscreen %GAME%"
+  },
+  {
+    "Name": "mGBA",
+    "Executable": "mGBA.exe",
+    "GameFilters": "GB-GBC-GBA Games (*.gba; *.zip; *.7z; *.elf; *.agb; *.mb; *.rom; *.bin; *.gb; *.gbc; *.sgb)",
+    "Arguments": "-f %GAME%"
+  },
+  {
+    "Name": "VBA",
+    "Executable": "VisualBoyAdvance.exe",
+    "GameFilters": "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.sgb; *.cgb; *.agb; *.bin)",
+    "Arguments": "-F %GAME%",
+    "Description": "Deprecated, if possible better use VBA-M"
+  },
+  {
+    "Name": "VBA-M",
+    "Executable": "visualboyadvance-m.exe",
+    "GameFilters": "GB-GBC-GBA Games (*.gba; *.gbc; *.gb; *.zip; *.agb; *.7z; *.rar; *.mb; *.bin; *.dmg; *-cgb; *.sgb)",
+    "Description": "Enable start in fullscreen. Don't exit fullscreen, do ALT+F4",
+    "Warning": true
+  },
+  {
+    "Name": "RPCS3",
+    "Executable": "rpcs3.exe",
+    "GameFilters": "PS3 Games (*.bin; *.iso)",
+    "Description": "Activate RPCS3 close when process finish and fullscreen"
+  },
+  {
+    "Name": "PCSX2 QT",
+    "Executable": "pcsx2-qt.exe",
+    "GameFilters": "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)",
+    "Arguments": "%GAME% -fullscreen",
+    "WaitForIt": true,
+    "Config": {
+      "Path": "%DOCUMENTS%\\PCSX2",
+      "File": "inis\\PCSX2.ini",
+      "Section": "GameList",
+      "Element": "RecursivePaths"
+    }
+  },
+  {
+    "Name": "PCSX2",
+    "Executable": "pcsx2.exe",
+    "GameFilters": "PS2 Games (*.iso; *.mdf; *.nrg; *.bin; *.img; *.dump; *.gz; *.csp)",
+    "Arguments": "%GAME% --fullscreen --nogui"
+  },
+  {
+    "Name": "PPSSPP",
+    "Executable": "PPSSPP.exe",
+    "GameFilters": "PSP Games (*.iso; *.cso; *.pbp; *.elf; *.prx; ¨.zip; ¨.ppdmp)",
+    "Arguments": "--fullscreen %GAME%"
+  },
+  {
+    "Name": "xemu",
+    "Executable": "xemu.exe",
+    "GameFilters": "Xbox Games (*.iso)",
+    "Arguments": "-full-screen -dvd_path %GAME%"
+  },
+  {
+    "Name": "xenia",
+    "Executable": "xenia.exe",
+    "GameFilters": "Xbox360 Games (*.xex; *.iso)",
+    "Arguments": "%GAME% --fullscreen"
+  },
+  {
+    "Name": "DuckStation",
+    "Executable": "duckstation-qt.exe",
+    "GameFilters": "PS1 Games (*.cue; *.iso; *.img; *.bin; *.chd; *.ecm; *.mds; *.pbp; *.exe; *.psexe; *.psf; *.minipsf; *.m3u)",
+    "Arguments": "-fullscreen -resume %USERARGS% -- %GAME%",
+    "Config": {
+      "Path": "%DOCUMENTS%\\DuckStation",
+      "File": "settings.ini",
+      "Section": "GameList",
+      "Element": "RecursivePaths"
+    }
+  }
+]

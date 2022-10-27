@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Shortcutes
+namespace Shortcutes.src
 {
 	public class CuteLauncher : Form
 	{
@@ -96,8 +96,6 @@ namespace Shortcutes
 			};
 			CLOSEbutton.Hide();
 			CLOSEbutton.Click += (object sender, EventArgs e) => { Close(); };
-			PictureBoxSC.MouseDown += FormDisp_MouseDown;
-			PictureBoxImage.MouseDown += FormDisp_MouseDown;
 			PictureBoxSC.Controls.Add(PBFade);
 			PictureBoxImage.Controls.Add(CLOSEbutton);
 			PictureBoxImage.Controls.Add(PictureBoxSC);
@@ -127,6 +125,11 @@ namespace Shortcutes
 			if (ClientSize.Height >= standarHeight)
 			{
 				TimerSC.Stop();
+
+				PBFade.MouseDown += FormDisp_MouseDown;
+				PictureBoxSC.MouseDown += FormDisp_MouseDown;
+				PictureBoxImage.MouseDown += FormDisp_MouseDown;
+
 				TimerSC.Interval = 1;
 				TimerSC.Tick -= GrowForm;
 				TimerSC.Tick += MovePB;
@@ -192,10 +195,16 @@ namespace Shortcutes
 			else if (Path.IsPathRooted(GameFile) && !File.Exists(GameFile))
 				MessageError("game", GameFile);
 
+			string arguments = "%ARGUMENTS%";	
+			if (arguments.Contains("%USERARGS%"))
+				arguments = arguments.Replace("%USERARGS%", ExtraArgs);
+			else
+				arguments += ExtraArgs;
+
 			//Emulator execution
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
-			ShortCute.StartInfo.Arguments = "%ARGUMENTS%" + ExtraArgs;
+			ShortCute.StartInfo.Arguments = arguments;
 			ShortCute.Start();
 
 			TimerSC.Interval = 250;
@@ -247,6 +256,12 @@ namespace Shortcutes
 
 		private void CloseForm()
         {
+			mouse_event(MOUSEEVENTF_LEFTUP, (uint)MousePosition.X, (uint)MousePosition.Y, 0, 0);
+			mouse_event(MOUSEEVENTF_RIGHTUP, (uint)MousePosition.X, (uint)MousePosition.Y, 0, 0);
+            PBFade.MouseDown -= FormDisp_MouseDown;
+			PictureBoxSC.MouseDown -= FormDisp_MouseDown;
+			PictureBoxImage.MouseDown -= FormDisp_MouseDown;
+
 			TimerSC.Stop();
 			TimerSC.Interval = 1;
 			TimerSC.Tick -= WaitEmuToLoad_Tick;
@@ -289,6 +304,13 @@ namespace Shortcutes
 			}
 		}
 
+		//For making left click up, so it doesnt make trouble with ShrinkForm
+		[DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+		public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+		private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+		private const int MOUSEEVENTF_LEFTUP = 0x04;
+		private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+		private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
 		//MAIN
 		[STAThread]

@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ShortCutes
+namespace ShortCutes.src.Utils
 {
     class IniFile   // revision 11
     {

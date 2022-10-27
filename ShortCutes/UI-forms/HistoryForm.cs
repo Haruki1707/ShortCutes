@@ -1,9 +1,11 @@
-﻿using System;
+﻿using ShortCutes.src;
+using ShortCutes.src.Utils;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,10 +16,15 @@ namespace ShortCutes
     {
         int Ypos = 0;
         int Namenum = 0;
-        int VScrollWidth = SystemInformation.VerticalScrollBarWidth;
+        bool StopThread = false;
         public int ShortCuteIndex = -1;
+        int VScrollWidth = SystemInformation.VerticalScrollBarWidth;
+
         List<ShortCute> Copylist;
         List<HistoryButton> Buttonlist = new List<HistoryButton>();
+        Dictionary<string, string> Games = new Dictionary<string, string>();
+        static Dictionary<string, Image> Thumbnails = new Dictionary<string, Image>();
+
         public HistoryForm()
         {
             InitializeComponent();
@@ -58,6 +65,11 @@ namespace ShortCutes
                 {
                     DrawShortCute(ShortCute);
                     InvokeUIAsync(() => SearchBox.Focus());
+                    if (StopThread)
+                    {
+                        StopThread = false;
+                        break;
+                    }
                 }
             });
             t.Start();
@@ -95,9 +107,8 @@ namespace ShortCutes
                 SizeMode = pictureBox1.SizeMode,
                 Location = new Point(btn.FlatAppearance.BorderSize, btn.FlatAppearance.BorderSize),
             };
-
             if (File.Exists(SC.Image))
-                picbox.Image = Image.FromFile(SC.Image);
+                picbox.Image = Thumbnail(SC, 127, 127);
             picbox.Click += new EventHandler(Control_Click);
             picbox.MouseEnter += new EventHandler(Control_MouseEnter);
             picbox.MouseLeave += new EventHandler(Control_MouseLeave);
@@ -105,7 +116,7 @@ namespace ShortCutes
 
             string emuname = "";
             foreach (var emu in Emulators.EmulatorsList)
-                if (emu.Exe.ToLower() == Path.GetFileName(SC.EmuPath).ToLower())
+                if (emu.CheckPath(Path.GetFileName(SC.EmuPath).ToLower(), false))
                 {
                     emuname = emu.Name;
                     break;
@@ -129,13 +140,35 @@ namespace ShortCutes
             label.MouseLeave += new EventHandler(Control_MouseLeave);
             btn.Controls.Add(label);
 
-            InvokeUI(() =>
+            InvokeUIAsync(() =>
             {
                 Buttonlist.Add(new HistoryButton(btn, SC.Name));
                 panel1.Controls.Add(btn);
                 btn.Location = new Point(0, Ypos - panel1.VerticalScroll.Value);
+                Ypos += button1.Height;
             });
-            Ypos += button1.Height;
+        }
+        
+        internal Image Thumbnail(ShortCute SC, int width, int height, bool keepAspect = true)
+        {
+            string id = SC.Name + SC.dateTime;
+            if(Thumbnails.ContainsKey(id))
+                return Thumbnails[id];
+            else
+            {
+                Image image = Image.FromFile(SC.Image);
+
+                if(keepAspect == true)
+                {
+                    width = image.Width < image.Height ? (width * image.Width) / image.Height : width;
+                    height = image.Width > image.Height ? (height * image.Height) / image.Width : height;
+                }
+
+                Image thumb = image.GetThumbnailImage(width, height, () => false, IntPtr.Zero);
+                image.Dispose();
+                Thumbnails.Add(id, thumb);
+                return Thumbnails[id];
+            }
         }
 
         private void Button_Click(object sender, EventArgs e)
@@ -143,12 +176,16 @@ namespace ShortCutes
             if (!string.IsNullOrEmpty(((Control)sender).Text))
                 ShortCuteIndex = int.Parse(((Control)sender).Text);
 
-            Parallel.ForEach(panel1.Controls.OfType<Button>(), btn =>
+            StopThread = true;
+            while (StopThread == false)
+                Thread.Sleep(1);
+
+            /*Parallel.ForEach(panel1.Controls.OfType<Button>(), btn =>
             {
                 foreach (var pB in btn.Controls.OfType<PictureBox>())
                     if (pB.Image != null)
                         pB.Image.Dispose();
-            });
+            });*/
 
             Buttonlist = null;
             Close();
@@ -173,7 +210,7 @@ namespace ShortCutes
             pea.Graphics.DrawLine(pen, pt3, pt4);
             pea.Graphics.DrawLine(pen, pt2, pt4);
 
-            ShortCutes.DrawLine(this.Controls, pea);
+            Utils.DrawLine(this.Controls, pea);
 
             pea.Graphics.DrawLine(new Pen(Color.White, 2),
                 new PointF(pictureBox2.Location.X, pictureBox2.Location.Y + pictureBox2.Height + 3),
@@ -237,17 +274,9 @@ namespace ShortCutes
             }
         }
 
-        //Let the form to be moved
-        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
-
-        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
-
         private void HistoryForm_MouseDown(object sender, MouseEventArgs e)
         {
-            ReleaseCapture();
-            SendMessage(this.Handle, 0x112, 0xf012, 0);
+            this.MoveForm();
         }
     }
 

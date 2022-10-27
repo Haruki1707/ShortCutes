@@ -102,6 +102,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="src\Emulator.cs" />
+    <Compile Include="src\Utils\Compiler.cs" />
+    <Compile Include="src\Utils\FindDominantColour\KCluster.cs" />
+    <Compile Include="src\Utils\FindDominantColour\KMeansClusteringCalculator.cs" />
+    <Compile Include="src\Utils\Utils.cs" />
     <Compile Include="UI-forms\HistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +114,7 @@
       <DependentUpon>HistoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\XmlShortCutes.cs" />
+    <None Include="Resources\Emulators.json" />
     <None Include="src\Roslyn Form Code.cs" />
     <Compile Include="UI-forms\CropImage_Tool.cs">
       <SubType>Form</SubType>
@@ -123,8 +129,8 @@
     <Compile Include="ShortCutesForm.Designer.cs">
       <DependentUpon>ShortCutesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\ImagingHelper.cs" />
-    <Compile Include="src\IniFile.cs" />
+    <Compile Include="src\Utils\ImagingHelper.cs" />
+    <Compile Include="src\Utils\IniFile.cs" />
     <Compile Include="UI-forms\MessageForm.cs">
       <SubType>Form</SubType>
     </Compile>

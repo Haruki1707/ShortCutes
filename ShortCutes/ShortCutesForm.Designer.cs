@@ -32,16 +32,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShortCutes));
             this.label5 = new System.Windows.Forms.Label();
             this.DesktopCheck = new System.Windows.Forms.CheckBox();
-            this.gameBrow = new System.Windows.Forms.Button();
-            this.emuBrow = new System.Windows.Forms.Button();
-            this.Shortcutbox = new System.Windows.Forms.TextBox();
+            this.GameExplorerBtn = new System.Windows.Forms.Button();
+            this.EmuExplorerBtn = new System.Windows.Forms.Button();
+            this.ShortCuteNameTxB = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.emulatorcb = new System.Windows.Forms.ComboBox();
-            this.Edirbox = new System.Windows.Forms.TextBox();
-            this.Gdirbox = new System.Windows.Forms.TextBox();
+            this.EmulatorsCbB = new System.Windows.Forms.ComboBox();
+            this.EmuDirTxB = new System.Windows.Forms.TextBox();
+            this.GameDirTxB = new System.Windows.Forms.TextBox();
             this.createshortbtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.panelBorderStyle = new System.Windows.Forms.Panel();
@@ -80,7 +80,7 @@
             this.DesktopCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DesktopCheck.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
-            this.DesktopCheck.Location = new System.Drawing.Point(10, 311);
+            this.DesktopCheck.Location = new System.Drawing.Point(12, 311);
             this.DesktopCheck.Name = "DesktopCheck";
             this.DesktopCheck.Size = new System.Drawing.Size(114, 20);
             this.DesktopCheck.TabIndex = 5;
@@ -88,52 +88,53 @@
             this.DesktopCheck.UseVisualStyleBackColor = true;
             this.DesktopCheck.CheckedChanged += new System.EventHandler(this.Shortcutbox_Focus);
             // 
-            // gameBrow
+            // GameExplorerBtn
             // 
-            this.gameBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
-            this.gameBrow.FlatAppearance.BorderSize = 0;
-            this.gameBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
-            this.gameBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
-            this.gameBrow.ForeColor = System.Drawing.Color.White;
-            this.gameBrow.Location = new System.Drawing.Point(302, 261);
-            this.gameBrow.Name = "gameBrow";
-            this.gameBrow.Size = new System.Drawing.Size(119, 35);
-            this.gameBrow.TabIndex = 3;
-            this.gameBrow.Text = "Select Game";
-            this.gameBrow.UseVisualStyleBackColor = false;
-            this.gameBrow.Click += new System.EventHandler(this.GameBrow_Click);
+            this.GameExplorerBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.GameExplorerBtn.FlatAppearance.BorderSize = 0;
+            this.GameExplorerBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
+            this.GameExplorerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GameExplorerBtn.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
+            this.GameExplorerBtn.ForeColor = System.Drawing.Color.White;
+            this.GameExplorerBtn.Location = new System.Drawing.Point(302, 261);
+            this.GameExplorerBtn.Name = "GameExplorerBtn";
+            this.GameExplorerBtn.Size = new System.Drawing.Size(119, 35);
+            this.GameExplorerBtn.TabIndex = 3;
+            this.GameExplorerBtn.Text = "Select Game";
+            this.GameExplorerBtn.UseVisualStyleBackColor = false;
+            this.GameExplorerBtn.Click += new System.EventHandler(this.GameBrow_Click);
             // 
-            // emuBrow
+            // EmuExplorerBtn
             // 
-            this.emuBrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
-            this.emuBrow.FlatAppearance.BorderSize = 0;
-            this.emuBrow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
-            this.emuBrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.emuBrow.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
-            this.emuBrow.ForeColor = System.Drawing.Color.White;
-            this.emuBrow.Location = new System.Drawing.Point(302, 192);
-            this.emuBrow.Name = "emuBrow";
-            this.emuBrow.Size = new System.Drawing.Size(119, 35);
-            this.emuBrow.TabIndex = 2;
-            this.emuBrow.Text = "Select Emulator";
-            this.emuBrow.UseVisualStyleBackColor = false;
-            this.emuBrow.Click += new System.EventHandler(this.EmuBrow_Click);
+            this.EmuExplorerBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(56)))), ((int)(((byte)(74)))));
+            this.EmuExplorerBtn.FlatAppearance.BorderSize = 0;
+            this.EmuExplorerBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(116)))), ((int)(((byte)(128)))));
+            this.EmuExplorerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EmuExplorerBtn.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
+            this.EmuExplorerBtn.ForeColor = System.Drawing.Color.White;
+            this.EmuExplorerBtn.Location = new System.Drawing.Point(302, 192);
+            this.EmuExplorerBtn.Name = "EmuExplorerBtn";
+            this.EmuExplorerBtn.Size = new System.Drawing.Size(119, 35);
+            this.EmuExplorerBtn.TabIndex = 2;
+            this.EmuExplorerBtn.Text = "Select Emulator";
+            this.EmuExplorerBtn.UseVisualStyleBackColor = false;
+            this.EmuExplorerBtn.Click += new System.EventHandler(this.EmuBrow_Click);
             // 
-            // Shortcutbox
+            // ShortCuteNameTxB
             // 
-            this.Shortcutbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Shortcutbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
-            this.Shortcutbox.ForeColor = System.Drawing.Color.White;
-            this.Shortcutbox.Location = new System.Drawing.Point(14, 137);
-            this.Shortcutbox.MaxLength = 50;
-            this.Shortcutbox.Multiline = true;
-            this.Shortcutbox.Name = "Shortcutbox";
-            this.Shortcutbox.Size = new System.Drawing.Size(254, 22);
-            this.Shortcutbox.TabIndex = 1;
-            this.Shortcutbox.TextChanged += new System.EventHandler(this.Shortcutbox_TextChanged);
-            this.Shortcutbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
-            this.Shortcutbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Shortcutbox_KeyPress);
+            this.ShortCuteNameTxB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.ShortCuteNameTxB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ShortCuteNameTxB.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 12F);
+            this.ShortCuteNameTxB.ForeColor = System.Drawing.Color.White;
+            this.ShortCuteNameTxB.Location = new System.Drawing.Point(12, 130);
+            this.ShortCuteNameTxB.MaxLength = 50;
+            this.ShortCuteNameTxB.Multiline = true;
+            this.ShortCuteNameTxB.Name = "ShortCuteNameTxB";
+            this.ShortCuteNameTxB.Size = new System.Drawing.Size(254, 25);
+            this.ShortCuteNameTxB.TabIndex = 1;
+            this.ShortCuteNameTxB.TextChanged += new System.EventHandler(this.ShortCuteName_TextChanged);
+            this.ShortCuteNameTxB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ICOurl_KeyDown);
+            this.ShortCuteNameTxB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ShortCuteName_KeyPress);
             // 
             // label4
             // 
@@ -179,51 +180,54 @@
             this.label1.TabIndex = 20;
             this.label1.Text = "Emulator Directory:";
             // 
-            // emulatorcb
+            // EmulatorsCbB
             // 
-            this.emulatorcb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.emulatorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.emulatorcb.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
-            this.emulatorcb.ForeColor = System.Drawing.Color.White;
-            this.emulatorcb.FormattingEnabled = true;
-            this.emulatorcb.Location = new System.Drawing.Point(14, 73);
-            this.emulatorcb.MaxDropDownItems = 10;
-            this.emulatorcb.Name = "emulatorcb";
-            this.emulatorcb.Size = new System.Drawing.Size(176, 26);
-            this.emulatorcb.TabIndex = 6;
-            this.emulatorcb.SelectedIndexChanged += new System.EventHandler(this.Emulatorcb_SelectedIndexChanged);
+            this.EmulatorsCbB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.EmulatorsCbB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.EmulatorsCbB.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 11F);
+            this.EmulatorsCbB.ForeColor = System.Drawing.Color.White;
+            this.EmulatorsCbB.FormattingEnabled = true;
+            this.EmulatorsCbB.Location = new System.Drawing.Point(14, 73);
+            this.EmulatorsCbB.MaxDropDownItems = 10;
+            this.EmulatorsCbB.Name = "EmulatorsCbB";
+            this.EmulatorsCbB.Size = new System.Drawing.Size(176, 26);
+            this.EmulatorsCbB.TabIndex = 6;
+            this.EmulatorsCbB.SelectedIndexChanged += new System.EventHandler(this.Emulatorcb_SelectedIndexChanged);
             // 
-            // Edirbox
+            // EmuDirTxB
             // 
-            this.Edirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Edirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Edirbox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Edirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
-            this.Edirbox.ForeColor = System.Drawing.Color.White;
-            this.Edirbox.Location = new System.Drawing.Point(14, 192);
-            this.Edirbox.Multiline = true;
-            this.Edirbox.Name = "Edirbox";
-            this.Edirbox.ReadOnly = true;
-            this.Edirbox.Size = new System.Drawing.Size(254, 35);
-            this.Edirbox.TabIndex = 14;
-            this.Edirbox.TabStop = false;
-            this.Edirbox.Click += new System.EventHandler(this.EmuBrow_Click);
+            this.EmuDirTxB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.EmuDirTxB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.EmuDirTxB.Cursor = System.Windows.Forms.Cursors.Default;
+            this.EmuDirTxB.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
+            this.EmuDirTxB.ForeColor = System.Drawing.Color.White;
+            this.EmuDirTxB.Location = new System.Drawing.Point(14, 192);
+            this.EmuDirTxB.Multiline = true;
+            this.EmuDirTxB.Name = "EmuDirTxB";
+            this.EmuDirTxB.ReadOnly = true;
+            this.EmuDirTxB.Size = new System.Drawing.Size(254, 35);
+            this.EmuDirTxB.TabIndex = 14;
+            this.EmuDirTxB.TabStop = false;
+            this.EmuDirTxB.Text = " ";
+            this.EmuDirTxB.Click += new System.EventHandler(this.EmuBrow_Click);
+            this.EmuDirTxB.TextChanged += new System.EventHandler(this.EmuGameDirbox_TextChanged);
             // 
-            // Gdirbox
+            // GameDirTxB
             // 
-            this.Gdirbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
-            this.Gdirbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Gdirbox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Gdirbox.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
-            this.Gdirbox.ForeColor = System.Drawing.Color.White;
-            this.Gdirbox.Location = new System.Drawing.Point(14, 261);
-            this.Gdirbox.Multiline = true;
-            this.Gdirbox.Name = "Gdirbox";
-            this.Gdirbox.ReadOnly = true;
-            this.Gdirbox.Size = new System.Drawing.Size(254, 35);
-            this.Gdirbox.TabIndex = 15;
-            this.Gdirbox.TabStop = false;
-            this.Gdirbox.Click += new System.EventHandler(this.GameBrow_Click);
+            this.GameDirTxB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
+            this.GameDirTxB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GameDirTxB.Cursor = System.Windows.Forms.Cursors.Default;
+            this.GameDirTxB.Font = new System.Drawing.Font("Bahnschrift Light SemiCondensed", 9F);
+            this.GameDirTxB.ForeColor = System.Drawing.Color.White;
+            this.GameDirTxB.Location = new System.Drawing.Point(14, 261);
+            this.GameDirTxB.Multiline = true;
+            this.GameDirTxB.Name = "GameDirTxB";
+            this.GameDirTxB.ReadOnly = true;
+            this.GameDirTxB.Size = new System.Drawing.Size(254, 35);
+            this.GameDirTxB.TabIndex = 15;
+            this.GameDirTxB.TabStop = false;
+            this.GameDirTxB.Click += new System.EventHandler(this.GameBrow_Click);
+            this.GameDirTxB.TextChanged += new System.EventHandler(this.EmuGameDirbox_TextChanged);
             // 
             // createshortbtn
             // 
@@ -266,7 +270,7 @@
             this.panelBorderStyle.Name = "panelBorderStyle";
             this.panelBorderStyle.Size = new System.Drawing.Size(760, 42);
             this.panelBorderStyle.TabIndex = 29;
-            this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
+            this.panelBorderStyle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm_MouseDown);
             // 
             // HistoryBtn
             // 
@@ -332,7 +336,7 @@
             this.label7.Size = new System.Drawing.Size(132, 33);
             this.label7.TabIndex = 2;
             this.label7.Text = "ShortCutes";
-            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FormDisp_MouseDown);
+            this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm_MouseDown);
             // 
             // miniBtn
             // 
@@ -409,7 +413,7 @@
             this.ClearSCSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ClearSCSelected.Font = new System.Drawing.Font("Bahnschrift Condensed", 11.25F, System.Drawing.FontStyle.Bold);
             this.ClearSCSelected.ForeColor = System.Drawing.Color.White;
-            this.ClearSCSelected.Location = new System.Drawing.Point(302, 124);
+            this.ClearSCSelected.Location = new System.Drawing.Point(302, 125);
             this.ClearSCSelected.Name = "ClearSCSelected";
             this.ClearSCSelected.Size = new System.Drawing.Size(119, 35);
             this.ClearSCSelected.TabIndex = 31;
@@ -462,16 +466,16 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.DesktopCheck);
             this.Controls.Add(this.ICOpic);
-            this.Controls.Add(this.gameBrow);
-            this.Controls.Add(this.emuBrow);
-            this.Controls.Add(this.Shortcutbox);
+            this.Controls.Add(this.GameExplorerBtn);
+            this.Controls.Add(this.EmuExplorerBtn);
+            this.Controls.Add(this.ShortCuteNameTxB);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.emulatorcb);
-            this.Controls.Add(this.Edirbox);
-            this.Controls.Add(this.Gdirbox);
+            this.Controls.Add(this.EmulatorsCbB);
+            this.Controls.Add(this.EmuDirTxB);
+            this.Controls.Add(this.GameDirTxB);
             this.Controls.Add(this.createshortbtn);
             this.Controls.Add(this.label5);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -495,16 +499,16 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox DesktopCheck;
         private System.Windows.Forms.PictureBox ICOpic;
-        private System.Windows.Forms.Button gameBrow;
-        private System.Windows.Forms.Button emuBrow;
-        private System.Windows.Forms.TextBox Shortcutbox;
+        private System.Windows.Forms.Button GameExplorerBtn;
+        private System.Windows.Forms.Button EmuExplorerBtn;
+        private System.Windows.Forms.TextBox ShortCuteNameTxB;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox emulatorcb;
-        private System.Windows.Forms.TextBox Edirbox;
-        private System.Windows.Forms.TextBox Gdirbox;
+        private System.Windows.Forms.ComboBox EmulatorsCbB;
+        private System.Windows.Forms.TextBox EmuDirTxB;
+        private System.Windows.Forms.TextBox GameDirTxB;
         private System.Windows.Forms.Button createshortbtn;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panelBorderStyle;
