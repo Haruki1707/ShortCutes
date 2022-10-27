@@ -74,6 +74,7 @@ namespace ShortCutes
                         new MessageForm("", 4).ShowDialog();
                 }
             });
+            t.Start();
         }
 
         private void Emulatorcb_SelectedIndexChanged(object sender, EventArgs e)
