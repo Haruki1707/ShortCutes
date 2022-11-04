@@ -6,6 +6,9 @@
   <br>
   <b>ShortCutes</b>
   <br>
+  <a href="https://github.com/Haruki1707/ShortCutes/releases"><img src="https://img.shields.io/github/v/release/haruki1707/shortcutes?style=for-the-badge&color=beeaff"></a>
+  <img src="https://img.shields.io/github/downloads/haruki1707/shortcutes/total?color=e7c4af&style=for-the-badge">
+  <a href="https://github.com/Haruki1707/ShortCutes/issues"><img src="https://img.shields.io/github/issues-raw/haruki1707/ShortCutes?style=for-the-badge&color=4f2b11"></a>
 </h1>
 
 <h3 align="center">
@@ -17,8 +20,8 @@ Creates executable ShortCutes for your emulated games.
 <br><br>
 </h3>
 
-## **[Download ShortCutes.exe](https://haruki1707.github.io/ShortCutes/#Download)** in download page
-* Requires [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+## **[Download ShortCutes](https://github.com/Haruki1707/ShortCutes/releases/latest/download/ShortCutes.exe)** here or **[in download page](https://haruki1707.github.io/ShortCutes/#Download)**
+* Requires [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) | *usually updated W10 and W11 already have it installed*
 * Exclude ShortCutes folder from any Anti-Virus, ShortCutes folder is created on your Emulator path root
 
 ### **ShortCutes launcher design**
