@@ -17,3 +17,4 @@ Emulator | Version From | Version To | Description
 [xemu](https://xemu.app/) | Unknown | Latest | Works as expected
 [xenia](https://xenia.jp/) | Unknown | Latest | Works as expected
 [DuckStation](https://www.duckstation.org/) | Unknown | Latest | Works as expected
+[MelonDS](https://melonds.kuribo64.net/) | Unknown | Latest | Works as expected

@@ -290,6 +290,11 @@ tabdir{
     color: #ffb000;
 }
 
+.melonds, .melonds span{
+    border-left-color: #ff554d;
+    color: #9dff80;
+}
+
 footer{
     padding: 20px 0px;
     background-color: #1e1e1e;
