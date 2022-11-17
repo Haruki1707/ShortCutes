@@ -115,7 +115,6 @@
       <DependentUpon>HistoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\XmlShortCutes.cs" />
-    <None Include="Emulators.json" />
     <None Include="Resources\Emulators.json" />
     <None Include="src\Roslyn Form Code.cs" />
     <Compile Include="UI-forms\CropImage_Tool.cs">
