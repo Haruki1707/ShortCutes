@@ -544,10 +544,7 @@ namespace ShortCutes
                 Size IncreasedFont = TextRenderer.MeasureText(TxB.Text, new Font(TxB.Font.FontFamily, TxB.Font.Size + 0.5F));
 
                 if (ActualFont.Width > (TxB.Width * (TxB.Height / ActualFont.Height)) - 5)
-                {
                     TxB.Font = new Font(TxB.Font.FontFamily, TxB.Font.Size - 0.5F);
-                    Trace.WriteLine(TxB.Font.Size - 0.5F);
-                }
                 else if (TxB.Font.Size < MaxFontSize && IncreasedFont.Width < TxB.Width * (TxB.Height / IncreasedFont.Height) - 5)
                     TxB.Font = new Font(TxB.Font.FontFamily, TxB.Font.Size + 0.5F);
                 else

@@ -20,7 +20,7 @@ namespace ShortCutes.src.Utils
     public static class Utils
     {
         readonly internal static string MyTempPath = Path.GetTempPath() + @"ShortCutes\";
-        readonly internal static string MyAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"ShortCutes\";
+        readonly internal static string MyAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\ShortCutes\";
 
         readonly internal static string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         readonly internal static string GlobalAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

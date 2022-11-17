@@ -106,6 +106,7 @@
     <Compile Include="src\Utils\Compiler.cs" />
     <Compile Include="src\Utils\FindDominantColour\KCluster.cs" />
     <Compile Include="src\Utils\FindDominantColour\KMeansClusteringCalculator.cs" />
+    <Compile Include="src\Utils\NoSectionIniFile.cs" />
     <Compile Include="src\Utils\Utils.cs" />
     <Compile Include="UI-forms\HistoryForm.cs">
       <SubType>Form</SubType>
@@ -114,6 +115,7 @@
       <DependentUpon>HistoryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\XmlShortCutes.cs" />
+    <None Include="Emulators.json" />
     <None Include="Resources\Emulators.json" />
     <None Include="src\Roslyn Form Code.cs" />
     <Compile Include="UI-forms\CropImage_Tool.cs">

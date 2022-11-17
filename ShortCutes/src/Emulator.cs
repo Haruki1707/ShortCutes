@@ -1,14 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShortCutes.src.Utils;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ShortCutes.src
@@ -54,7 +50,7 @@ namespace ShortCutes.src
         {
             name = Name;
             exe = Exe;
-            arguments = "%GAME%";
+            arguments = "%GAME% %USERARGS%";
             gamesfilters = Filters + "|" + Filters.Split('(', ')')[1];
         }
 
@@ -138,7 +134,12 @@ namespace ShortCutes.src
                     case ".cfg":
                         try
                         {
-                            string Directory = new IniFile(ConfigPath).Read(ConfigElement, ConfigSection).Replace('/', '\\');
+                            string Directory;
+                            if (ConfigSection == null)
+                                Directory = new NoSectionIniFile(ConfigPath).Read(ConfigElement).Replace('/', '\\');
+                            else
+                                Directory = new IniFile(ConfigPath).Read(ConfigElement, ConfigSection).Replace('/', '\\');
+
                             if (Directory != null)
                                 gamesPath = Directory;
                         }
@@ -174,7 +175,9 @@ namespace ShortCutes.src
 
         public string Arguments(string gamedir)
         {
-            string args = arguments.Replace("%", "\\\"");
+            string args = arguments.Replace("%USERARGS%", "*USERARGS*");
+            args = args.Replace("%", "\\\"");
+            args = args.Replace("*", "%");
             return args.Replace("GAME", gamedir.Replace(@"\", @"\\"));
         }
     }
