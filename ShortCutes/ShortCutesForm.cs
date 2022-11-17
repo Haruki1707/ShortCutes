@@ -64,7 +64,7 @@ namespace ShortCutes
         private async void ShortCutes_Shown(object sender, EventArgs e)
         {
             Updater.GUI_Context = SynchronizationContext.Current;
-            if (await Updater.CheckUpdateAsync("Haruki1707", "testrepo"))
+            if (await Updater.CheckUpdateAsync("Haruki1707", "ShortCutes"))
             {
                 if (Updater.CannotWriteOnDir)
                     MessageForm.Error(Updater.Message);
