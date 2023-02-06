@@ -6,7 +6,7 @@
     "Arguments": "-g %GAME% -f %USERARGS%",
     "WaitForIt": true,
     "Config": {
-      "Path": null,
+      "Paths": null,
       "File": "settings.xml",
       "Section": "GamePaths",
       "Element": "Entry"
@@ -19,7 +19,10 @@
     "Arguments": "-e %USERARGS% %GAME%",
     "WaitForIt": false,
     "Config": {
-      "Path": "%DOCUMENTS%\\Dolphin Emulator\\",
+      "Paths": [
+        "%DOCUMENTS%\\Dolphin Emulator\\",
+        "%SELF%\\User"
+      ],
       "File": "Config\\Dolphin.ini",
       "Section": "General",
       "Element": "ISOPath0"
@@ -37,7 +40,7 @@
     "GameFilters": "Nintendo 64 Games (*.n64; *.z64; *.v64; *.u64; *.zip; *.7z; *.rar; *.rom; *.jap; *.pal; *.usa; *.bin; *.ndd; *.d64)",
     "Description": "Activate fullscreen through PJ64 GUI",
     "Config": {
-      "Path": null,
+      "Paths": null,
       "File": "Config\\Project64.cfg",
       "Section": "Game Directory",
       "Element": "Directory"
@@ -49,7 +52,9 @@
     "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)",
     "Arguments": "-f -g %USERARGS% %GAME%",
     "Config": {
-      "Path": "%APPDATA%",
+      "Paths": [
+        "%APPDATA%"
+      ],
       "File": "yuzu\\config\\qt-config.ini",
       "Section": "UI",
       "Element": "Paths\\gamedirs\\4\\path"
@@ -65,8 +70,11 @@
     "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.pfs0)",
     "Arguments": "-f %USERARGS% %GAME%",
     "Config": {
-      "Path": "%APPDATA%",
-      "File": "Ryujinx\\Config.json",
+      "Paths": [
+        "%APPDATA%\\Ryujinx",
+        "%SELF%\\portable"
+      ],
+      "File": "Config.json",
       "Section": "game_dirs",
       "Element": ""
     }
@@ -76,7 +84,9 @@
     "Executable": "citra-qt.exe",
     "GameFilters": "3DS Games (*.3ds; *.3dsx; *.elf; *.axf; *.cci; *.cxi; *.app)",
     "Config": {
-      "Path": "%APPDATA%",
+      "Paths": [
+        "%APPDATA%"
+      ],
       "File": "Citra\\config\\qt-config.ini",
       "Section": "UI",
       "Element": "Paths\\gamedirs\\3\\path"
@@ -121,7 +131,9 @@
     "Arguments": "%GAME% -fullscreen %USERARGS%",
     "WaitForIt": true,
     "Config": {
-      "Path": "%DOCUMENTS%\\PCSX2",
+      "Paths": [
+        "%DOCUMENTS%\\PCSX2"
+      ],
       "File": "inis\\PCSX2.ini",
       "Section": "GameList",
       "Element": "RecursivePaths"
@@ -157,7 +169,9 @@
     "GameFilters": "PS1 Games (*.cue; *.iso; *.img; *.bin; *.chd; *.ecm; *.mds; *.pbp; *.exe; *.psexe; *.psf; *.minipsf; *.m3u)",
     "Arguments": "-fullscreen -resume %USERARGS% -- %GAME%",
     "Config": {
-      "Path": "%DOCUMENTS%\\DuckStation",
+      "Paths": [
+        "%DOCUMENTS%\\DuckStation"
+      ],
       "File": "settings.ini",
       "Section": "GameList",
       "Element": "RecursivePaths"
@@ -169,7 +183,7 @@
     "GameFilters": "DS Games (*.nds; *.dsi; *.ids; *.srl; *.zip; *.7z; *.rar; *.tar; *.tar.gz; *.tar.xz; *.tar.bz2)",
     "Arguments": "-f %USERARGS% %GAME%",
     "Config": {
-      "Path": null,
+      "Paths": null,
       "File": "melonDS.ini",
       "Section": null,
       "Element": "LastROMFolder"

@@ -21,8 +21,8 @@ namespace ShortCutes.src
         string gamesPath = null;
         Color cdesc = Color.LightGreen;
 
-        bool SelfConfig = false;
-        string ConfigPath = null;
+        string[] ConfigPaths = null;
+        string ConfigFile = null;
         string ConfigSection = null;
         string ConfigElement = null;
         readonly bool WaitWindowChangeP = false;
@@ -105,23 +105,33 @@ namespace ShortCutes.src
 
         public string TryGetGamesPath()
         {
-            if (ConfigPath != null)
+            if (ConfigFile != null)
             {
-                if (SelfConfig)
-                {
-                    ConfigPath = InstallPath + ConfigPath;
-                    SelfConfig = false;
-                }
+                string finalPath = null;
 
-                if (!File.Exists(ConfigPath))
+                if (ConfigPaths != null)
+                    foreach (string path in ConfigPaths)
+                    {
+                        string subpath = path.Replace("%SELF%", InstallPath);
+                        if (File.Exists($"{subpath}\\{ConfigFile}"))
+                        {
+                            finalPath = $"{subpath}\\{ConfigFile}";
+                            break;
+                        }
+                    }
+
+                if (finalPath == null && File.Exists(InstallPath + ConfigFile))
+                    finalPath = InstallPath + ConfigFile;
+
+                if (finalPath == null || !File.Exists(finalPath))
                     return null;
 
-                switch (System.IO.Path.GetExtension(ConfigPath))
+                switch (System.IO.Path.GetExtension(finalPath))
                 {
                     case ".xml":
                         try
                         {
-                            XDocument doc = XDocument.Load(ConfigPath);
+                            XDocument doc = XDocument.Load(finalPath);
                             foreach (var itemElement in doc.Element("content").Elements(ConfigSection))
                             {
                                 var properties = itemElement.Elements(ConfigElement).ToList();
@@ -136,9 +146,9 @@ namespace ShortCutes.src
                         {
                             string Directory;
                             if (ConfigSection == null)
-                                Directory = new NoSectionIniFile(ConfigPath).Read(ConfigElement).Replace('/', '\\');
+                                Directory = new NoSectionIniFile(finalPath).Read(ConfigElement).Replace('/', '\\');
                             else
-                                Directory = new IniFile(ConfigPath).Read(ConfigElement, ConfigSection).Replace('/', '\\');
+                                Directory = new IniFile(finalPath).Read(ConfigElement, ConfigSection).Replace('/', '\\');
 
                             if (Directory != null)
                                 gamesPath = Directory;
@@ -148,7 +158,7 @@ namespace ShortCutes.src
                     case ".json":
                         try
                         {
-                            var json = JsonConvert.DeserializeObject<JToken>(File.ReadAllText(ConfigPath));
+                            var json = JsonConvert.DeserializeObject<JToken>(File.ReadAllText(finalPath));
                             gamesPath = (string)json[ConfigSection][0];
                         }
                         catch { }
@@ -160,17 +170,12 @@ namespace ShortCutes.src
             return gamesPath;
         }
 
-        public void SetConfigPath(string dir, string File, string Section, string Element)
+        public void SetConfigPath(string[] dirs, string File, string Section, string Element)
         {
-            ConfigPath = $"{dir}\\{File}";
+            ConfigPaths = dirs;
+            ConfigFile = File;
             ConfigSection = Section;
             ConfigElement = Element;
-
-            if (!System.IO.File.Exists(ConfigPath))
-            {
-                SelfConfig = true;
-                ConfigPath = File;
-            }
         }
 
         public string Arguments(string gamedir)

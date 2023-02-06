@@ -1,14 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Xml.Linq;
 
 namespace ShortCutes.src
 {
@@ -28,7 +23,7 @@ namespace ShortCutes.src
 
     struct EmulatorConfig
     {
-        public string Path { get; set; }
+        public string[] Paths { get; set; }
         public string File { get; set; }
         public string Section { get; set; }
         public string Element { get; set; }
@@ -54,11 +49,10 @@ namespace ShortCutes.src
         static Emulators()
         {
             var EmulatorsJSON = JsonConvert.DeserializeObject<EmulatorJSON[]>(Properties.Resources.Emulators);
-            
+
             foreach (var item in EmulatorsJSON)
             {
                 Emulator Emulator;
-
                 if (item.Arguments == null)
                     Emulator = new Emulator(item.Name, item.Executable, item.GameFilters);
                 else
@@ -70,21 +64,21 @@ namespace ShortCutes.src
                 if (item.Config.HasValue)
                 {
                     var Config = item.Config.Value;
-                    string Path = Config.Path;
+                    string[] Paths = Config.Paths;
 
-                    Path = ReplacePaths(Path);
+                    Paths = ReplacePaths(Paths);
 
-                    Emulator.SetConfigPath(Path, Config.File, Config.Section, Config.Element);
+                    Emulator.SetConfigPath(Paths, Config.File, Config.Section, Config.Element);
                 }
 
-                if(item.DefaultLocations != null)
+                if (item.DefaultLocations != null)
                     for (int i = 0; i < item.DefaultLocations.Count(); i++)
                         item.DefaultLocations[i] = ReplacePaths(item.DefaultLocations[i]);
                 Emulator.DefaultLocations = item.DefaultLocations;
 
                 EmulatorsList.Add(Emulator);
             }
-            
+
             //To find if emulator shortcut exist for easy use of Shortcutes
             ShortcutsFinder();
         }
@@ -157,6 +151,16 @@ namespace ShortCutes.src
             if (!string.IsNullOrEmpty(path))
                 path = Utils.Utils.Replace(path, Replacements);
             return path;
+        }
+
+        private static string[] ReplacePaths(string[] paths)
+        {
+            if (paths == null)
+                return paths;
+
+            for (int i = 0; i < paths.Length; i++)
+                paths[i] = ReplacePaths(paths[i]);
+            return paths;
         }
     }
 }
