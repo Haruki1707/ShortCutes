@@ -80,7 +80,7 @@ namespace ShortCutes.src
 
         public ShortCute() : this("", "", "", "")
         {
-            
+
         }
 
         public ShortCute(string name, string emupath, string gamepath, string image)

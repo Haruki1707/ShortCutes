@@ -2,12 +2,10 @@
 using ShortCutes.src.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShortCutes
@@ -148,17 +146,17 @@ namespace ShortCutes
                 Ypos += button1.Height;
             });
         }
-        
+
         internal Image Thumbnail(ShortCute SC, int width, int height, bool keepAspect = true)
         {
             string id = SC.Name + SC.dateTime;
-            if(Thumbnails.ContainsKey(id))
+            if (Thumbnails.ContainsKey(id))
                 return Thumbnails[id];
             else
             {
                 Image image = Image.FromFile(SC.Image);
 
-                if(keepAspect == true)
+                if (keepAspect == true)
                 {
                     width = image.Width < image.Height ? (width * image.Width) / image.Height : width;
                     height = image.Width > image.Height ? (height * image.Height) / image.Width : height;

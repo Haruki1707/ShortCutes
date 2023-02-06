@@ -306,7 +306,8 @@ namespace ShortCutes
                 ICOpic.Image.Save(Utils.MyTempPath + @"temp.png");
             }
 
-            tImageColors = Task.Run(() => {
+            tImageColors = Task.Run(() =>
+            {
                 IList<Color> colors = Utils.GetMostUsedColors(ICOpic.Image);
                 colors.Add(Utils.GetAverageColor(ICOpic.Image));
                 return colors;

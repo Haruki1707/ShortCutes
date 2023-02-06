@@ -2,12 +2,8 @@
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShortCutes.src.Utils
@@ -39,7 +35,8 @@ namespace ShortCutes.src.Utils
         {
             CompilerParameters parameters = new CompilerParameters(
                 new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll", "System.Runtime.InteropServices.dll" }
-            ){
+            )
+            {
                 CompilerOptions = "-win32icon:" + $"\"{Utils.MyTempPath}temp.ico\"" +
                     "\n -target:winexe " +
                     "\n -resource:" + $"\"{Utils.MyTempPath}temp.png\"" +
@@ -49,8 +46,8 @@ namespace ShortCutes.src.Utils
                 OutputAssembly = Output
             };
 
-            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, 
-                new[] { code, assemblyInfo.ToString().Replace("%GAME%", game).Replace("%EMULATOR%", emulator)});
+            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters,
+                new[] { code, assemblyInfo.ToString().Replace("%GAME%", game).Replace("%EMULATOR%", emulator) });
 
             if (results.Errors.Count > 0)
             {

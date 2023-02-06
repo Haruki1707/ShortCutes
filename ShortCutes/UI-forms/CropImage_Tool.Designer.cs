@@ -75,9 +75,9 @@ namespace ShortCutes
             this.OriginalImage.ForeColor = System.Drawing.Color.White;
             this.OriginalImage.Location = new System.Drawing.Point(410, 105);
             this.OriginalImage.Name = "OriginalImage";
-            this.OriginalImage.Size = new System.Drawing.Size(119, 35);
+            this.OriginalImage.Size = new System.Drawing.Size(119, 50);
             this.OriginalImage.TabIndex = 5;
-            this.OriginalImage.Text = "Original Image";
+            this.OriginalImage.Text = "Restore Original Image";
             this.OriginalImage.UseVisualStyleBackColor = false;
             this.OriginalImage.Click += new System.EventHandler(this.OriginalImage_Click);
             // 
@@ -93,7 +93,7 @@ namespace ShortCutes
             this.CropBTN.Name = "CropBTN";
             this.CropBTN.Size = new System.Drawing.Size(119, 35);
             this.CropBTN.TabIndex = 6;
-            this.CropBTN.Text = "Crop";
+            this.CropBTN.Text = "Crop Image";
             this.CropBTN.UseVisualStyleBackColor = false;
             this.CropBTN.Click += new System.EventHandler(this.CropBTN_Click);
             // 
@@ -110,7 +110,7 @@ namespace ShortCutes
             this.SaveBTN.Name = "SaveBTN";
             this.SaveBTN.Size = new System.Drawing.Size(119, 35);
             this.SaveBTN.TabIndex = 7;
-            this.SaveBTN.Text = "Save Croped Image";
+            this.SaveBTN.Text = "Use Croped Image";
             this.SaveBTN.UseVisualStyleBackColor = false;
             this.SaveBTN.Click += new System.EventHandler(this.SaveBTN_Click);
             // 
@@ -142,7 +142,7 @@ namespace ShortCutes
             this.SaveOriBTN.Name = "SaveOriBTN";
             this.SaveOriBTN.Size = new System.Drawing.Size(119, 35);
             this.SaveOriBTN.TabIndex = 9;
-            this.SaveOriBTN.Text = "Save Original Image";
+            this.SaveOriBTN.Text = "Use Original Image";
             this.SaveOriBTN.UseVisualStyleBackColor = false;
             this.SaveOriBTN.Click += new System.EventHandler(this.SaveOriBTN_Click);
             // 

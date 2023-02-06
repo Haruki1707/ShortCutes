@@ -11,8 +11,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace ShortCutes.src.Utils

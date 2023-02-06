@@ -1,11 +1,6 @@
-﻿using EZ_Updater;
-using ShortCutes.src.Utils;
+﻿using ShortCutes.src.Utils;
 using System;
-using System.Management;
-using System.Net;
-using System.Security.Cryptography;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
