@@ -55,6 +55,7 @@
             this.ICOpic = new System.Windows.Forms.PictureBox();
             this.ClearSCSelected = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.forceWindowToNotWait = new System.Windows.Forms.CheckBox();
             this.OpenFolder = new System.Windows.Forms.Button();
             this.Timer = new System.Windows.Forms.Timer(this.components);
             this.panelBorderStyle.SuspendLayout();
@@ -82,7 +83,7 @@
             this.DesktopCheck.ForeColor = System.Drawing.Color.White;
             this.DesktopCheck.Location = new System.Drawing.Point(12, 311);
             this.DesktopCheck.Name = "DesktopCheck";
-            this.DesktopCheck.Size = new System.Drawing.Size(114, 20);
+            this.DesktopCheck.Size = new System.Drawing.Size(113, 20);
             this.DesktopCheck.TabIndex = 5;
             this.DesktopCheck.Text = "Desktop Shortcut";
             this.DesktopCheck.UseVisualStyleBackColor = true;
@@ -333,7 +334,7 @@
             this.label7.ForeColor = System.Drawing.SystemColors.Control;
             this.label7.Location = new System.Drawing.Point(4, 4);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(132, 33);
+            this.label7.Size = new System.Drawing.Size(131, 33);
             this.label7.TabIndex = 2;
             this.label7.Text = "ShortCutes";
             this.label7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MoveForm_MouseDown);
@@ -430,6 +431,19 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 50;
             // 
+            // forceWindowToNotWait
+            // 
+            this.forceWindowToNotWait.AutoSize = true;
+            this.forceWindowToNotWait.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 9.75F);
+            this.forceWindowToNotWait.ForeColor = System.Drawing.Color.White;
+            this.forceWindowToNotWait.Location = new System.Drawing.Point(131, 311);
+            this.forceWindowToNotWait.Name = "forceWindowToNotWait";
+            this.forceWindowToNotWait.Size = new System.Drawing.Size(144, 20);
+            this.forceWindowToNotWait.TabIndex = 33;
+            this.forceWindowToNotWait.Text = "Force launcher to close";
+            this.toolTip.SetToolTip(this.forceWindowToNotWait, "Forces ShortCute launcher to close when the emulator exe has already opened");
+            this.forceWindowToNotWait.UseVisualStyleBackColor = true;
+            // 
             // OpenFolder
             // 
             this.OpenFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(18)))), ((int)(((byte)(23)))));
@@ -454,11 +468,13 @@
             // 
             // ShortCutes
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(28)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(760, 415);
             this.ControlBox = false;
+            this.Controls.Add(this.forceWindowToNotWait);
             this.Controls.Add(this.OpenFolder);
             this.Controls.Add(this.ClearSCSelected);
             this.Controls.Add(this.ICOurl);
@@ -523,6 +539,7 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button OpenFolder;
         private System.Windows.Forms.Timer Timer;
+        private System.Windows.Forms.CheckBox forceWindowToNotWait;
     }
 }
 

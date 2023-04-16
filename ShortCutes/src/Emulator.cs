@@ -72,6 +72,7 @@ namespace ShortCutes.src
 
         private void SetPath(string path = null)
         {
+
             string fileName = Path.GetFileName(path);
             if (path != null & File.Exists(path))
             {
@@ -107,26 +108,9 @@ namespace ShortCutes.src
         {
             if (ConfigFile != null)
             {
-                string finalPath = null;
+                string finalPath = getConfigFinalPath();
 
-                if (ConfigPaths != null)
-                    foreach (string path in ConfigPaths)
-                    {
-                        string subpath = path.Replace("%SELF%", InstallPath);
-                        if (File.Exists($"{subpath}\\{ConfigFile}"))
-                        {
-                            finalPath = $"{subpath}\\{ConfigFile}";
-                            break;
-                        }
-                    }
-
-                if (finalPath == null && File.Exists(InstallPath + ConfigFile))
-                    finalPath = InstallPath + ConfigFile;
-
-                if (finalPath == null || !File.Exists(finalPath))
-                    return null;
-
-                switch (System.IO.Path.GetExtension(finalPath))
+                switch (Path.GetExtension(finalPath))
                 {
                     case ".xml":
                         try
@@ -168,6 +152,30 @@ namespace ShortCutes.src
                 }
             }
             return gamesPath;
+        }
+
+        public string getConfigFinalPath()
+        {
+            string finalPath = null;
+
+            if (ConfigPaths != null)
+                foreach (string path in ConfigPaths)
+                {
+                    string subpath = path.Replace("%SELF%", InstallPath);
+                    if (File.Exists($"{subpath}\\{ConfigFile}"))
+                    {
+                        finalPath = $"{subpath}\\{ConfigFile}";
+                        break;
+                    }
+                }
+
+            if (finalPath == null && File.Exists(InstallPath + ConfigFile))
+                finalPath = InstallPath + ConfigFile;
+
+            if (finalPath == null || !File.Exists(finalPath))
+                return null;
+
+            return finalPath;
         }
 
         public void SetConfigPath(string[] dirs, string File, string Section, string Element)

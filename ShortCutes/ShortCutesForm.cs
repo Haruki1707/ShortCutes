@@ -44,8 +44,6 @@ namespace ShortCutes
         {
             InitializeComponent();
 
-            //MessageBox.Show(Utils.MyTempPath);
-
             foreach (var emu in Emulators.EmulatorsList)
                 EmulatorsCbB.Items.Add(emu.Name);
 
@@ -126,7 +124,8 @@ namespace ShortCutes
             Application.UseWaitCursor = true;
             string message = "Shortcut created!\nExecute shortcut?";
 
-            string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""), await GetImageColor());
+            string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""),
+                await GetImageColor(), forceWindowToNotWait.Checked);
 
             string emuPath = Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes";
             if (!Directory.Exists(emuPath))

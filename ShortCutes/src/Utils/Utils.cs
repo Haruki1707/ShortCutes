@@ -202,16 +202,30 @@ namespace ShortCutes.src.Utils
         }
 
 
-        internal static string Roslyn_FormCode(Emulator emu, string gamename, string gamedir, Color color)
+        internal static string Roslyn_FormCode(Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange)
         {
             string size = "256";
             if (RectangularDesign)
                 size = "322";
 
+            bool waitWindowChange = false;
+
+            if (!forceNotToWaitWindowChange)
+            {
+                waitWindowChange = emu.WaitWindowChange;
+
+                if (emu.Name == "PCSX2 QT")
+                    try
+                    {
+                        waitWindowChange = Convert.ToBoolean(new IniFile(emu.getConfigFinalPath()).Read("EnableFastBoot", "EmuCore").Replace('/', '\\'));
+                    }
+                    catch { }
+            }
+
             return Properties.Resources.Roslyn_Form_Code.Replace(new Dictionary<string, string>()
             {
                 ["%HEIGHT%"] = size,
-                ["%WAITCHANGE%"] = emu.WaitWindowChange.ToString().ToLower(),
+                ["%WAITCHANGE%"] = waitWindowChange.ToString().ToLower(),
                 ["%EMUNAME%"] = emu.Name,
                 ["%GAME%"] = gamename,
                 ["%EMULATOR%"] = emu.emuFile,

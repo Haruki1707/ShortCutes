@@ -177,9 +177,11 @@ namespace Shortcutes.src
 			if (ClientSize.Height < 72 / 1.5)
 			{
 				TimerSC.Stop();
+				SetForegroundWindow(ShortCute.Handle.ToInt32());
 				Close();
-			}
-		}
+                SetForegroundWindow(ShortCute.Handle.ToInt32());
+            }
+        }
 
 		private void ExecuteEmu_Tick(object sender, EventArgs e)
 		{
@@ -227,20 +229,24 @@ namespace Shortcutes.src
 		string EMainWindowTitle = null;
 		private void WaitEmuToBeOpen_Tick(object sender, EventArgs e)
 		{
-			TimerSC.Interval = 100;
-			if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
-            {
-				EMainWindowTitle = ShortCute.MainWindowTitle;
-				if (WaitForWindowChange)
+			try
+			{
+				TimerSC.Interval = 100;
+				if (!string.IsNullOrEmpty(ShortCute.MainWindowTitle))
 				{
-					TimerSC.Interval = 250;
-					TimerSC.Tick -= WaitEmuToBeOpen_Tick;
-					TimerSC.Tick += WaitEmuToLoad_Tick;
+					EMainWindowTitle = ShortCute.MainWindowTitle;
+					if (WaitForWindowChange)
+					{
+						TimerSC.Interval = 250;
+						TimerSC.Tick -= WaitEmuToBeOpen_Tick;
+						TimerSC.Tick += WaitEmuToLoad_Tick;
+					}
+					else
+						CloseForm();
 				}
-				else
-					CloseForm();
-            }
-			ShortCute.Refresh();
+				ShortCute.Refresh();
+			}
+			catch { }
 		}
 
 		int WaitingLoop = 0;
@@ -312,8 +318,11 @@ namespace Shortcutes.src
 		private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
 		private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
-		//MAIN
-		[STAThread]
+        [DllImport("User32.dll")]
+        public static extern Int32 SetForegroundWindow(int hWnd);
+
+        //MAIN
+        [STAThread]
 		static void Main(string[] args)
 		{
 			if (args.Length > 0)
