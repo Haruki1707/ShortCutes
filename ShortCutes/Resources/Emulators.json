@@ -188,5 +188,17 @@
       "Section": null,
       "Element": "LastROMFolder"
     }
+  },
+  {
+    "Name": "Flycast",
+    "Executable": "flycast.exe",
+    "GameFilters": "Flycast Supported Games (*.cdi; *.gdi; *.chd; *.cue; *.bin; *.elf; *.zip; *.7z; *.lst; *.dat; *.m3u)",
+    "Arguments": "-config window:fullscreen=yes %USERARGS% %GAME%",
+    "Config": {
+      "Paths": null,
+      "File": "emu.cfg",
+      "Section": "config",
+      "Element": "Dreamcast.ContentPath"
+    }
   }
 ]
