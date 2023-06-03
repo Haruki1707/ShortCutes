@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace ShortCutes.src
 {
@@ -31,7 +32,7 @@ namespace ShortCutes.src
 
     struct LnkInfo
     {
-        public IWshRuntimeLibrary.IWshShortcut lnk { get; set; }
+        public Shell32.ShellLinkObject lnk { get; set; }
         public FileVersionInfo fileInfo { get; set; }
     }
 
@@ -115,7 +116,7 @@ namespace ShortCutes.src
 
                     if (shortcut.Value.lnk != null)
                         if (setted == false && String.IsNullOrWhiteSpace(emulator.getInstallPath()))
-                            emulator.CheckPath(shortcut.Value.lnk.TargetPath);
+                            emulator.CheckPath(shortcut.Value.lnk.Path);
                 }
             }
         }
@@ -132,10 +133,16 @@ namespace ShortCutes.src
         private static LnkInfo GenerateLnkInfo(string path)
         {
             FileVersionInfo tempInfo;
-            IWshRuntimeLibrary.WshShortcut tempLnk = new IWshRuntimeLibrary.WshShell().CreateShortcut(path);
+            Shell32.ShellLinkObject tempLnk = null;
+            try
+            {
+                Shell32.FolderItem itm = new Shell32.Shell().NameSpace(Path.GetDirectoryName(path)).Items().Item(Path.GetFileName(path));
+                tempLnk = (Shell32.ShellLinkObject)itm.GetLink;              
+            }
+            catch { }
 
-            if (File.Exists(tempLnk.TargetPath))
-                tempInfo = FileVersionInfo.GetVersionInfo(tempLnk.TargetPath);
+            if (tempLnk != null && File.Exists(tempLnk.Path))
+                tempInfo = FileVersionInfo.GetVersionInfo(tempLnk.Path);
             else
                 tempInfo = FileVersionInfo.GetVersionInfo(path);
 

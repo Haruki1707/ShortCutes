@@ -194,9 +194,10 @@ namespace ShortCutes
 
         private async Task<Color> GetImageColor()
         {
-            Color Average = (await tImageColors)[3];
             IList<Color> MostUsed = await tImageColors;
-            MostUsed.RemoveAt(3);
+            Trace.WriteLine(MostUsed.Count);
+            Color Average = (await tImageColors)[MostUsed.Count() - 1];
+            MostUsed.RemoveAt(MostUsed.Count() - 1);
 
             if (ModifierKeys.HasFlag(Keys.Control))
             {

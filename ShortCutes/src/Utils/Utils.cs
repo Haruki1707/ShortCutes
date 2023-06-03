@@ -20,6 +20,7 @@ namespace ShortCutes.src.Utils
         readonly internal static string MyTempPath = Path.GetTempPath() + @"ShortCutes\";
         readonly internal static string MyAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\ShortCutes\";
 
+        readonly internal static string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         readonly internal static string Documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         readonly internal static string GlobalAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         readonly internal static string LocalAppdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -138,7 +139,15 @@ namespace ShortCutes.src.Utils
 
         internal static IList<Color> GetMostUsedColors(Image image)
         {
-            Bitmap bmp = new Bitmap(image);
+            Bitmap bmp = null;
+            while (bmp == null)
+            {
+                try
+                {
+                    bmp = new Bitmap(image);
+                }
+                catch { }
+            }
             List<Color> imageColors = new List<Color>();
 
             for (int x = 0; x < bmp.Width; x++)
@@ -149,8 +158,18 @@ namespace ShortCutes.src.Utils
                 }
             }
 
-            var Colors = KMeansClusteringCalculator.Calculate(3, imageColors.Where(c => (KCluster.EuclideanDistance(c, Color.Black) >= 200) && (KCluster.EuclideanDistance(c, Color.White) >= 200) && (KCluster.EuclideanDistance(c, Color.Brown) >= 50)).ToList());
-            Colors = Colors.Where(c => (KCluster.EuclideanDistance(c, Color.Black) >= 200) && (KCluster.EuclideanDistance(c, Color.White) >= 200) && (KCluster.EuclideanDistance(c, Color.Brown) >= 50)).OrderByDescending(c => c.GetHue()).ToList();
+            IList<Color> Colors;
+            List<Color> values = imageColors.Where(c => (KCluster.EuclideanDistance(c, Color.Black) >= 200) && (KCluster.EuclideanDistance(c, Color.White) >= 200) && (KCluster.EuclideanDistance(c, Color.Brown) >= 50)).ToList();
+
+            if (values.Count > 0)
+            {
+                Colors = KMeansClusteringCalculator.Calculate(3, values);
+                Colors = Colors.Where(c => (KCluster.EuclideanDistance(c, Color.Black) >= 200) && (KCluster.EuclideanDistance(c, Color.White) >= 200) && (KCluster.EuclideanDistance(c, Color.Brown) >= 50)).OrderByDescending(c => c.GetHue()).ToList();
+            }
+            else
+            {
+                Colors = KMeansClusteringCalculator.Calculate(3, imageColors);
+            }
 
 
             return Colors;
@@ -191,14 +210,18 @@ namespace ShortCutes.src.Utils
 
         internal static void CreateShortcut(string Name, string Output, string workingDir)
         {
-            object shDesktop = (object)"Desktop";
-            IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + Name + ".lnk";
-            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutAddress);
-            shortcut.Description = "ShortCute for " + Name;
-            shortcut.TargetPath = Output;
-            shortcut.WorkingDirectory = workingDir;
-            shortcut.Save();
+            // Create empty .lnk file
+            string path = Path.Combine(Desktop, Name + ".lnk");
+            File.WriteAllBytes(path, new byte[0]);
+            // Create a ShellLinkObject that references the .lnk file
+            Shell32.FolderItem itm = new Shell32.Shell().NameSpace(Desktop).Items().Item(Name + ".lnk");
+            Shell32.ShellLinkObject lnk = (Shell32.ShellLinkObject)itm.GetLink;
+            // Set the .lnk file properties
+            lnk.Path = Output;
+            lnk.Description = "ShortCute for " + Name;
+            //lnk.Arguments = "";
+            lnk.WorkingDirectory = workingDir;
+            lnk.Save(path);
         }
 
 
