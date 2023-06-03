@@ -295,6 +295,11 @@ tabdir{
     color: #9dff80;
 }
 
+.flycast, .flycast span{
+    border-left-color: #944ef9;
+    color: #944ef9;
+}
+
 footer{
     padding: 20px 0px;
     background-color: #1e1e1e;
