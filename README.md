@@ -53,6 +53,7 @@ Emulator | Version From | Version To | Description
 [xenia](https://xenia.jp/) | Unknown | Latest | Works as expected
 [DuckStation](https://www.duckstation.org/) | Unknown | Latest | Works as expected
 [MelonDS](https://melonds.kuribo64.net/) | Unknown | Latest | Works as expected
+[Flycast](https://github.com/flyinghead/flycast) | Unknown | Latest | Works as expected
 
 ### **Examples of ShortCutes**
 * CEMU
