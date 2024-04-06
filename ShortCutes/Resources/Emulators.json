@@ -167,7 +167,7 @@
     "Name": "DuckStation",
     "Executable": "duckstation-qt.exe",
     "GameFilters": "PS1 Games (*.cue; *.iso; *.img; *.bin; *.chd; *.ecm; *.mds; *.pbp; *.exe; *.psexe; *.psf; *.minipsf; *.m3u)",
-    "Arguments": "-fullscreen -resume %USERARGS% -- %GAME%",
+    "Arguments": "-fullscreen %USERARGS% -- %GAME%",
     "Config": {
       "Paths": [
         "%DOCUMENTS%\\DuckStation"
@@ -200,5 +200,19 @@
       "Section": "config",
       "Element": "Dreamcast.ContentPath"
     }
-  }
+  },
+  {
+    "Name": "suyu",
+    "Executable": "suyu.exe",
+    "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)",
+    "Arguments": "-f -g %USERARGS% %GAME%",
+    "Config": {
+      "Paths": [
+        "%APPDATA%"
+      ],
+      "File": "suyu\\config\\qt-config.ini",
+      "Section": "UI",
+      "Element": "Paths\\gamedirs\\4\\path"
+    }
+  },
 ]
