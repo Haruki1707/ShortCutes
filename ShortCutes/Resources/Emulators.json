@@ -215,4 +215,21 @@
       "Element": "Paths\\gamedirs\\4\\path"
     }
   },
+  {
+    "Name": "sudachi",
+    "Executable": "sudachi.exe",
+    "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)",
+    "Arguments": "-f -g %USERARGS% %GAME%",
+    "Config": {
+      "Paths": [
+        "%APPDATA%"
+      ],
+      "File": "sudachi\\config\\qt-config.ini",
+      "Section": "UI",
+      "Element": "Paths\\gamedirs\\4\\path"
+    },
+    "DefaultLocations": [
+      "%LOCALAPPDATA%\\sudachi\\"
+    ]
+  }
 ]
