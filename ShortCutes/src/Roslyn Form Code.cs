@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Drawing;
@@ -28,6 +28,7 @@ namespace Shortcutes.src
 		private string GameName = "%GAME%";
 		private static int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
+		private bool KeepLauncherOpen = true; // don't close the launcher after the emulator is started, but keep it running in the background
 		private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
@@ -178,7 +179,17 @@ namespace Shortcutes.src
 			{
 				TimerSC.Stop();
 				SetForegroundWindow(ShortCute.Handle.ToInt32());
-				Close();
+				// if KeepLauncherOpen is enabled, we minimize the launcher only 
+				// and close it on Emulator exit instead
+				if (KeepLauncherOpen)
+				{
+					this.WindowState = FormWindowState.Minimized;
+                    this.Hide();
+				}
+				else
+				{
+					Close();
+				}
                 SetForegroundWindow(ShortCute.Handle.ToInt32());
             }
         }
@@ -207,6 +218,8 @@ namespace Shortcutes.src
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
 			ShortCute.StartInfo.Arguments = arguments;
+			ShortCute.EnableRaisingEvents = true; // enable notification on process exit
+            ShortCute.Exited += Emulator_Exited; // notify on process exit
 			ShortCute.Start();
 
 			TimerSC.Interval = 250;
@@ -275,6 +288,10 @@ namespace Shortcutes.src
 			TimerSC.Tick += ShrinkForm;
 			TimerSC.Start();
 		}
+		private void Emulator_Exited(object sender, EventArgs e)
+        {
+            Close();
+        }
 
 		//Tools
 		private void MessageError(string type, string path)
