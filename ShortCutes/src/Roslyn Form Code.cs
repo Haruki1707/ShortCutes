@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Shortcutes.src
 {
@@ -28,9 +29,9 @@ namespace Shortcutes.src
 		private string GameName = "%GAME%";
 		private static int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
-		private bool KeepLauncherOpen = true; // don't close the launcher after the emulator is started, but keep it running in the background
-		private bool KeepLauncherActive = true; // needs to have KeepLauncherOpen enabled. Keep the launcher active for a certain duration each time the emulator is focused
-		private int ActiveDuration = 3000; // Duration in milliseconds for which the launcher will be active
+		private bool KeepLauncherOpen = %KEEPOPEN%; // don't close the launcher after the emulator is started, but keep it running in the background
+		private bool KeepLauncherActive = %KEEPACTIVE%; // needs to have KeepLauncherOpen enabled. Keep the launcher active for a certain duration each time the emulator is focused
+		private int ActiveDuration = %KEEPACTIVEDURATION%; // Duration in milliseconds for which the launcher will be active
 		private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
@@ -353,7 +354,7 @@ namespace Shortcutes.src
 					IntPtr mainWindowHandle = this.Handle;
 
 					// Application.OpenForms[0] replaced with this
-					this.Invoke(new Action(() =>
+					this.Invoke(new Func<Task>(async () =>
 					{
 						try
 						{
@@ -365,7 +366,7 @@ namespace Shortcutes.src
 							SetForegroundWindow(mainWindowHandle);
 
 							// Wait for the specified delay duration before hiding the window again
-                        	await Task.Delay(delayDuration);
+                        	await Task.Delay(ActiveDuration);
 
 							// Hide the CuteLauncher window again and make sure the emulator is the foreground window
 							this.WindowState = FormWindowState.Minimized;

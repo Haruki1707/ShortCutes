@@ -125,7 +125,7 @@ namespace ShortCutes
             string message = "Shortcut created!\nExecute shortcut?";
 
             string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""),
-                await GetImageColor(), forceWindowToNotWait.Checked);
+                await GetImageColor(), forceWindowToNotWait.Checked, true, true, 3000);
 
             string emuPath = Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes";
             if (!Directory.Exists(emuPath))
