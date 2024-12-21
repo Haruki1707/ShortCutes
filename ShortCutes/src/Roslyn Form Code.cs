@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Shortcutes.src
 {
@@ -28,8 +29,35 @@ namespace Shortcutes.src
 		private string GameName = "%GAME%";
 		private static int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
+		private bool KeepLauncherOpen = %KEEPOPEN%; // don't close the launcher after the emulator is started, but keep it running in the background
+		private bool KeepLauncherActive = %KEEPACTIVE%; // needs to have KeepLauncherOpen enabled. Keep the launcher active for a certain duration each time the emulator is focused
+		private int ActiveDuration = %KEEPACTIVEDURATION%; // Duration in milliseconds for which the launcher will be active
 		private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+		// ---------------------------------------------------------------
+		// Use WinEventHook to get notified when the foreground window changes
+		private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+        private WinEventDelegate procDelegate;
+        private IntPtr hWinEventHook;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern Int32 SetForegroundWindow(IntPtr hWnd);
+
+        private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        private const uint WINEVENT_OUTOFCONTEXT = 0;
+		private bool emulatorIsForeground = true;
+		private readonly object emulatorIsForegroundLock = new object();
+		// ---------------------------------------------------------------
 
 		public CuteLauncher()
 		{
@@ -178,7 +206,24 @@ namespace Shortcutes.src
 			{
 				TimerSC.Stop();
 				SetForegroundWindow(ShortCute.Handle.ToInt32());
-				Close();
+				// if KeepLauncherOpen is enabled, we minimize the launcher only 
+				// and close it on Emulator exit instead
+				if (KeepLauncherOpen)
+				{
+					this.WindowState = FormWindowState.Minimized;
+                    this.Hide();
+
+					// register WineventHook to be notified on foreground window change
+					if (KeepLauncherActive)
+					{
+						procDelegate = new WinEventDelegate(WinEventProc);
+						hWinEventHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, procDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+					}
+				}
+				else
+				{
+					Close();
+				}
                 SetForegroundWindow(ShortCute.Handle.ToInt32());
             }
         }
@@ -207,6 +252,8 @@ namespace Shortcutes.src
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
 			ShortCute.StartInfo.Arguments = arguments;
+			ShortCute.EnableRaisingEvents = true; // enable notification on process exit
+            ShortCute.Exited += Emulator_Exited; // notify on process exit
 			ShortCute.Start();
 
 			TimerSC.Interval = 250;
@@ -275,6 +322,83 @@ namespace Shortcutes.src
 			TimerSC.Tick += ShrinkForm;
 			TimerSC.Start();
 		}
+
+		// callback on form closed
+		protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+			// Unhook the WinEventHook
+			if (KeepLauncherOpen && KeepLauncherActive)
+			{
+            	UnhookWinEvent(hWinEventHook);
+			}
+            base.OnFormClosed(e);
+        }
+
+		private void Emulator_Exited(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+		// callback on foreground window change
+		private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            // Check if the foreground window is the ShortCute process
+			bool shouldInvoke = false;
+			IntPtr launcherWindowHandle = this.Handle;
+			lock (emulatorIsForegroundLock)
+			{
+				// if the new foreground window is the emulator -> show the CuteLauncher for a few seconds
+				// if the new foreground window is the launcher -> do nothing
+				// if the new foreground window is any other window -> reset the emulatorIsForeground variable
+				IntPtr foregroundWindow = GetForegroundWindow();
+				if (foregroundWindow == ShortCute.MainWindowHandle)
+				{
+
+					// avoid steady triggering of the mechanism while the emulator is running
+					if (!emulatorIsForeground)
+					{
+						// only execute once until another window becomes the foreground window
+						emulatorIsForeground = true;
+						shouldInvoke = true;
+					}
+				}
+				else if (foregroundWindow != launcherWindowHandle)
+				{
+					// the next time the emulator becomes the foreground window, execute the triggering
+					emulatorIsForeground = false;
+				}
+			}
+
+			if (shouldInvoke)
+			{
+				// Execute in GUI thread
+				this.Invoke(new Func<Task>(async () =>
+				{
+					try
+					{
+						// Show the CuteLauncher as the foreground window and make it the active window
+						// s.t. third-party tools can detect it as the active window
+						this.Show();
+						this.WindowState = FormWindowState.Normal;
+						this.BringToFront();
+						SetForegroundWindow(launcherWindowHandle.ToInt32());
+
+						// Wait for the specified delay duration before hiding the window again
+						await Task.Delay(ActiveDuration);
+
+						// Hide the CuteLauncher window again and make sure the emulator is the foreground window
+						this.WindowState = FormWindowState.Minimized;
+						this.Hide();
+						SetForegroundWindow(ShortCute.Handle.ToInt32());
+					}
+					catch (Exception ex)
+					{
+						// Handle any exceptions that occur
+						MessageBox.Show("Error in WinEventProc: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}));
+			}
+        }
 
 		//Tools
 		private void MessageError(string type, string path)
