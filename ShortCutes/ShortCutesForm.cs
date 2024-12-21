@@ -126,7 +126,7 @@ namespace ShortCutes
 
             // For Armoury Crate on ROG Ally set keepLauncherOpen and keepLauncherActive to true and keepActiveDuration to 5000 ms
             string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""),
-                await GetImageColor(), forceWindowToNotWait.Checked, true, true, 5000);
+                await GetImageColor(), forceWindowToNotWait.Checked, false, false, 0);
 
             string emuPath = Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes";
             if (!Directory.Exists(emuPath))
