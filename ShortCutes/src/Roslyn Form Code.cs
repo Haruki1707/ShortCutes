@@ -56,6 +56,7 @@ namespace Shortcutes.src
         private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
         private const uint WINEVENT_OUTOFCONTEXT = 0;
 		private bool emulatorIsForeground = true;
+		private readonly object emulatorIsForegroundLock = new object();
 		// ---------------------------------------------------------------
 
 		public CuteLauncher()
@@ -342,49 +343,60 @@ namespace Shortcutes.src
 		private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             // Check if the foreground window is the ShortCute process
-            if (GetForegroundWindow() == ShortCute.MainWindowHandle)
-            {
-				// avoid steady triggering of the mechanism while the emulator is running
-				if(!emulatorIsForeground)
-				{
-					// only execute once until another window becomes the foreground window
-					emulatorIsForeground = true;
-
-					// Store the MainWindowHandle in a variable
-					IntPtr mainWindowHandle = this.Handle;
-
-					// Application.OpenForms[0] replaced with this
-					this.Invoke(new Func<Task>(async () =>
-					{
-						try
-						{
-							// Show the CuteLauncher as the foreground window and make it the active window
-							// s.t. third-party tools can detect it as the active window
-							this.Show();
-							this.WindowState = FormWindowState.Normal;
-							this.BringToFront();
-							SetForegroundWindow(mainWindowHandle);
-
-							// Wait for the specified delay duration before hiding the window again
-                        	await Task.Delay(ActiveDuration);
-
-							// Hide the CuteLauncher window again and make sure the emulator is the foreground window
-							this.WindowState = FormWindowState.Minimized;
-							this.Hide();
-							SetForegroundWindow(ShortCute.Handle.ToInt32());
-						}
-						catch (Exception ex)
-						{
-							// Handle any exceptions that occur
-							MessageBox.Show("Error in WinEventProc: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-					}));
-				}
-            }
-			else 
+			bool shouldInvoke = false;
+			IntPtr launcherWindowHandle = this.Handle;
+			lock (emulatorIsForegroundLock)
 			{
-				// the next time the emulator becomes the foreground window, execute the triggering
-				emulatorIsForeground = false;
+				// if the new foreground window is the emulator -> show the CuteLauncher for a few seconds
+				// if the new foreground window is the launcher -> do nothing
+				// if the new foreground window is any other window -> reset the emulatorIsForeground variable
+				IntPtr foregroundWindow = GetForegroundWindow();
+				if (foregroundWindow == ShortCute.MainWindowHandle)
+				{
+
+					// avoid steady triggering of the mechanism while the emulator is running
+					if (!emulatorIsForeground)
+					{
+						// only execute once until another window becomes the foreground window
+						emulatorIsForeground = true;
+						shouldInvoke = true;
+					}
+				}
+				else if (foregroundWindow != launcherWindowHandle)
+				{
+					// the next time the emulator becomes the foreground window, execute the triggering
+					emulatorIsForeground = false;
+				}
+			}
+
+			if (shouldInvoke)
+			{
+				// Execute in GUI thread
+				this.Invoke(new Func<Task>(async () =>
+				{
+					try
+					{
+						// Show the CuteLauncher as the foreground window and make it the active window
+						// s.t. third-party tools can detect it as the active window
+						this.Show();
+						this.WindowState = FormWindowState.Normal;
+						this.BringToFront();
+						SetForegroundWindow(launcherWindowHandle.ToInt32());
+
+						// Wait for the specified delay duration before hiding the window again
+						await Task.Delay(ActiveDuration);
+
+						// Hide the CuteLauncher window again and make sure the emulator is the foreground window
+						this.WindowState = FormWindowState.Minimized;
+						this.Hide();
+						SetForegroundWindow(ShortCute.Handle.ToInt32());
+					}
+					catch (Exception ex)
+					{
+						// Handle any exceptions that occur
+						MessageBox.Show("Error in WinEventProc: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}));
 			}
         }
 
