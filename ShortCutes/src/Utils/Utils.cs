@@ -225,8 +225,10 @@ namespace ShortCutes.src.Utils
         }
 
 
-        internal static string Roslyn_FormCode(Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange)
-        {
+        internal static string Roslyn_FormCode(
+            Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange,
+            bool keepLauncherOpen, bool keepLauncherActive, int keepActiveDuration
+        ) {
             string size = "256";
             if (RectangularDesign)
                 size = "322";
@@ -238,11 +240,13 @@ namespace ShortCutes.src.Utils
                 waitWindowChange = emu.WaitWindowChange;
 
                 if (emu.Name == "PCSX2 QT")
+                {
                     try
                     {
                         waitWindowChange = Convert.ToBoolean(new IniFile(emu.getConfigFinalPath()).Read("EnableFastBoot", "EmuCore").Replace('/', '\\'));
                     }
                     catch { }
+                }
             }
 
             return Properties.Resources.Roslyn_Form_Code.Replace(new Dictionary<string, string>()
@@ -257,6 +261,9 @@ namespace ShortCutes.src.Utils
                 ["%avgR%"] = color.R.ToString(),
                 ["%avgG%"] = color.G.ToString(),
                 ["%avgB%"] = color.B.ToString(),
+                ["%KEEPOPEN%"] = keepLauncherOpen.ToString().ToLower(),
+                ["%KEEPACTIVE%"] = keepLauncherActive.ToString().ToLower(),
+                ["%KEEPACTIVEDURATION%"] = keepActiveDuration.ToString(),
             });
         }
 
