@@ -225,9 +225,10 @@ namespace ShortCutes.src.Utils
         }
 
 
-        internal static string Roslyn_FormCode(Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange,
-                                               bool keepLauncherOpen, bool keepLauncherActive, int keepActiveDuration)
-        {
+        internal static string Roslyn_FormCode(
+            Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange,
+            bool keepLauncherOpen, bool keepLauncherActive, int keepActiveDuration
+        ) {
             string size = "256";
             if (RectangularDesign)
                 size = "322";

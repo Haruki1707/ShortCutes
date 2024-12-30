@@ -29,10 +29,10 @@ namespace Shortcutes.src
 		private string GameName = "%GAME%";
 		private static int standarHeight = %HEIGHT%;
 		private bool WaitForWindowChange = %WAITCHANGE%;
-		private bool KeepLauncherOpen = %KEEPOPEN%; // don't close the launcher after the emulator is started, but keep it running in the background
-		private bool KeepLauncherActive = %KEEPACTIVE%; // needs to have KeepLauncherOpen enabled. Keep the launcher active for a certain duration each time the emulator is focused
-		private int ActiveDuration = %KEEPACTIVEDURATION%; // Duration in milliseconds for which the launcher will be active
-		private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
+		private bool KeepLauncherOpen = %KEEPOPEN%; // Keep launcher running in background
+		private bool KeepLauncherActive = %KEEPACTIVE%; // Focus the launcher window when the emulator is focused (requires KeepLauncherOpen)
+        private int ActiveDuration = %KEEPACTIVEDURATION%; // Duration in milliseconds for which the launcher will be focused (requires KeepLauncherOpen and KeepLauncherActive)
+        private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
 		// ---------------------------------------------------------------
@@ -206,14 +206,14 @@ namespace Shortcutes.src
 			{
 				TimerSC.Stop();
 				SetForegroundWindow(ShortCute.Handle.ToInt32());
-				// if KeepLauncherOpen is enabled, we minimize the launcher only 
-				// and close it on Emulator exit instead
-				if (KeepLauncherOpen)
+
+                // If KeepLauncherOpen is enabled, we minimize instead of closing the launcher
+                if (KeepLauncherOpen)
 				{
 					this.WindowState = FormWindowState.Minimized;
                     this.Hide();
 
-					// register WineventHook to be notified on foreground window change
+					// Register a WineventHook to get notified on foreground window change
 					if (KeepLauncherActive)
 					{
 						procDelegate = new WinEventDelegate(WinEventProc);
@@ -252,9 +252,9 @@ namespace Shortcutes.src
 			ShortCute.StartInfo.WorkingDirectory = "..\\";
 			ShortCute.StartInfo.FileName = "..\\" + Emulator;
 			ShortCute.StartInfo.Arguments = arguments;
-			ShortCute.EnableRaisingEvents = true; // enable notification on process exit
-            ShortCute.Exited += Emulator_Exited; // notify on process exit
-			ShortCute.Start();
+			ShortCute.EnableRaisingEvents = true; // Enable process to raise events
+            ShortCute.Exited += Emulator_Exited; // Get notified when the emulator process exits
+            ShortCute.Start();
 
 			TimerSC.Interval = 250;
 			TimerSC.Tick -= ExecuteEmu_Tick;
@@ -323,7 +323,6 @@ namespace Shortcutes.src
 			TimerSC.Start();
 		}
 
-		// callback on form closed
 		protected override void OnFormClosed(FormClosedEventArgs e)
         {
 			// Unhook the WinEventHook
@@ -339,7 +338,7 @@ namespace Shortcutes.src
             Close();
         }
 
-		// callback on foreground window change
+		// Callback on foreground window change
 		private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             // Check if the foreground window is the ShortCute process
@@ -347,25 +346,23 @@ namespace Shortcutes.src
 			IntPtr launcherWindowHandle = this.Handle;
 			lock (emulatorIsForegroundLock)
 			{
-				// if the new foreground window is the emulator -> show the CuteLauncher for a few seconds
-				// if the new foreground window is the launcher -> do nothing
-				// if the new foreground window is any other window -> reset the emulatorIsForeground variable
-				IntPtr foregroundWindow = GetForegroundWindow();
+                // If foreground window is the emulator ->  Show CuteLauncher by the specified duration
+                // If foreground window is the launcher -> Do nothing
+                // If foreground window is any other window -> Reset the emulatorIsForeground variable
+                IntPtr foregroundWindow = GetForegroundWindow();
 				if (foregroundWindow == ShortCute.MainWindowHandle)
 				{
-
-					// avoid steady triggering of the mechanism while the emulator is running
-					if (!emulatorIsForeground)
+                    // Avoid multiple invocations of the CuteLauncher window when the emulator is the foreground window
+                    if (!emulatorIsForeground)
 					{
-						// only execute once until another window becomes the foreground window
 						emulatorIsForeground = true;
 						shouldInvoke = true;
 					}
 				}
 				else if (foregroundWindow != launcherWindowHandle)
 				{
-					// the next time the emulator becomes the foreground window, execute the triggering
-					emulatorIsForeground = false;
+                    // Reset the emulatorIsForeground variable when the emulator is not the foreground window
+                    emulatorIsForeground = false;
 				}
 			}
 
