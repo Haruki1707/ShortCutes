@@ -231,5 +231,22 @@
     "DefaultLocations": [
       "%LOCALAPPDATA%\\sudachi\\"
     ]
-  }
+  },
+  {
+    "Name": "eden",
+    "Executable": "eden.exe",
+    "GameFilters": "Switch Games (*.xci; *.nsp; *.nso; *.nro; *.nca; *.kip)",
+    "Arguments": "-f -g %USERARGS% %GAME%",
+    "Config": {
+      "Paths": [
+        "%APPDATA%"
+      ],
+      "File": "eden\\config\\qt-config.ini",
+      "Section": "UI",
+      "Element": "Paths\\gamedirs\\4\\path"
+    },
+    "DefaultLocations": [
+      "%LOCALAPPDATA%\\eden\\",
+    ]
+  },
 ]
