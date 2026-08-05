@@ -249,13 +249,14 @@ namespace Shortcutes.src
 		private void ExecuteEmu_Tick(object sender, EventArgs e)
 		{
 			TimerSC.Stop();
-			var emupath = AppContext.BaseDirectory.ToString();
-				emupath = emupath.Remove(emupath.Length - 1);
-				emupath = emupath.Substring(0, emupath.LastIndexOf(@"\") + 1);
+			var baseDir = AppContext.BaseDirectory;
+			var emupath = Path.GetDirectoryName(baseDir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+			if (string.IsNullOrEmpty(emupath)) emupath = baseDir;
+			if (!emupath.EndsWith(Path.DirectorySeparatorChar.ToString())) emupath += Path.DirectorySeparatorChar;
 
-			if (!File.Exists("..\\" + Emulator))
+			if (!File.Exists(emupath + Emulator))
 				MessageError("emulator", emupath + Emulator);
-			else if (!Path.IsPathRooted(GameFile) && !File.Exists("..\\" + GameFile))
+			else if (!Path.IsPathRooted(GameFile) && !File.Exists(emupath + GameFile))
 				MessageError("game", emupath + GameFile);
 			else if (Path.IsPathRooted(GameFile) && !File.Exists(GameFile))
 				MessageError("game", GameFile);
@@ -267,8 +268,8 @@ namespace Shortcutes.src
 				arguments += ExtraArgs;
 
 			//Emulator execution
-			ShortCute.StartInfo.WorkingDirectory = "..\\";
-			ShortCute.StartInfo.FileName = "..\\" + Emulator;
+			ShortCute.StartInfo.WorkingDirectory = emupath;
+			ShortCute.StartInfo.FileName = emupath + Emulator;
 			ShortCute.StartInfo.Arguments = arguments;
 			ShortCute.EnableRaisingEvents = true; // Enable process to raise events
             ShortCute.Exited += Emulator_Exited; // Get notified when the emulator process exits
