@@ -117,8 +117,11 @@
     <Compile Include="src\XmlShortCutes.cs" />
     <None Include="Resources\Emulators.json" />
     <None Include="src\CuteLauncher\CuteLauncher.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.Configuration.cs" />
     <None Include="src\CuteLauncher\CuteLauncher.UI.cs" />
-    <None Include="src\CuteLauncher\CuteLauncher.Execution.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.Process.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.WindowDetection.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.Lifecycle.cs" />
     <None Include="src\CuteLauncher\CuteLauncher.Native.cs" />
     <Compile Include="UI-forms\CropImage_Tool.cs">
       <SubType>Form</SubType>

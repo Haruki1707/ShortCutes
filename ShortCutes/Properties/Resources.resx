@@ -148,11 +148,20 @@
   <data name="CuteLauncher" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\CuteLauncher\CuteLauncher.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CuteLauncher_Configuration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\CuteLauncher\CuteLauncher.Configuration.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CuteLauncher_UI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\CuteLauncher\CuteLauncher.UI.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="CuteLauncher_Execution" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\src\CuteLauncher\CuteLauncher.Execution.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="CuteLauncher_Process" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\CuteLauncher\CuteLauncher.Process.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CuteLauncher_WindowDetection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\CuteLauncher\CuteLauncher.WindowDetection.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CuteLauncher_Lifecycle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\CuteLauncher\CuteLauncher.Lifecycle.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="CuteLauncher_Native" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\CuteLauncher\CuteLauncher.Native.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

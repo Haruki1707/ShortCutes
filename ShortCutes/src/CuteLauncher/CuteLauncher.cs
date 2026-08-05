@@ -19,27 +19,21 @@ namespace Shortcutes.src
 		private Timer TimerSC = new Timer();
 		private bool isMouseDown = false;
         private Image TextImage;
-		private int GrowInt = 1;
+		private int GrowInt = InitialGrowIncrement;
 		Process ShortCute = new Process();
-		private static string ExtraArgs = "";
-		private string Emulator = "%EMULATOR%";
-		private string EmuName = "%EMUNAME%";
-		private string GameFile = @"%GAMEFILE%";
-		private string GameName = "%GAME%";
-		private static int standarHeight = %HEIGHT%;
-		private bool WaitForWindowChange = %WAITCHANGE%;
-		private bool KeepLauncherOpen = %KEEPOPEN%; 
-		private bool KeepLauncherActive = %KEEPACTIVE%; 
-        private int ActiveDuration = %KEEPACTIVEDURATION%; 
-        private Color avgColor = Color.FromArgb(%avgR%, %avgG%, %avgB%);
+		private Timer ShowCloseTimer;
+		private bool isClosing;
+		private bool closeAnimationStarted;
+		private bool emulatorStarted;
+		private bool emulatorWindowDetected;
+		private int WindowDetectionLoop;
+		private static string[] ExtraArgs = new string[0];
 		System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
         [STAThread]
 		static void Main(string[] args)
 		{
-			if (args.Length > 0)
-				foreach (string arg in args)
-					ExtraArgs += " " + arg;
+			ExtraArgs = args ?? new string[0];
 
 			Application.EnableVisualStyles();
 			Application.Run(new CuteLauncher());

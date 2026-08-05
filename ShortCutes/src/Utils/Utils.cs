@@ -269,8 +269,11 @@ namespace ShortCutes.src.Utils
             return new string[]
             {
                 Properties.Resources.CuteLauncher.Replace(replacements),
+                Properties.Resources.CuteLauncher_Configuration.Replace(replacements),
                 Properties.Resources.CuteLauncher_UI.Replace(replacements),
-                Properties.Resources.CuteLauncher_Execution.Replace(replacements),
+                Properties.Resources.CuteLauncher_Process.Replace(replacements),
+                Properties.Resources.CuteLauncher_WindowDetection.Replace(replacements),
+                Properties.Resources.CuteLauncher_Lifecycle.Replace(replacements),
                 Properties.Resources.CuteLauncher_Native.Replace(replacements)
             };
         }

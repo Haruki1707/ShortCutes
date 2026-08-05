@@ -172,15 +172,33 @@ namespace ShortCutes.Properties {
             }
         }
 
+        internal static string CuteLauncher_Configuration {
+            get {
+                return ResourceManager.GetString("CuteLauncher_Configuration", resourceCulture);
+            }
+        }
+
         internal static string CuteLauncher_UI {
             get {
                 return ResourceManager.GetString("CuteLauncher_UI", resourceCulture);
             }
         }
 
-        internal static string CuteLauncher_Execution {
+        internal static string CuteLauncher_Process {
             get {
-                return ResourceManager.GetString("CuteLauncher_Execution", resourceCulture);
+                return ResourceManager.GetString("CuteLauncher_Process", resourceCulture);
+            }
+        }
+
+        internal static string CuteLauncher_WindowDetection {
+            get {
+                return ResourceManager.GetString("CuteLauncher_WindowDetection", resourceCulture);
+            }
+        }
+
+        internal static string CuteLauncher_Lifecycle {
+            get {
+                return ResourceManager.GetString("CuteLauncher_Lifecycle", resourceCulture);
             }
         }
 
