@@ -31,7 +31,7 @@ namespace ShortCutes.src.Utils
             unit.AssemblyCustomAttributes.Add(decl);
         }
 
-        internal static bool Compile(string code, string Output, string game = null, string emulator = null)
+        internal static bool Compile(string[] codes, string Output, string game = null, string emulator = null)
         {
             CompilerParameters parameters = new CompilerParameters(
                 new[] { "mscorlib.dll", "System.Core.dll", "System.dll", "System.Windows.Forms.dll", "System.Drawing.dll", "System.Runtime.InteropServices.dll" }
@@ -46,8 +46,11 @@ namespace ShortCutes.src.Utils
                 OutputAssembly = Output
             };
 
-            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters,
-                new[] { code, assemblyInfo.ToString().Replace("%GAME%", game).Replace("%EMULATOR%", emulator) });
+            string[] allSources = new string[codes.Length + 1];
+            Array.Copy(codes, allSources, codes.Length);
+            allSources[codes.Length] = assemblyInfo.ToString().Replace("%GAME%", game).Replace("%EMULATOR%", emulator);
+
+            CompilerResults results = new CSharpCodeProvider().CompileAssemblyFromSource(parameters, allSources);
 
             if (results.Errors.Count > 0)
             {

@@ -125,7 +125,7 @@ namespace ShortCutes
             string message = "Shortcut created!\nExecute shortcut?";
 
             // For Armoury Crate on ROG Ally set keepLauncherOpen and keepLauncherActive to true and keepActiveDuration to 5000 ms
-            string codeToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""),
+            string[] codesToCompile = Utils.Roslyn_FormCode(SelectedEmu, ShortCuteNameTxB.Text, GameDirTxB.Text.Replace(Utils.GetDirectoryName(EmuDirTxB.Text), @""),
                 await GetImageColor(), forceWindowToNotWait.Checked, armoryCrateLauncher.Checked, armoryCrateLauncher.Checked, armoryCrateLauncher.Checked ? 5000 : 0);
 
             string emuPath = Utils.GetDirectoryName(EmuDirTxB.Text) + "ShortCutes";
@@ -135,7 +135,7 @@ namespace ShortCutes
 
             string Output = $"{emuPath}{ShortCuteNameTxB.Text}.exe";
 
-            if (!Compiler.Compile(codeToCompile, Output, ShortCuteNameTxB.Text, SelectedEmu.Name))
+            if (!Compiler.Compile(codesToCompile, Output, ShortCuteNameTxB.Text, SelectedEmu.Name))
                 return;
 
             if (insertInHistory(emuPath))

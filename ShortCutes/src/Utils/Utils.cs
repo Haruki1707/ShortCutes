@@ -225,7 +225,7 @@ namespace ShortCutes.src.Utils
         }
 
 
-        internal static string Roslyn_FormCode(
+        internal static string[] Roslyn_FormCode(
             Emulator emu, string gamename, string gamedir, Color color, bool forceNotToWaitWindowChange,
             bool keepLauncherOpen, bool keepLauncherActive, int keepActiveDuration
         ) {
@@ -249,7 +249,7 @@ namespace ShortCutes.src.Utils
                 }
             }
 
-            return Properties.Resources.Roslyn_Form_Code.Replace(new Dictionary<string, string>()
+            var replacements = new Dictionary<string, string>()
             {
                 ["%HEIGHT%"] = size,
                 ["%WAITCHANGE%"] = waitWindowChange.ToString().ToLower(),
@@ -264,7 +264,15 @@ namespace ShortCutes.src.Utils
                 ["%KEEPOPEN%"] = keepLauncherOpen.ToString().ToLower(),
                 ["%KEEPACTIVE%"] = keepLauncherActive.ToString().ToLower(),
                 ["%KEEPACTIVEDURATION%"] = keepActiveDuration.ToString(),
-            });
+            };
+
+            return new string[]
+            {
+                Properties.Resources.CuteLauncher.Replace(replacements),
+                Properties.Resources.CuteLauncher_UI.Replace(replacements),
+                Properties.Resources.CuteLauncher_Execution.Replace(replacements),
+                Properties.Resources.CuteLauncher_Native.Replace(replacements)
+            };
         }
 
         public static void CheckLatestVersion()

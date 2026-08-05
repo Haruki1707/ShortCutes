@@ -166,34 +166,27 @@ namespace ShortCutes.Properties {
             }
         }
         
-        /// <summary>
-        ///   Busca una cadena traducida similar a using System;
-        ///using System.IO;
-        ///using System.Text;
-        ///using System.Drawing;
-        ///using System.Diagnostics;
-        ///using System.Windows.Forms;
-        ///using System.Drawing.Imaging;
-        ///using System.Runtime.InteropServices;
-        ///
-        ///namespace Shortcutes.src
-        ///{
-        ///	public class CuteLauncher : Form
-        ///	{
-        ///		private Button CLOSEbutton;
-        ///		private PictureBox PictureBoxImage;
-        ///		private PictureBox PictureBoxSC;
-        ///		private PictureBox PBFade;
-        ///		private Timer TimerSC = new Timer();
-        ///
-        ///		private Image TextImage;
-        ///
-        ///		private int GrowInt = 1;
-        ///		Pr [resto de la cadena truncado]&quot;;.
-        /// </summary>
-        internal static string Roslyn_Form_Code {
+        internal static string CuteLauncher {
             get {
-                return ResourceManager.GetString("Roslyn_Form_Code", resourceCulture);
+                return ResourceManager.GetString("CuteLauncher", resourceCulture);
+            }
+        }
+
+        internal static string CuteLauncher_UI {
+            get {
+                return ResourceManager.GetString("CuteLauncher_UI", resourceCulture);
+            }
+        }
+
+        internal static string CuteLauncher_Execution {
+            get {
+                return ResourceManager.GetString("CuteLauncher_Execution", resourceCulture);
+            }
+        }
+
+        internal static string CuteLauncher_Native {
+            get {
+                return ResourceManager.GetString("CuteLauncher_Native", resourceCulture);
             }
         }
         

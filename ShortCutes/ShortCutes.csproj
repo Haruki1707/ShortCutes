@@ -116,7 +116,10 @@
     </Compile>
     <Compile Include="src\XmlShortCutes.cs" />
     <None Include="Resources\Emulators.json" />
-    <None Include="src\Roslyn Form Code.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.UI.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.Execution.cs" />
+    <None Include="src\CuteLauncher\CuteLauncher.Native.cs" />
     <Compile Include="UI-forms\CropImage_Tool.cs">
       <SubType>Form</SubType>
     </Compile>
