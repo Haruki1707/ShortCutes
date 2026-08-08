@@ -69,3 +69,62 @@ https://user-images.githubusercontent.com/72423267/140080768-30114c81-48d2-4dd3-
 * DOLPHIN
 
 https://user-images.githubusercontent.com/72423267/140080931-d30cc844-6427-4226-af6d-3a1999faf8f6.mp4
+
+## **Armoury Crate**
+You can use ShortCutes to add your emulated games to the ROG Ally's Armoury Crate launcher. This allows you to not only launch your games from Armoury Crate but also to take advantage of its active game detection and custom game profiles.
+
+After following the instructions, you'll be able to:
+
+* Create game-specific profiles to define settings like TDP (Thermal Design Power) and custom controller configurations.
+
+* Have Armoury Crate detect when your game is running and automatically re-open Armoury Crate after you exit your game.
+
+### Set-Up
+
+Follow these steps to get your emulated games working perfectly with Armoury Crate:
+
+1.  **Add Your Emulator to Armoury Crate:**
+    * Open Armoury Crate.
+    * Go to the menu and select "Add games to library."
+    * Press `L` or `R` to browse for files.
+    * Navigate to your emulator's `.exe` file and select it. Your emulator should now appear in your Armoury Crate library.
+
+2.  **Configure Your Emulator Entry:**
+    * In Armoury Crate, select your newly added emulator.
+    * Press `X` and choose "Game Info."
+    * Edit the tags and select **`PC Gaming Client`**.
+    * Make sure the option to "Allow other games to run simultaneously with this one" is **enabled**.
+
+3.  **Test Emulator Launch & Profile:**
+    * Try launching your emulator through Armoury Crate.
+    * Once it's open, bring up the **ROG Ally's Quick Menu**.
+    * Select "Game Profile" (if "Game Profile" isn't there, add it to your quick access) and verify that it refers to your **emulator's profile**.
+    * Ensure that **none of the settings in this profile diverge from default**.
+
+4.  **Create Your Game ShortCutes:**
+    * Use the ShortCutes application to create shortcuts for your individual emulated games.
+    * **Crucially, make sure to select the "Armoury Crate Launcher" checkbox** in the ShortCutes form for each game.
+
+5.  **Add Game ShortCutes to Armoury Crate:**
+    * Add these newly created ShortCutes to Armoury Crate, just like you added your emulator's `.exe` file in step 1.
+
+6.  **Set-Up Game-Specific Profiles:**
+    * Start one of your emulated games from Armoury Crate.
+    * While the "ShortCutes loading" pop-up is on screen, open the Quick Menu again and select "Game Profile."
+    * **Verify that this profile refers to your *game* and not to the emulator.**
+    * Now, feel free to adjust any settings you want for this specific game (e.g., TDP, controller mappings).
+    * *Pro Tip:* Try setting a unique Aura Sync lighting configuration for the profile. This is a great visual cue to confirm your game's profile is correctly applied.
+
+7.  **Finalize & Restart:**
+    * Exit your game.
+    * Restart Armoury Crate.
+    * You're all set!
+
+### How It Works
+
+When you launch a game using a ShortCutes entry from Armoury Crate:
+
+* The ShortCutes pop-up will briefly appear, triggering the application of your **game-specific settings**.
+* If your game loses focus (e.g., you switch windows), your default settings will be reapplied. However, when your game regains focus, the ShortCutes pop-up will reappear, **re-applying your custom game settings**.
+* As long as your game is running, Armoury Crate will show it as "running" in your library.
+* Once you exit your game, Armoury Crate will detect this and automatically **re-open the launcher**, ready for your next gaming session!
